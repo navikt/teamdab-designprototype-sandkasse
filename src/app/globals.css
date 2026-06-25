@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@navikt/ds-tokens/dist/tokens.css";
+@import "@navikt/ds-css";
 
 :root {
   --background: #ffffff;
