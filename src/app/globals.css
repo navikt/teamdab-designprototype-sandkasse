@@ -7,6 +7,17 @@
   --foreground: #171717;
 }
 
+/* Override Aksel blue accent with neutral dark grey */
+.navds-radio-input:checked,
+.navds-radio-input {
+  accent-color: var(--ax-bg-neutral-strong);
+}
+
+.navds-radio-input:checked {
+  border-color: var(--ax-bg-neutral-strong);
+  background-color: var(--ax-bg-neutral-strong);
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

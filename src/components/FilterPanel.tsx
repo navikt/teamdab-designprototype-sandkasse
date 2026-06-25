@@ -5,7 +5,7 @@ import { StarIcon, PersonGroupIcon, FunnelIcon, VitalsIcon } from "@navikt/aksel
 
 export function FilterPanel() {
   return (
-    <div className="bg-white w-[443px] [&_.navds-tabs__tab-inner]:text-[11px]">
+    <div className="bg-white w-[443px] [&_.navds-tabs__tab-inner]:text-[11px] [&_.navds-tabs__tab--active]:text-[var(--ax-text-neutral)] [&_.navds-tabs__tab--active]:shadow-[inset_0_-3px_0_0_var(--ax-bg-neutral-strong)] [&_.navds-radio-input:checked]:accent-[var(--ax-bg-neutral-strong)]">
       <Tabs defaultValue="status" size="small" iconPosition="top">
         <Tabs.List>
           <Tabs.Tab value="status" icon={<VitalsIcon aria-hidden />} label="Status" />
