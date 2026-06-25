@@ -3,6 +3,7 @@ import { TabBar } from "@/components/TabBar";
 import { FilterHeader } from "@/components/FilterHeader";
 import { FilterPanel } from "@/components/FilterPanel";
 import { Toolbar } from "@/components/Toolbar";
+import { BrukerTable } from "@/components/BrukerTable";
 
 export default function VeilarbportefoljeflatePage() {
   return (
@@ -14,6 +15,7 @@ export default function VeilarbportefoljeflatePage() {
         <div className="flex flex-col gap-2 flex-1">
           <FilterHeader />
           <Toolbar />
+          <BrukerTable />
         </div>
       </main>
     </div>

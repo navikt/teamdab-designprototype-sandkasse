@@ -3,32 +3,7 @@ name: aksel-agent
 description: Ekspert på Navs Aksel designsystem (v8+) — bygger og refaktorerer UI med @navikt/ds-react, tokens, layout-primitives, theming, versjon/migrering og tilgjengelighet, og oversetter Figma-design til Aksel-kode. Drevet av aksel-builder-skillen og Aksel MCP som fasit.
 model: Claude Sonnet 4.6
 tools:
-  - execute
-  - read
-  - edit
-  - search
-  - web
-  - todo
-  - ms-vscode.vscode-websearchforcopilot/websearch
-  - io.github.navikt/aksel-mcp/aksel_find_docs
-  - io.github.navikt/aksel-mcp/aksel_get_doc
-  - io.github.navikt/aksel-mcp/aksel_get_component_info
-  - io.github.navikt/aksel-mcp/aksel_get_token_details
-  - io.github.navikt/aksel-mcp/aksel_find_icons
-  - com.figma/figma-mcp/get_design_context
-  - com.figma/figma-mcp/get_metadata
-  - com.figma/figma-mcp/get_variable_defs
-  - io.github.navikt/github-mcp/get_file_contents
-  - io.github.navikt/github-mcp/search_code
-  - io.github.navikt/github-mcp/search_repositories
-  - io.github.navikt/github-mcp/list_commits
-  - io.github.navikt/github-mcp/issue_read
-  - io.github.navikt/github-mcp/list_issues
-  - io.github.navikt/github-mcp/search_issues
-  - io.github.navikt/github-mcp/pull_request_read
-  - io.github.navikt/github-mcp/search_pull_requests
-  - io.github.navikt/github-mcp/get_latest_release
-  - io.github.navikt/github-mcp/list_releases
+[execute/runNotebookCell, execute/getTerminalOutput, execute/killTerminal, execute/sendToTerminal, execute/runTask, execute/createAndRunTask, execute/runInTerminal, execute/runTests, execute/testFailure, read/getNotebookSummary, read/problems, read/readFile, read/viewImage, read/readNotebookCellOutput, read/terminalSelection, read/terminalLastCommand, read/getTaskOutput, edit/createDirectory, edit/createFile, edit/createJupyterNotebook, edit/editFiles, edit/editNotebook, edit/rename, search/codebase, search/fileSearch, search/listDirectory, search/textSearch, search/usages, web/fetch, web/githubTextSearch, com.figma/figma-mcp/add_code_connect_map, com.figma/figma-mcp/create_new_file, com.figma/figma-mcp/download_assets, com.figma/figma-mcp/export_video, com.figma/figma-mcp/generate_diagram, com.figma/figma-mcp/generate_figma_design, com.figma/figma-mcp/get_code_connect_map, com.figma/figma-mcp/get_code_connect_suggestions, com.figma/figma-mcp/get_context_for_code_connect, com.figma/figma-mcp/get_design_context, com.figma/figma-mcp/get_figjam, com.figma/figma-mcp/get_libraries, com.figma/figma-mcp/get_metadata, com.figma/figma-mcp/get_motion_context, com.figma/figma-mcp/get_screenshot, com.figma/figma-mcp/get_shader_effect, com.figma/figma-mcp/get_shader_fill, com.figma/figma-mcp/get_variable_defs, com.figma/figma-mcp/list_shader_effects, com.figma/figma-mcp/list_shader_fills, com.figma/figma-mcp/search_design_system, com.figma/figma-mcp/send_code_connect_mappings, com.figma/figma-mcp/upload_assets, com.figma/figma-mcp/use_figma, com.figma/figma-mcp/whoami, io.github.navikt/aksel-mcp/aksel_find_docs, io.github.navikt/aksel-mcp/aksel_find_icons, io.github.navikt/aksel-mcp/aksel_get_component_info, io.github.navikt/aksel-mcp/aksel_get_doc, io.github.navikt/aksel-mcp/aksel_get_token_details, todo]
 ---
 
 # Aksel Design System Agent (v8+)
