@@ -1,18 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import { InformationSquareIcon, LeaveIcon, TimerStartIcon, XMarkIcon } from "@navikt/aksel-icons";
 import { BodyLong, Button } from "@navikt/ds-react";
-import { ForlengOppfolgingModal } from "./ForlengOppfolgingModal";
-import { AvsluttOppfolgingModal } from "./AvsluttOppfolgingModal";
 
-export function InfoCard() {
-  const [hidden, setHidden] = useState(false);
-  const [forlengOpen, setForlengOpen] = useState(false);
-  const [avsluttOpen, setAvsluttOpen] = useState(false);
+interface InfoCardProps {
+  onHide: () => void;
+  onOpenForleng: () => void;
+  onOpenAvslutt: () => void;
+}
 
-  if (hidden) return null;
-
+export function InfoCard({ onHide, onOpenForleng, onOpenAvslutt }: InfoCardProps) {
   return (
     <div
       className="flex flex-col items-start overflow-clip rounded-xl w-full"
@@ -43,7 +40,7 @@ export function InfoCard() {
           size="xsmall"
           icon={<XMarkIcon aria-hidden />}
           aria-label="Lukk"
-          onClick={() => setHidden(true)}
+          onClick={onHide}
           style={{ color: "var(--ax-text-info, #002942)" }}
         />
       </div>
@@ -62,7 +59,7 @@ export function InfoCard() {
           size="small"
           icon={<LeaveIcon aria-hidden />}
           iconPosition="left"
-          onClick={() => setAvsluttOpen(true)}
+          onClick={onOpenAvslutt}
         >
           Avslutt oppfølging
         </Button>
@@ -71,22 +68,11 @@ export function InfoCard() {
           size="small"
           icon={<TimerStartIcon aria-hidden />}
           iconPosition="left"
-          onClick={() => setForlengOpen(true)}
+          onClick={onOpenForleng}
         >
           Forleng oppfølging
         </Button>
       </div>
-
-      <ForlengOppfolgingModal
-        open={forlengOpen}
-        onClose={() => setForlengOpen(false)}
-        onBekreft={() => { setForlengOpen(false); setHidden(true); }}
-      />
-      <AvsluttOppfolgingModal
-        open={avsluttOpen}
-        onClose={() => setAvsluttOpen(false)}
-        onBekreft={() => { setAvsluttOpen(false); setHidden(true); }}
-      />
     </div>
   );
 }
