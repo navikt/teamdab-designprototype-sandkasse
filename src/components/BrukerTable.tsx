@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Checkbox, Table, Tag } from "@navikt/ds-react";
 
 const data = [
@@ -100,9 +101,15 @@ export function BrukerTable() {
                 {" "}
               </Checkbox>
             </Table.DataCell>
-            <Table.HeaderCell scope="row" textSize="small">
-              <span id={`navn-${bruker.id}`}>{bruker.navn}</span>
-            </Table.HeaderCell>
+            <Table.DataCell textSize="small">
+              <Link
+                id={`navn-${bruker.id}`}
+                href={`/personprofil?navn=${encodeURIComponent(bruker.navn)}`}
+                className="text-blue-600 hover:underline"
+              >
+                {bruker.navn}
+              </Link>
+            </Table.DataCell>
             <Table.DataCell textSize="small">{bruker.fnr}</Table.DataCell>
             <Table.DataCell textSize="small">{bruker.veileder}</Table.DataCell>
             <Table.DataCell textSize="small">{bruker.navIdent}</Table.DataCell>
