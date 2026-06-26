@@ -52,8 +52,6 @@ export function InfoCard() {
       <div className="flex flex-col gap-1 items-start pt-2 pb-3 px-4 w-full bg-white">
         <ul className="list-disc pl-5 space-y-0.5">
           <li><BodyLong as="span" size="small">Ikke lengre arbeidssøker</BodyLong></li>
-          <li><BodyLong as="span" size="small">Ikke lovlig opphold</BodyLong></li>
-          <li><BodyLong as="span" size="small">Død</BodyLong></li>
         </ul>
       </div>
 
