@@ -4,10 +4,12 @@ import { useState } from "react";
 import { InformationSquareIcon, LeaveIcon, TimerStartIcon, XMarkIcon } from "@navikt/aksel-icons";
 import { BodyLong, Button } from "@navikt/ds-react";
 import { ForlengOppfolgingModal } from "./ForlengOppfolgingModal";
+import { AvsluttOppfolgingModal } from "./AvsluttOppfolgingModal";
 
 export function InfoCard() {
   const [hidden, setHidden] = useState(false);
   const [forlengOpen, setForlengOpen] = useState(false);
+  const [avsluttOpen, setAvsluttOpen] = useState(false);
 
   if (hidden) return null;
 
@@ -62,6 +64,7 @@ export function InfoCard() {
           size="small"
           icon={<LeaveIcon aria-hidden />}
           iconPosition="left"
+          onClick={() => setAvsluttOpen(true)}
         >
           Avslutt oppfølging
         </Button>
@@ -80,6 +83,11 @@ export function InfoCard() {
         open={forlengOpen}
         onClose={() => setForlengOpen(false)}
         onBekreft={() => { setForlengOpen(false); setHidden(true); }}
+      />
+      <AvsluttOppfolgingModal
+        open={avsluttOpen}
+        onClose={() => setAvsluttOpen(false)}
+        onBekreft={() => { setAvsluttOpen(false); setHidden(true); }}
       />
     </div>
   );

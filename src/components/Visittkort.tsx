@@ -5,10 +5,12 @@ import { useState } from "react";
 import { ChevronLeftIcon, PersonCircleFillIcon, CogIcon } from "@navikt/aksel-icons";
 import { ActionMenu, Button, Tag } from "@navikt/ds-react";
 import { ForlengOppfolgingModal } from "./ForlengOppfolgingModal";
+import { AvsluttOppfolgingModal } from "./AvsluttOppfolgingModal";
 
 export function Visittkort({ navn }: { navn?: string }) {
   const router = useRouter();
   const [forlengOpen, setForlengOpen] = useState(false);
+  const [avsluttOpen, setAvsluttOpen] = useState(false);
   return (
     <div className="flex items-center gap-4 px-4 py-3.5 bg-white border-b border-gray-200">
       <button
@@ -72,7 +74,7 @@ export function Visittkort({ navn }: { navn?: string }) {
             <ActionMenu.Item onSelect={() => {}}>Send varsel</ActionMenu.Item>
             <ActionMenu.Item onSelect={() => {}}>Endre til manuell oppfølging</ActionMenu.Item>
             <ActionMenu.Item onSelect={() => {}}>Start KVP-periode</ActionMenu.Item>
-            <ActionMenu.Item onSelect={() => {}}>Avslutt oppfølging</ActionMenu.Item>
+            <ActionMenu.Item onSelect={() => setAvsluttOpen(true)}>Avslutt oppfølging</ActionMenu.Item>
             <ActionMenu.Item onSelect={() => setForlengOpen(true)}>Forleng oppfølging</ActionMenu.Item>
             <ActionMenu.Item onSelect={() => {}}>Bytt oppfølgingskontor</ActionMenu.Item>
             <ActionMenu.Item onSelect={() => {}}>Vis historikk</ActionMenu.Item>
@@ -84,6 +86,11 @@ export function Visittkort({ navn }: { navn?: string }) {
         open={forlengOpen}
         onClose={() => setForlengOpen(false)}
         onBekreft={() => setForlengOpen(false)}
+      />
+      <AvsluttOppfolgingModal
+        open={avsluttOpen}
+        onClose={() => setAvsluttOpen(false)}
+        onBekreft={() => setAvsluttOpen(false)}
       />
     </div>
   );
