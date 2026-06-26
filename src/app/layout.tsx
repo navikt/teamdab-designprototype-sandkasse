@@ -1,12 +1,5 @@
 import type { Metadata } from "next";
-import { Source_Sans_3 } from "next/font/google";
 import "./globals.css";
-
-const sourceSans = Source_Sans_3({
-  variable: "--font-source-sans",
-  subsets: ["latin"],
-  weight: ["300", "400", "600"],
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,10 +12,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="nb"
-      className={`${sourceSans.variable} h-full antialiased`}
-    >
+    <html lang="nb" className="h-full">
+      <head>
+        <link
+          rel="preload"
+          href="https://cdn.nav.no/aksel/fonts/SourceSans3-normal.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
