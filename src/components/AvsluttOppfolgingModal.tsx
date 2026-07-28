@@ -20,14 +20,15 @@ export function AvsluttOppfolgingModal({ open, onClose, onBekreft }: AvsluttOppf
         </BodyLong>
         <Textarea
           label="Begrunnelse"
+          size="small"
           value={begrunnelse}
           onChange={(e) => setBegrunnelse(e.target.value)}
           maxLength={500}
         />
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" size="medium" onClick={onBekreft}>Bekreft</Button>
-        <Button variant="secondary" size="medium" onClick={onClose}>Avbryt</Button>
+        <Button variant="primary" size="small" onClick={onBekreft}>Bekreft</Button>
+        <Button variant="secondary" size="small" onClick={onClose}>Avbryt</Button>
       </Modal.Footer>
     </Modal>
   );

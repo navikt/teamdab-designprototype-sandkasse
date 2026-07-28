@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { ClockDashedIcon } from "@navikt/aksel-icons";
 import {
   Accordion,
@@ -20,8 +20,6 @@ interface ForlengOppfolgingModalProps {
 }
 
 export function ForlengOppfolgingModal({ open, onClose, onBekreft }: ForlengOppfolgingModalProps) {
-  const ref = useRef<HTMLDialogElement>(null);
-
   const [days, setDays] = useState(30);
   const [begrunnelse, setBegrunnelse] = useState("");
   const [begrunnelseFritext, setBegrunnelseFritext] = useState("");
@@ -35,12 +33,12 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft }: ForlengOppf
   });
 
   return (
-    <Modal ref={ref} open={open} onClose={onClose} header={{ heading: "Forleng oppfølging" }} width="medium">
+    <Modal open={open} onClose={onClose} header={{ heading: "Forleng oppfølging" }} width="medium">
       <Modal.Body className="flex flex-col gap-4">
         <div className="flex flex-wrap gap-2">
-          <Tag variant="info" size="medium">Ikke lengre arbeidssøker</Tag>
-          <Tag variant="info" size="medium">Ikke lovlig opphold</Tag>
-          <Tag variant="info" size="medium">Død</Tag>
+          <Tag variant="info" size="small">Ikke lengre arbeidssøker</Tag>
+          <Tag variant="info" size="small">Ikke lovlig opphold</Tag>
+          <Tag variant="info" size="small">Død</Tag>
         </div>
 
         <Link href="#">Gå til aktivitetsplan</Link>
@@ -85,8 +83,8 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft }: ForlengOppf
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant="primary" size="medium" onClick={onBekreft}>Bekreft</Button>
-        <Button variant="secondary" size="medium" onClick={onClose}>Avbryt</Button>
+        <Button variant="primary" size="small" onClick={onBekreft}>Bekreft</Button>
+        <Button variant="secondary" size="small" onClick={onClose}>Avbryt</Button>
       </Modal.Footer>
     </Modal>
   );
