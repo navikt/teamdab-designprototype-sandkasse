@@ -54,9 +54,15 @@ export function FilterPanel() {
           </div>
         </Tabs.Panel>
 
-        <Tabs.Panel value="mine-filter" className="p-6" />
-        <Tabs.Panel value="veiledergrupper" className="p-6" />
-        <Tabs.Panel value="filter" className="p-6" />
+        <Tabs.Panel value="mine-filter" className="p-6">
+          {null}
+        </Tabs.Panel>
+        <Tabs.Panel value="veiledergrupper" className="p-6">
+          {null}
+        </Tabs.Panel>
+        <Tabs.Panel value="filter" className="p-6">
+          {null}
+        </Tabs.Panel>
       </Tabs>
     </div>
   );
