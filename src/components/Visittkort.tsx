@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { ChevronLeftIcon, PersonCircleFillIcon, CogIcon } from "@navikt/aksel-icons";
-import { ActionMenu, Button, Tag } from "@navikt/ds-react";
+import { ActionMenu, BodyLong, Button, Heading, Tag } from "@navikt/ds-react";
 
 interface VisittkortProps {
   navn?: string;
@@ -13,10 +13,10 @@ interface VisittkortProps {
 export function Visittkort({ navn, onOpenForleng, onOpenAvslutt }: VisittkortProps) {
   const router = useRouter();
   return (
-    <div className="flex items-center gap-4 px-4 py-3.5 bg-white border-b border-gray-200">
+    <div className="flex items-center gap-4 px-4 py-3.5 bg-ax-bg-default border-b border-ax-border-neutral-subtle">
       <button
         aria-label="Tilbake"
-        className="p-1 rounded hover:bg-gray-100 transition-colors"
+        className="p-1 rounded hover:bg-ax-bg-neutral-soft transition-colors"
         onClick={() => router.back()}
       >
         <ChevronLeftIcon aria-hidden fontSize="1.5rem" />
@@ -25,31 +25,18 @@ export function Visittkort({ navn, onOpenForleng, onOpenAvslutt }: VisittkortPro
       <PersonCircleFillIcon
         aria-hidden
         fontSize="2.5rem"
-        style={{ color: "#368da8" }}
+        className="text-ax-text-info"
       />
 
-      <span
-        className="font-semibold text-2xl leading-8 whitespace-nowrap"
-        style={{
-          fontFamily: "'Source Sans Pro', 'Source Sans 3', sans-serif",
-          color: "#23262a",
-          letterSpacing: "-0.048px",
-        }}
-      >
+      <Heading size="large" level="1" className="whitespace-nowrap">
         {navn ?? "Testbruker, Uspesifisert"} (44 år)
-      </span>
+      </Heading>
 
       {/* Fnr-lignende testverdi: dag-del "00" er aldri gyldig i et ekte
           fødselsnummer, så tallet kan ikke sammenfalle med et reelt. */}
-      <span
-        className="text-lg leading-6 whitespace-nowrap"
-        style={{
-          fontFamily: "'Source Sans Pro', 'Source Sans 3', sans-serif",
-          color: "#23262a",
-        }}
-      >
+      <BodyLong className="whitespace-nowrap">
         00000000000
-      </span>
+      </BodyLong>
 
       <div className="flex items-center gap-2 flex-wrap flex-1">
         <Tag variant="moderate" data-color="info" size="medium">

@@ -22,6 +22,18 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: "Source Sans 3", Arial, sans-serif;
+
+  /* Aksel design tokens → Tailwind utility classes */
+  --color-ax-bg-default: var(--ax-bg-default);
+  --color-ax-bg-neutral-soft: var(--ax-bg-neutral-soft);
+  --color-ax-bg-accent-moderate-hover: var(--ax-bg-accent-moderate-hover);
+  --color-ax-bg-accent-strong: var(--ax-bg-accent-strong);
+  --color-ax-bg-success-moderate: var(--ax-bg-success-moderate);
+  --color-ax-border-neutral: var(--ax-border-neutral);
+  --color-ax-border-neutral-subtle: var(--ax-border-neutral-subtle);
+  --color-ax-border-default: var(--ax-border-default);
+  --color-ax-text-neutral: var(--ax-text-neutral);
+  --color-ax-text-info: var(--ax-text-info);
 }
 
 @media (prefers-color-scheme: dark) {

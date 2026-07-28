@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { HelpText, Link } from "@navikt/ds-react";
+import { Heading, HelpText, Link } from "@navikt/ds-react";
 import { AktivitetsKort, KolonneId, KOLONNE_LABELS, KOLONNE_HELP } from "./types";
 import { AktivitetsKortCard } from "./AktivitetsKortCard";
 
@@ -16,8 +16,8 @@ export function AktivitetsplanKolonne({ kolonneId, kort, onDragStart, onDrop }: 
 
   return (
     <div
-      className={`flex flex-col gap-2 min-w-[260px] flex-1 rounded-lg p-2 transition-colors ${
-        isDragOver ? "bg-[#cce1ff] ring-2 ring-[#0067c5]" : "bg-[#eceef0]"
+      className={`flex flex-col gap-2 min-w-[260px] flex-1 border-t border-ax-border-neutral-subtle rounded-none p-4 transition-colors sm:border-t-0 sm:rounded-md ${
+        isDragOver ? "bg-ax-bg-accent-moderate-hover" : "bg-ax-bg-neutral-soft"
       }`}
       onDragOver={(e) => {
         e.preventDefault();
@@ -30,12 +30,11 @@ export function AktivitetsplanKolonne({ kolonneId, kort, onDragStart, onDrop }: 
       }}
     >
       {/* Column header */}
-      <div className="flex items-center gap-1 px-1 pb-1">
-        <span className="font-semibold text-sm uppercase tracking-widest" style={{ color: "#23262a" }}>
+      <div className="flex items-center justify-between pb-2">
+        <Heading level="2" size="small">
           {KOLONNE_LABELS[kolonneId]}
-        </span>
-        <span className="text-sm font-normal text-gray-500">({kort.length})</span>
-        <HelpText title={KOLONNE_LABELS[kolonneId]} placement="right" className="ml-0.5">
+        </Heading>
+        <HelpText title={KOLONNE_LABELS[kolonneId]} placement="right">
           {KOLONNE_HELP[kolonneId]}
         </HelpText>
       </div>

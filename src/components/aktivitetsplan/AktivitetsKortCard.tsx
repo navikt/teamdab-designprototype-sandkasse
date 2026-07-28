@@ -1,4 +1,4 @@
-import { Tag } from "@navikt/ds-react";
+import { Tag, Detail, Heading, BodyShort } from "@navikt/ds-react";
 import { AktivitetsKort, TagVariant } from "./types";
 
 interface TagConfig {
@@ -28,53 +28,44 @@ export function AktivitetsKortCard({ kort, onDragStart }: Props) {
     <div
       draggable
       onDragStart={(e) => onDragStart(e, kort.id)}
-      className="bg-white rounded border border-[rgba(2,20,49,0.2)] p-3 flex flex-col gap-1.5 cursor-grab active:cursor-grabbing active:opacity-60 select-none"
+      className="bg-ax-bg-default rounded-md border border-ax-border-neutral p-3 pb-4 flex flex-col gap-1 cursor-grab active:cursor-grabbing active:opacity-60 select-none"
     >
       {/* Type label + blue dot */}
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-baseline gap-1.5">
         {kort.hasBlueDot && (
           <span
-            className="inline-block w-2.5 h-2.5 rounded-full bg-[#0067c5] shrink-0"
+            className="inline-block w-2 h-2 rounded-full bg-ax-bg-accent-strong shrink-0 self-center"
             aria-label="Ulest"
           />
         )}
-        <span
-          className="text-xs font-normal tracking-[0.1em] uppercase"
-          style={{ color: "#0067c5", fontSize: "12px", lineHeight: "16px" }}
-        >
+        <Detail as="p" className="uppercase text-ax-text-neutral">
           {kort.type}
-        </span>
+        </Detail>
       </div>
 
       {/* Title */}
-      <p className="font-semibold text-base leading-5" style={{ color: "#23262a" }}>
+      <Heading level="3" size="xsmall">
         {kort.title}
-      </p>
+      </Heading>
 
       {/* Subtitle */}
       {kort.subtitle && (
-        <p className="text-sm leading-5" style={{ color: "#23262a" }}>
-          {kort.subtitle}
-        </p>
+        <BodyShort>{kort.subtitle}</BodyShort>
       )}
 
       {/* Date range */}
       {kort.dateRange && (
-        <p className="text-sm leading-5" style={{ color: "#23262a" }}>
-          {kort.dateRange}
-        </p>
+        <BodyShort>{kort.dateRange}</BodyShort>
       )}
 
       {/* Extra line */}
       {kort.extraLine && (
-        <p className="text-sm leading-5" style={{ color: "#23262a" }}>
-          {kort.extraLine}
-        </p>
+        <BodyShort>{kort.extraLine}</BodyShort>
       )}
 
       {/* Tags */}
       {kort.tags.length > 0 && (
-        <div className="flex flex-wrap gap-1 pt-0.5">
+        <div className="flex flex-wrap gap-1 pt-1">
           {kort.tags.map((t) => {
             const cfg = TAG_CONFIG[t];
             return (

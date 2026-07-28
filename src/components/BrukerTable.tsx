@@ -71,8 +71,8 @@ export function BrukerTable() {
   return (
     <div>
     <Table zebraStripes size="medium" className="bg-[var(--ax-bg-default,white)]">
-      <Table.Header style={{ background: "#ecedef" }}>
-        <Table.Row style={{ background: "#ecedef" }}>
+      <Table.Header style={{ background: "var(--ax-bg-neutral-soft)" }}>
+        <Table.Row style={{ background: "var(--ax-bg-neutral-soft)" }}>
           <Table.HeaderCell textSize="small">
             <Checkbox
               checked={allSelected}
