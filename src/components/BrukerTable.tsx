@@ -1,8 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { Checkbox, Table, Tag } from "@navikt/ds-react";
+import { Checkbox, Link, Tag } from "@navikt/ds-react";
+import { ArrowDownIcon, ArrowUpIcon } from "@navikt/aksel-icons";
+
+// Stil for sorteringsknapper — tilsvarer .lenke--frittstaende i prod
+const sorteringKnappStyle: React.CSSProperties = {
+  border: 0,
+  padding: "0 4px",
+  background: "none",
+  cursor: "pointer",
+  fontWeight: "normal",
+  fontSize: "inherit",
+  fontFamily: "inherit",
+  color: "var(--ax-text-action)",
+  textAlign: "left",
+  display: "inline-flex",
+  alignItems: "center",
+  gap: "4px",
+};
 
 // Testdata: fiktive navn bygget som ord-kombinasjoner (substantiv, adjektiv)
 // i stedet for egennavn, for å unngå tilfeldig sammenfall med virkelige
@@ -57,8 +73,42 @@ const data = [
   },
 ];
 
+type SortField = "navn" | "fnr" | "veileder" | "navIdent" | "utlopsdato";
+type SortOrder = "stigende" | "synkende" | null;
+
+function SorteringHeader({
+  tekst,
+  felt,
+  aktivtFelt,
+  rekkefolge,
+  onClick,
+  className,
+}: {
+  tekst: string;
+  felt: SortField;
+  aktivtFelt: SortField | null;
+  rekkefolge: SortOrder;
+  onClick: (felt: SortField) => void;
+  className?: string;
+}) {
+  const erValgt = aktivtFelt === felt;
+  return (
+    <button
+      onClick={() => onClick(felt)}
+      style={sorteringKnappStyle}
+      aria-pressed={erValgt}
+    >
+      {tekst}
+      {erValgt && rekkefolge === "stigende" && <ArrowUpIcon aria-hidden fontSize="1rem" />}
+      {erValgt && rekkefolge === "synkende" && <ArrowDownIcon aria-hidden fontSize="1rem" />}
+    </button>
+  );
+}
+
 export function BrukerTable() {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
+  const [sortFelt, setSortFelt] = useState<SortField | null>(null);
+  const [sortOrder, setSortOrder] = useState<SortOrder>(null);
 
   const toggleRow = (id: string) =>
     setSelectedRows((prev) =>
@@ -68,66 +118,146 @@ export function BrukerTable() {
   const allSelected = selectedRows.length === data.length;
   const someSelected = selectedRows.length > 0 && !allSelected;
 
+  const handleSort = (felt: SortField) => {
+    if (sortFelt === felt) {
+      setSortOrder((prev) => (prev === "stigende" ? "synkende" : prev === "synkende" ? null : "stigende"));
+      if (sortOrder === "synkende") setSortFelt(null);
+    } else {
+      setSortFelt(felt);
+      setSortOrder("stigende");
+    }
+  };
+
+  const sortertData = [...data].sort((a, b) => {
+    if (!sortFelt || !sortOrder) return 0;
+    const va = a[sortFelt];
+    const vb = b[sortFelt];
+    return sortOrder === "stigende" ? va.localeCompare(vb) : vb.localeCompare(va);
+  });
+
+  const sorteringProps = { aktivtFelt: sortFelt, rekkefolge: sortOrder, onClick: handleSort };
+
   return (
     <div>
-    <Table zebraStripes size="medium" className="bg-[var(--ax-bg-default,white)]">
-      <Table.Header style={{ background: "var(--ax-bg-neutral-soft)" }}>
-        <Table.Row style={{ background: "var(--ax-bg-neutral-soft)" }}>
-          <Table.HeaderCell textSize="small">
-            <Checkbox
-              checked={allSelected}
-              indeterminate={someSelected}
-              onChange={() =>
-                setSelectedRows(allSelected ? [] : data.map((d) => d.id))
-              }
-              hideLabel
+      {/* Header — tilsvarer brukerliste__sorteringheader i prod */}
+      <div
+        className="flex items-center min-h-12 pb-2"
+        style={{ borderBottom: "1px solid var(--ax-border-neutral-strong)" }}
+      >
+        {/* Checkbox-kolonne */}
+        <div style={{ marginLeft: "calc(1rem + 1px)", marginRight: "0.5rem" }}>
+          <Checkbox
+            size="small"
+            checked={allSelected}
+            indeterminate={someSelected}
+            onChange={() => setSelectedRows(allSelected ? [] : data.map((d) => d.id))}
+            hideLabel
+          >
+            Velg alle
+          </Checkbox>
+        </div>
+
+        {/* Kolonneoverskrifter — tilsvarer brukerliste__innhold (70% bredde) */}
+        <div className="flex items-center" style={{ width: "70%" }}>
+          <div className="flex-[2]">
+            <SorteringHeader tekst="Etternavn, fornavn" felt="navn" {...sorteringProps} />
+          </div>
+          <div className="flex-[1]">
+            <SorteringHeader tekst="Fødselsnr." felt="fnr" {...sorteringProps} />
+          </div>
+          <div className="flex-[2]">
+            <SorteringHeader tekst="Veileder" felt="veileder" {...sorteringProps} />
+          </div>
+          <div className="flex-[1]">
+            <SorteringHeader tekst="Nav-ident" felt="navIdent" {...sorteringProps} />
+          </div>
+          <div className="flex-[2]">
+            <SorteringHeader tekst="Neste utløpsdato aktivitet" felt="utlopsdato" {...sorteringProps} />
+          </div>
+        </div>
+
+        {/* Gutter right — status-kolonne */}
+        <div className="flex flex-1 items-center">
+          <span className="text-sm" style={{ fontWeight: "normal", color: "var(--ax-text-neutral)", padding: "0 4px" }}>
+            Status
+          </span>
+        </div>
+      </div>
+
+      {/* Radliste — tilsvarer ul.brukerliste i prod */}
+      <ul
+        style={{
+          listStyle: "none",
+          margin: 0,
+          padding: 0,
+          backgroundColor: "var(--ax-bg-neutral-soft)",
+          borderLeft: "1px solid var(--ax-border-neutral-strong)",
+          borderRight: "1px solid var(--ax-border-neutral-strong)",
+          borderRadius: "0 0 4px 4px",
+        }}
+      >
+        {sortertData.map((bruker, index) => {
+          const isSelected = selectedRows.includes(bruker.id);
+          const isOdd = index % 2 === 0; // 1-indeksert: første er oddetall
+          return (
+            <li
+              key={bruker.id}
+              style={{
+                backgroundColor: isSelected
+                  ? "var(--ax-bg-accent-soft)"
+                  : isOdd
+                    ? "var(--ax-bg-default)"
+                    : undefined,
+                borderTop: index === 0 ? "none" : "1px solid var(--ax-border-default)",
+                borderBottom:
+                  index === sortertData.length - 1
+                    ? "1px solid var(--ax-border-default)"
+                    : undefined,
+              }}
             >
-              Velg alle
-            </Checkbox>
-          </Table.HeaderCell>
-          <Table.ColumnHeader scope="col" textSize="small" style={{ fontWeight: "normal" }}>Etternavn, fornavn</Table.ColumnHeader>
-          <Table.ColumnHeader scope="col" textSize="small" style={{ fontWeight: "normal" }}>Fødselsnr.</Table.ColumnHeader>
-          <Table.ColumnHeader scope="col" textSize="small" style={{ fontWeight: "normal" }}>Veileder</Table.ColumnHeader>
-          <Table.ColumnHeader scope="col" textSize="small" style={{ fontWeight: "normal" }}>Nav-ident</Table.ColumnHeader>
-          <Table.ColumnHeader scope="col" textSize="small" style={{ fontWeight: "normal" }}>Neste utløpsdato aktivitet</Table.ColumnHeader>
-          <Table.ColumnHeader scope="col" textSize="small" style={{ fontWeight: "normal" }}>Status</Table.ColumnHeader>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {data.map((bruker) => (
-          <Table.Row key={bruker.id} selected={selectedRows.includes(bruker.id)}>
-            <Table.DataCell textSize="small">
-              <Checkbox
-                hideLabel
-                checked={selectedRows.includes(bruker.id)}
-                onChange={() => toggleRow(bruker.id)}
-                aria-labelledby={`navn-${bruker.id}`}
-              >
-                {" "}
-              </Checkbox>
-            </Table.DataCell>
-            <Table.DataCell textSize="small">
-              <Link
-                id={`navn-${bruker.id}`}
-                href={`/personprofil?navn=${encodeURIComponent(bruker.navn)}`}
-                className="text-blue-600 hover:underline"
-              >
-                {bruker.navn}
-              </Link>
-            </Table.DataCell>
-            <Table.DataCell textSize="small">{bruker.fnr}</Table.DataCell>
-            <Table.DataCell textSize="small">{bruker.veileder}</Table.DataCell>
-            <Table.DataCell textSize="small">{bruker.navIdent}</Table.DataCell>
-            <Table.DataCell textSize="small">{bruker.utlopsdato}</Table.DataCell>
-            <Table.DataCell textSize="small">
-              <Tag variant="outline" data-color="info" size="small">
-                {bruker.status}
-              </Tag>
-            </Table.DataCell>
-          </Table.Row>
-        ))}
-      </Table.Body>
-    </Table>
+              {/* Rad-element — tilsvarer div.brukerliste__element */}
+              <div className="flex items-center py-2">
+                {/* Checkbox */}
+                <div style={{ marginLeft: "calc(1rem + 1px)", marginRight: "0.5rem" }}>
+                  <Checkbox
+                    size="small"
+                    hideLabel
+                    checked={isSelected}
+                    onChange={() => toggleRow(bruker.id)}
+                    aria-label={`Velg ${bruker.navn}`}
+                  >
+                    Velg {bruker.navn}
+                  </Checkbox>
+                </div>
+
+                {/* Datakolonner — tilsvarer brukerliste__innhold (70%) */}
+                <div className="flex items-center text-sm" style={{ width: "70%" }}>
+                  <div className="flex-[2] px-1">
+                    <Link
+                      id={`navn-${bruker.id}`}
+                      href={`/personprofil?navn=${encodeURIComponent(bruker.navn)}`}
+                      style={{ textDecoration: "none" }}
+                    >
+                      {bruker.navn}
+                    </Link>
+                  </div>
+                  <div className="flex-[1] px-1">{bruker.fnr}</div>
+                  <div className="flex-[2] px-1">{bruker.veileder}</div>
+                  <div className="flex-[1] px-1">{bruker.navIdent}</div>
+                  <div className="flex-[2] px-1">{bruker.utlopsdato}</div>
+                </div>
+
+                {/* Gutter right — etiketter, tilsvarer brukerliste__gutter-right */}
+                <div className="flex flex-1 items-center gap-1">
+                  <Tag variant="outline" data-color="info" size="small" style={{ fontSize: "0.75rem" }}>
+                    {bruker.status}
+                  </Tag>
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

@@ -7,7 +7,7 @@ import { BrukerTable } from "@/components/BrukerTable";
 
 export default function VeilarbportefoljeflatePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-ax-bg-neutral-soft">
+    <div className="flex flex-col min-h-screen bg-ax-bg-neutral-moderate">
       <Topbar />
       <TabBar />
       <main className="flex-1 p-6 flex gap-4">

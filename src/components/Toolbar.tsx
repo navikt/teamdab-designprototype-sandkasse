@@ -22,7 +22,7 @@ export function Toolbar() {
         <Button variant="tertiary-neutral" size="xsmall" disabled>
           Vis 200 per side
         </Button>
-        <Button variant="primary" size="small" style={{ backgroundColor: "var(--ax-bg-neutral-strong)", borderColor: "var(--ax-bg-neutral-strong)" }}>
+        <Button variant="secondary-neutral" size="small">
           1
         </Button>
       </div>

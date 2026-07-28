@@ -26,6 +26,7 @@
   /* Aksel design tokens → Tailwind utility classes */
   --color-ax-bg-default: var(--ax-bg-default);
   --color-ax-bg-neutral-soft: var(--ax-bg-neutral-soft);
+  --color-ax-bg-neutral-moderate: var(--ax-bg-neutral-moderate);
   --color-ax-bg-accent-moderate-hover: var(--ax-bg-accent-moderate-hover);
   --color-ax-bg-accent-strong: var(--ax-bg-accent-strong);
   --color-ax-bg-success-moderate: var(--ax-bg-success-moderate);
