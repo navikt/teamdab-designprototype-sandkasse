@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Modia-prototype — Team DAB
 
-## Getting Started
+> **⚠️ Dette er en prototype**
+> Repoet brukes til utforskning og intern testing av ideer, og har ingen funksjonell rolle i produksjon. Koden skal ikke driftsettes eller kobles til reelle systemer.
 
-First, run the development server:
+## Hva er dette?
+
+En interaktiv prototype utviklet av Team DAB for å utforske og kommunisere ideer knyttet til brukeropplevelsen i Modia — primært aktivitetsplan, men også andre deler av arbeidsflaten.
+
+Prototypen er et mer realistisk og klikkbart alternativ til Figma-skisser, og brukes til:
+
+- **Designutforskning** — teste ut interaksjonsmønstre og layout
+- **Kommunikasjon** — vise frem ideer til andre team og interessenter
+- **Brukertesting** — støtte interne tester av brukeropplevelse
+
+Utviklingen skjer primært med KI-verktøy (GitHub Copilot).
+
+## Teknologi
+
+- [Next.js](https://nextjs.org/) (App Router)
+- [Aksel](https://aksel.nav.no/) — NAVs designsystem (`@navikt/ds-react`)
+- TypeScript
+
+## Kom i gang
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Åpne [http://localhost:3000](http://localhost:3000) i nettleseren.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Testdata
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+All data i prototypen er fiktiv og laget utelukkende for demonstrasjonsformål. Ingen reelle brukere, fødselsnumre eller personopplysninger skal forekomme i kodebasen.
 
-## Learn More
+## Status
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+🧪 Aktiv prototype — ikke produksjonsklar

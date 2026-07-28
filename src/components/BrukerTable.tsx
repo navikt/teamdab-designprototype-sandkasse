@@ -31,7 +31,6 @@ const data = [
     navn: "Kunnskap, Fattig",
     fnr: "00010112345",
     veileder: "Vidde, Rolig",
-    navIdent: "Z123456",
     utlopsdato: "12.07.2026",
     status: "Ikke lengre arbeidssøker",
   },
@@ -40,7 +39,6 @@ const data = [
     navn: "Avstand, Oversiktlig",
     fnr: "00020123456",
     veileder: "Retning, Stødig",
-    navIdent: "Z234567",
     utlopsdato: "03.08.2026",
     status: "Ikke lengre arbeidssøker",
   },
@@ -49,7 +47,6 @@ const data = [
     navn: "Utsikt, Stille",
     fnr: "00030134567",
     veileder: "Vidde, Rolig",
-    navIdent: "Z123456",
     utlopsdato: "19.06.2026",
     status: "Ikke lengre arbeidssøker",
   },
@@ -58,7 +55,6 @@ const data = [
     navn: "Balanse, Skarp",
     fnr: "00040145678",
     veileder: "Utvikling, Klar",
-    navIdent: "Z345678",
     utlopsdato: "28.07.2026",
     status: "Ikke lengre arbeidssøker",
   },
@@ -67,13 +63,12 @@ const data = [
     navn: "Rutine, Åpen",
     fnr: "00050156789",
     veileder: "Retning, Stødig",
-    navIdent: "Z234567",
     utlopsdato: "15.09.2026",
     status: "Ikke lengre arbeidssøker",
   },
 ];
 
-type SortField = "navn" | "fnr" | "veileder" | "navIdent" | "utlopsdato";
+type SortField = "navn" | "fnr" | "veileder" | "utlopsdato";
 type SortOrder = "stigende" | "synkende" | null;
 
 function SorteringHeader({
@@ -168,9 +163,6 @@ export function BrukerTable() {
           <div className="flex-[2]">
             <SorteringHeader tekst="Veileder" felt="veileder" {...sorteringProps} />
           </div>
-          <div className="flex-[1]">
-            <SorteringHeader tekst="Nav-ident" felt="navIdent" {...sorteringProps} />
-          </div>
           <div className="flex-[2]">
             <SorteringHeader tekst="Neste utløpsdato aktivitet" felt="utlopsdato" {...sorteringProps} />
           </div>
@@ -243,7 +235,6 @@ export function BrukerTable() {
                   </div>
                   <div className="flex-[1] px-1">{bruker.fnr}</div>
                   <div className="flex-[2] px-1">{bruker.veileder}</div>
-                  <div className="flex-[1] px-1">{bruker.navIdent}</div>
                   <div className="flex-[2] px-1">{bruker.utlopsdato}</div>
                 </div>
 

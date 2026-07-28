@@ -107,7 +107,7 @@ export function Topbar() {
         <span className="text-white text-sm font-semibold leading-none" style={{ fontFamily: "'Source Sans Pro', sans-serif" }}>
           Vera Veileder
         </span>
-        <span className="text-gray-400 text-xs leading-none mt-0.5">Z867654</span>
+
       </div>
     </header>
   );
