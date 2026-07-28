@@ -4,48 +4,53 @@ import { useState } from "react";
 import Link from "next/link";
 import { Checkbox, Table, Tag } from "@navikt/ds-react";
 
+// Testdata: fiktive navn bygget som ord-kombinasjoner (substantiv, adjektiv)
+// i stedet for egennavn, for å unngå tilfeldig sammenfall med virkelige
+// personer. Fnr-verdiene har dag-del "00", som aldri forekommer i et ekte
+// fødselsnummer eller D-/synthetisk nummer, slik at de aldri kan feiltolkes
+// som reelle.
 const data = [
   {
     id: "1",
-    navn: "Jakobsen, Markus",
-    fnr: "03999265463",
-    veileder: "Andersen, Kari",
+    navn: "Kunnskap, Fattig",
+    fnr: "00010112345",
+    veileder: "Vidde, Rolig",
     navIdent: "Z123456",
     utlopsdato: "12.07.2026",
     status: "Ikke lengre arbeidssøker",
   },
   {
     id: "2",
-    navn: "Halvorsen, Mari",
-    fnr: "16993634134",
-    veileder: "Bjørnstad, Per",
+    navn: "Avstand, Oversiktlig",
+    fnr: "00020123456",
+    veileder: "Retning, Stødig",
     navIdent: "Z234567",
     utlopsdato: "03.08.2026",
     status: "Ikke lengre arbeidssøker",
   },
   {
     id: "3",
-    navn: "Christiansen, Mathias",
-    fnr: "18994441438",
-    veileder: "Andersen, Kari",
+    navn: "Utsikt, Stille",
+    fnr: "00030134567",
+    veileder: "Vidde, Rolig",
     navIdent: "Z123456",
     utlopsdato: "19.06.2026",
     status: "Ikke lengre arbeidssøker",
   },
   {
     id: "4",
-    navn: "Fredriksen, Leah",
-    fnr: "24999080180",
-    veileder: "Olsen, Tone",
+    navn: "Balanse, Skarp",
+    fnr: "00040145678",
+    veileder: "Utvikling, Klar",
     navIdent: "Z345678",
     utlopsdato: "28.07.2026",
     status: "Ikke lengre arbeidssøker",
   },
   {
     id: "5",
-    navn: "Evensen, Jonas",
-    fnr: "18996248460",
-    veileder: "Bjørnstad, Per",
+    navn: "Rutine, Åpen",
+    fnr: "00050156789",
+    veileder: "Retning, Stødig",
     navIdent: "Z234567",
     utlopsdato: "15.09.2026",
     status: "Ikke lengre arbeidssøker",

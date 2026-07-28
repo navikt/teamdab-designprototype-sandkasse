@@ -36,9 +36,11 @@ export function Visittkort({ navn, onOpenForleng, onOpenAvslutt }: VisittkortPro
           letterSpacing: "-0.048px",
         }}
       >
-        {navn ?? "Navn Navnersen"} (44 år)
+        {navn ?? "Testbruker, Uspesifisert"} (44 år)
       </span>
 
+      {/* Fnr-lignende testverdi: dag-del "00" er aldri gyldig i et ekte
+          fødselsnummer, så tallet kan ikke sammenfalle med et reelt. */}
       <span
         className="text-lg leading-6 whitespace-nowrap"
         style={{
@@ -46,7 +48,7 @@ export function Visittkort({ navn, onOpenForleng, onOpenAvslutt }: VisittkortPro
           color: "#23262a",
         }}
       >
-        12345671234
+        00000000000
       </span>
 
       <div className="flex items-center gap-2 flex-wrap flex-1">
