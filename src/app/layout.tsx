@@ -36,6 +36,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <div className="demo-corner" aria-hidden="true">
           <span className="demo-corner__label">DEMO</span>
+          <span className="demo-corner__sublabel">Designprototype</span>
         </div>
         {children}
       </body>

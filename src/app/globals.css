@@ -57,8 +57,8 @@ body {
   position: fixed;
   top: 0;
   right: 0;
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   background: #ffb000;
   clip-path: polygon(0 0, 100% 0, 100% 100%);
   z-index: 2147483647;
@@ -76,4 +76,17 @@ body {
   transform: rotate(45deg);
   transform-origin: center center;
   letter-spacing: 0.5px;
+}
+
+.demo-corner__sublabel {
+  position: absolute;
+  top: 48px;
+  right: 6px;
+  color: #000;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1;
+  transform: rotate(45deg);
+  transform-origin: center center;
+  letter-spacing: 0.3px;
 }
