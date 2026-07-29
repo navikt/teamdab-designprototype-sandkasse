@@ -13,13 +13,16 @@ import {
   Textarea,
 } from "@navikt/ds-react";
 
+import { Merkelapp } from "@/data/brukere";
+
 interface ForlengOppfolgingModalProps {
   open: boolean;
   onClose: () => void;
   onBekreft: () => void;
+  merkelapper?: Merkelapp[];
 }
 
-export function ForlengOppfolgingModal({ open, onClose, onBekreft }: ForlengOppfolgingModalProps) {
+export function ForlengOppfolgingModal({ open, onClose, onBekreft, merkelapper }: ForlengOppfolgingModalProps) {
   const [days, setDays] = useState(30);
   const [begrunnelse, setBegrunnelse] = useState("");
   const [begrunnelseFritext, setBegrunnelseFritext] = useState("");
@@ -36,9 +39,17 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft }: ForlengOppf
     <Modal open={open} onClose={onClose} header={{ heading: "Forleng oppfølging" }} width="medium">
       <Modal.Body className="flex flex-col gap-4">
         <div className="flex flex-wrap gap-2">
-          <Tag variant="info" size="small">Ikke lengre arbeidssøker</Tag>
-          <Tag variant="info" size="small">Ikke lovlig opphold</Tag>
-          <Tag variant="info" size="small">Død</Tag>
+          {merkelapper && merkelapper.length > 0 ? (
+            merkelapper.map((m) => (
+              <Tag key={m.tekst} variant={m.variant} size="small">{m.tekst}</Tag>
+            ))
+          ) : (
+            <>
+              <Tag variant="info" size="small">Ikke lengre arbeidssøker</Tag>
+              <Tag variant="info" size="small">Ikke lovlig opphold</Tag>
+              <Tag variant="info" size="small">Død</Tag>
+            </>
+          )}
         </div>
 
         <Link href="#">Gå til aktivitetsplan</Link>

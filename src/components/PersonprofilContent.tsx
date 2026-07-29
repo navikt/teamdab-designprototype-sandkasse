@@ -64,6 +64,7 @@ export function PersonprofilContent({ navn, fnr, merkelapper }: Props) {
         open={forlengOpen}
         onClose={() => setForlengOpen(false)}
         onBekreft={handleForlengBekreft}
+        merkelapper={merkelapper}
       />
       <AvsluttOppfolgingModal
         open={avsluttOpen}

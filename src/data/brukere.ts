@@ -7,6 +7,7 @@ export interface Bruker {
   id: string;
   navn: string;
   fnr: string;
+  oppfolgingStartet: string;
   veileder: string;
   utlopsdato: string;
   status: string;
@@ -21,6 +22,7 @@ export const brukere: Bruker[] = [
     id: "1",
     navn: "Kunnskap, Fattig",
     fnr: "00010112345",
+    oppfolgingStartet: "14.03.2024",
     veileder: "Vidde, Rolig",
     utlopsdato: "12.07.2026",
     status: "Ikke lengre arbeidssøker",
@@ -34,6 +36,7 @@ export const brukere: Bruker[] = [
     id: "2",
     navn: "Avstand, Oversiktlig",
     fnr: "00020123456",
+    oppfolgingStartet: "07.09.2023",
     veileder: "Retning, Stødig",
     utlopsdato: "03.08.2026",
     status: "Ikke lengre arbeidssøker",
@@ -48,6 +51,7 @@ export const brukere: Bruker[] = [
     id: "3",
     navn: "Utsikt, Stille",
     fnr: "00030134567",
+    oppfolgingStartet: "22.11.2024",
     veileder: "Vidde, Rolig",
     utlopsdato: "19.06.2026",
     status: "Ikke lengre arbeidssøker",
@@ -61,6 +65,7 @@ export const brukere: Bruker[] = [
     id: "4",
     navn: "Balanse, Skarp",
     fnr: "00040145678",
+    oppfolgingStartet: "05.06.2025",
     veileder: "Utvikling, Klar",
     utlopsdato: "28.07.2026",
     status: "Ikke lengre arbeidssøker",
@@ -75,6 +80,7 @@ export const brukere: Bruker[] = [
     id: "5",
     navn: "Rutine, Åpen",
     fnr: "00050156789",
+    oppfolgingStartet: "18.01.2025",
     veileder: "Retning, Stødig",
     utlopsdato: "15.09.2026",
     status: "Ikke lengre arbeidssøker",

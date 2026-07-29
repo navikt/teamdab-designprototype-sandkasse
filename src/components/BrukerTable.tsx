@@ -23,7 +23,7 @@ const sorteringKnappStyle: React.CSSProperties = {
 
 const data = brukere;
 
-type SortField = "navn" | "fnr" | "veileder" | "utlopsdato" | "status";
+type SortField = "navn" | "fnr" | "oppfolgingStartet" | "veileder" | "status";
 type SortOrder = "stigende" | "synkende" | null;
 
 function SorteringHeader({
@@ -116,10 +116,10 @@ export function BrukerTable() {
             <SorteringHeader tekst="Fødselsnr." felt="fnr" {...sorteringProps} />
           </div>
           <div className="flex-[2]">
-            <SorteringHeader tekst="Veileder" felt="veileder" {...sorteringProps} />
+            <SorteringHeader tekst="Oppfølging startet" felt="oppfolgingStartet" {...sorteringProps} />
           </div>
           <div className="flex-[2]">
-            <SorteringHeader tekst="Neste utløpsdato aktivitet" felt="utlopsdato" {...sorteringProps} />
+            <SorteringHeader tekst="Veileder" felt="veileder" {...sorteringProps} />
           </div>
         </div>
 
@@ -189,8 +189,8 @@ export function BrukerTable() {
                     </Link>
                   </div>
                   <div className="flex-[1] px-1">{bruker.fnr}</div>
+                  <div className="flex-[2] px-1">{bruker.oppfolgingStartet}</div>
                   <div className="flex-[2] px-1">{bruker.veileder}</div>
-                  <div className="flex-[2] px-1">{bruker.utlopsdato}</div>
                 </div>
 
                 {/* Gutter right — etiketter, tilsvarer brukerliste__gutter-right */}
