@@ -9,11 +9,15 @@ import { AktivitetsplanBoard } from "./aktivitetsplan/AktivitetsplanBoard";
 import { ForlengOppfolgingModal } from "./ForlengOppfolgingModal";
 import { AvsluttOppfolgingModal } from "./AvsluttOppfolgingModal";
 
+import { Merkelapp } from "@/data/brukere";
+
 interface Props {
   navn?: string;
+  fnr?: string;
+  merkelapper?: Merkelapp[];
 }
 
-export function PersonprofilContent({ navn }: Props) {
+export function PersonprofilContent({ navn, fnr, merkelapper }: Props) {
   const [infoCardHidden, setInfoCardHidden] = useState(false);
   const [forlengOpen, setForlengOpen] = useState(false);
   const [avsluttOpen, setAvsluttOpen] = useState(false);
@@ -32,6 +36,8 @@ export function PersonprofilContent({ navn }: Props) {
     <>
       <Visittkort
         navn={navn}
+        fnr={fnr}
+        merkelapper={merkelapper}
         onOpenForleng={() => setForlengOpen(true)}
         onOpenAvslutt={() => setAvsluttOpen(true)}
       />

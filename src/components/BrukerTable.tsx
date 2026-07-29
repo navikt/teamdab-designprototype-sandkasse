@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Checkbox, Link, Tag } from "@navikt/ds-react";
 import { ArrowDownIcon, ArrowUpIcon } from "@navikt/aksel-icons";
+import { brukere } from "@/data/brukere";
 
 // Stil for sorteringsknapper — tilsvarer .lenke--frittstaende i prod
 const sorteringKnappStyle: React.CSSProperties = {
@@ -20,55 +21,9 @@ const sorteringKnappStyle: React.CSSProperties = {
   gap: "4px",
 };
 
-// Testdata: fiktive navn bygget som ord-kombinasjoner (substantiv, adjektiv)
-// i stedet for egennavn, for å unngå tilfeldig sammenfall med virkelige
-// personer. Fnr-verdiene har dag-del "00", som aldri forekommer i et ekte
-// fødselsnummer eller D-/synthetisk nummer, slik at de aldri kan feiltolkes
-// som reelle.
-const data = [
-  {
-    id: "1",
-    navn: "Kunnskap, Fattig",
-    fnr: "00010112345",
-    veileder: "Vidde, Rolig",
-    utlopsdato: "12.07.2026",
-    status: "Ikke lengre arbeidssøker",
-  },
-  {
-    id: "2",
-    navn: "Avstand, Oversiktlig",
-    fnr: "00020123456",
-    veileder: "Retning, Stødig",
-    utlopsdato: "03.08.2026",
-    status: "Ikke lengre arbeidssøker",
-  },
-  {
-    id: "3",
-    navn: "Utsikt, Stille",
-    fnr: "00030134567",
-    veileder: "Vidde, Rolig",
-    utlopsdato: "19.06.2026",
-    status: "Ikke lengre arbeidssøker",
-  },
-  {
-    id: "4",
-    navn: "Balanse, Skarp",
-    fnr: "00040145678",
-    veileder: "Utvikling, Klar",
-    utlopsdato: "28.07.2026",
-    status: "Ikke lengre arbeidssøker",
-  },
-  {
-    id: "5",
-    navn: "Rutine, Åpen",
-    fnr: "00050156789",
-    veileder: "Retning, Stødig",
-    utlopsdato: "15.09.2026",
-    status: "Ikke lengre arbeidssøker",
-  },
-];
+const data = brukere;
 
-type SortField = "navn" | "fnr" | "veileder" | "utlopsdato";
+type SortField = "navn" | "fnr" | "veileder" | "utlopsdato" | "status";
 type SortOrder = "stigende" | "synkende" | null;
 
 function SorteringHeader({
@@ -227,7 +182,7 @@ export function BrukerTable() {
                   <div className="flex-[2] px-1">
                     <Link
                       id={`navn-${bruker.id}`}
-                      href={`/personprofil?navn=${encodeURIComponent(bruker.navn)}`}
+                      href={`/personprofil?navn=${encodeURIComponent(bruker.navn)}&fnr=${encodeURIComponent(bruker.fnr)}`}
                       style={{ textDecoration: "none" }}
                     >
                       {bruker.navn}
