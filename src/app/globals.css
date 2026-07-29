@@ -51,3 +51,29 @@ body {
   font-size: 16px;
   line-height: 1.4;
 }
+
+/* DEMO-corner guardrail — synlig i alle visninger */
+.demo-corner {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: #ffb000;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  z-index: 2147483647;
+  pointer-events: none;
+}
+
+.demo-corner__label {
+  position: absolute;
+  top: 32px;
+  right: 10px;
+  color: #000;
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1;
+  transform: rotate(45deg);
+  transform-origin: center center;
+  letter-spacing: 0.5px;
+}

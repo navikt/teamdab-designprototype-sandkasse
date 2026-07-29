@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check:testdata": "node scripts/check-synthetic-idents.mjs"
   },
   "dependencies": {
     "@navikt/aksel-icons": "^8.13.1",

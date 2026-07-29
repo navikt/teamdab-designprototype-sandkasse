@@ -37,3 +37,17 @@ All data i prototypen er fiktiv og laget utelukkende for demonstrasjonsformål. 
 ## Status
 
 🧪 Aktiv prototype — ikke produksjonsklar
+
+## Sikkerhetsregler for testdata
+
+For å kunne bruke realistisk terminologi i UI (for eksempel «Fødselsnr.») uten å risikere ekte persondata, gjelder disse reglene:
+
+- **Kun syntetiske testverdier er tillatt** i kildekoden (f.eks. Dolly/Tenor-genererte data).
+- **Ingen gyldige fødselsnumre** skal forekomme.
+- **Pull requests skal avvises** hvis guardrail-sjekken finner gyldig fnr.
+
+Kjør kontroll lokalt:
+
+```sh
+npm run check:testdata
+```
