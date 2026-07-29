@@ -7,15 +7,27 @@ interface TagConfig {
 }
 
 const TAG_CONFIG: Record<TagVariant, TagConfig> = {
-  "ulest": { label: "Ulest", variant: "warning" },
-  "avtalt-med-nav": { label: "Avtalt med NAV", variant: "info" },
-  "deltar": { label: "Deltar", variant: "success" },
-  "fatt-jobbtilbud": { label: "Fått jobbtilbud", variant: "success" },
-  "cv-er-delt": { label: "CV er delt", variant: "success" },
-  "sendt-soknad": { label: "Sendt søknad", variant: "success" },
-  "skal-pa-intervju": { label: "Skal på intervju", variant: "neutral" },
-  "ikke-ferdig": { label: "Ikke ferdig", variant: "neutral" },
-  "venter-svar": { label: "Venter svar fra deg", variant: "neutral" },
+  // Meta
+  "ulest":              { label: "Ulest",                         variant: "warning" },
+  "avtalt-med-nav":     { label: "Avtalt med Nav",                 variant: "info" },
+  // Stilling / Stilling fra Nav
+  "sendt-soknad":       { label: "Søknaden er sendt",             variant: "neutral" },
+  "skal-pa-intervju":   { label: "Skal på intervju",              variant: "info" },
+  "fatt-jobbtilbud":    { label: "Fått jobbtilbud",               variant: "success" },
+  "ikke-fatt-jobben":   { label: "Ikke fått jobben",              variant: "neutral" },
+  "fatt-jobben":        { label: "Fått jobben",                   variant: "success" },
+  "venter-pa-kontakt":  { label: "Venter på å bli kontaktet",     variant: "neutral" },
+  "cv-er-delt":         { label: "CV er delt med arbeidsgiver",   variant: "info" },
+  // Arena-tiltak / ekstern aktivitet
+  "sokt-inn":           { label: "Søkt inn på tiltaket",          variant: "neutral" },
+  "fatt-plass":         { label: "Fått plass på tiltaket",        variant: "success" },
+  "pa-venteliste":      { label: "På venteliste",                 variant: "neutral" },
+  "takket-ja":          { label: "Takket ja til tilbud",          variant: "success" },
+  "takket-nei":         { label: "Takket nei til tilbud",         variant: "neutral" },
+  "infomote":           { label: "Infomøte før tiltaket",         variant: "info" },
+  "ikke-mott":          { label: "Ikke møtt på tiltaket",         variant: "warning" },
+  "ikke-aktuell":       { label: "Ikke aktuell for tiltaket",     variant: "neutral" },
+  "fatt-avslag":        { label: "Fått avslag",                   variant: "neutral" },
 };
 
 interface Props {
@@ -47,11 +59,6 @@ export function AktivitetsKortCard({ kort, onDragStart }: Props) {
       <Heading level="3" size="xsmall">
         {kort.title}
       </Heading>
-
-      {/* Subtitle */}
-      {kort.subtitle && (
-        <BodyShort>{kort.subtitle}</BodyShort>
-      )}
 
       {/* Date range */}
       {kort.dateRange && (
