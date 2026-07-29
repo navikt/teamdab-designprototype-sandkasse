@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Modia-prototype - Team DAB",
+  title: "Designprototype - Team DAB",
   description: "Interaktiv prototype for utforskning og brukertesting.",
 };
 

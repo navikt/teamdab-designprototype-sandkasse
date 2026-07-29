@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "check:testdata": "node scripts/check-synthetic-idents.mjs"
+    "check:testdata": "node scripts/check-synthetic-idents.mjs",
+    "scan:history": "node scripts/scan-git-history-for-fnr.mjs"
   },
   "dependencies": {
     "@navikt/aksel-icons": "^8.13.1",

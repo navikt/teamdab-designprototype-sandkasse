@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# nav-pilot verktøystatusfil (maskin-nivå installasjon)
+.github/.nav-pilot-state.json
