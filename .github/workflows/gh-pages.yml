@@ -29,6 +29,8 @@ jobs:
 
             - name: Build
               run: npm run build:gh-pages
+              env:
+                  GITHUB_PAGES: true
 
             - name: Deploy
               if: success()
