@@ -184,7 +184,7 @@ export function BrukerTable() {
                     <NextLink
                       id={`navn-${bruker.id}`}
                       href={`/personprofil?navn=${encodeURIComponent(bruker.navn)}&fnr=${encodeURIComponent(bruker.fnr)}`}
-                      style={{ textDecoration: "none" }}
+                      className="bruker-lenke"
                     >
                       {bruker.navn}
                     </NextLink>

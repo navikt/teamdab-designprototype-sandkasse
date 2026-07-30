@@ -52,6 +52,14 @@ body {
   line-height: 1.4;
 }
 
+.bruker-lenke {
+  color: #0067c5;
+  text-decoration: none;
+}
+.bruker-lenke:hover {
+  text-decoration: underline;
+}
+
 /* DEMO-corner guardrail — synlig i alle visninger */
 .demo-corner {
   position: fixed;
