@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Checkbox, Link, Tag } from "@navikt/ds-react";
+import NextLink from "next/link";
+import { Checkbox, Tag } from "@navikt/ds-react";
 import { ArrowDownIcon, ArrowUpIcon } from "@navikt/aksel-icons";
 import { brukere } from "@/data/brukere";
 
@@ -180,13 +181,13 @@ export function BrukerTable() {
                 {/* Datakolonner — tilsvarer brukerliste__innhold (70%) */}
                 <div className="flex items-center text-sm" style={{ width: "70%" }}>
                   <div className="flex-[2] px-1">
-                    <Link
+                    <NextLink
                       id={`navn-${bruker.id}`}
                       href={`/personprofil?navn=${encodeURIComponent(bruker.navn)}&fnr=${encodeURIComponent(bruker.fnr)}`}
                       style={{ textDecoration: "none" }}
                     >
                       {bruker.navn}
-                    </Link>
+                    </NextLink>
                   </div>
                   <div className="flex-[1] px-1">{bruker.fnr}</div>
                   <div className="flex-[2] px-1">{bruker.oppfolgingStartet}</div>
