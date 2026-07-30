@@ -7,7 +7,7 @@
  * Bruk dette før overføring av repo til ny organisasjon.
  */
 
-import { execSync } from "node:child_process";
+import { execSync, spawnSync } from "node:child_process";
 
 const IDENT_REGEX = /\b\d{11}\b/g;
 const K1 = [3, 7, 6, 1, 8, 9, 4, 5, 2];
@@ -66,15 +66,15 @@ const findings = [];
 for (const hash of commits) {
   // Hent diff for denne commiten (kun tillagte linjer, dvs. + linjer)
   let diff;
-  try {
-    diff = execSync(`git show --unified=0 ${hash}`, {
-      encoding: "utf8",
-      maxBuffer: 50 * 1024 * 1024,
-    });
-  } catch {
+  const result = spawnSync("git", ["show", "--unified=0", hash], {
+    encoding: "utf8",
+    maxBuffer: 50 * 1024 * 1024,
+  });
+  if (result.status !== 0 || result.error) {
     // Merge-commits eller tomme commits kan feile — hopp over
     continue;
   }
+  diff = result.stdout;
 
   let currentFile = null;
   let lineNum = 0;
