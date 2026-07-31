@@ -1,21 +1,37 @@
 "use client";
 
 import { useState } from "react";
+import { Button, Modal } from "@navikt/ds-react";
+import { PlusIcon } from "@navikt/aksel-icons";
 
 const PLACEHOLDER_DIALOGS = ["Dialog 1", "Dialog 2", "Dialog 3"];
 
 export function DialogSection() {
   const [valgtId, setValgtId] = useState<string>("Dialog 1");
+  const [omDialogOpen, setOmDialogOpen] = useState(false);
 
   return (
     <div className="flex flex-1 overflow-hidden">
       {/* Venstre panel: dialogliste */}
       <div className="flex flex-col border-r border-ax-border-neutral-subtle md:min-w-[320px] md:max-w-[320px] w-full">
-        <div className="flex flex-1 flex-col overflow-y-auto bg-ax-bg-sunken p-2">
+        <div className="relative flex flex-1 flex-col overflow-y-auto bg-ax-bg-sunken p-2">
           <div className="flex gap-2 p-1 pb-2">
-            {/* Ny dialog-knapp og Om dialogen-lenke */}
-            <div className="h-8 w-24 bg-gray-200 rounded" />
-            <div className="h-8 w-24 bg-gray-200 rounded" />
+            <Button size="small" icon={<PlusIcon aria-hidden />} className="flex-grow">
+              Ny dialog
+            </Button>
+            <Button variant="tertiary" size="small" className="flex-grow" onClick={() => setOmDialogOpen(true)}>
+              Om dialogen
+            </Button>
+            <Modal
+              open={omDialogOpen}
+              onClose={() => setOmDialogOpen(false)}
+              closeOnBackdropClick
+              header={{ heading: "Om dialogen", closeButton: true }}
+            >
+              <Modal.Body>
+                <p>Her kan du sende meldinger til og fra veileder.</p>
+              </Modal.Body>
+            </Modal>
           </div>
           <div className="flex flex-col gap-2">
             {PLACEHOLDER_DIALOGS.map((d) => (
