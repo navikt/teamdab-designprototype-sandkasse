@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Modal } from "@navikt/ds-react";
+import { Button, Heading, Modal } from "@navikt/ds-react";
 import { PlusIcon } from "@navikt/aksel-icons";
 import { demoDialoger, DemoMelding } from "./dialogData";
 import { DialogPreviewListe } from "./DialogPreviewKort";
@@ -65,9 +65,12 @@ export function DialogSection() {
 
       {/* Høyre område: header + meldinger + svarfelt */}
       <div className="flex flex-1 flex-col overflow-hidden border-l border-ax-border-neutral-subtle">
-        {/* DialogHeader */}
-        <div className="border-b border-ax-border-neutral-subtle bg-white px-4 py-2">
-          <div className="h-6 w-48 bg-gray-200 rounded" />
+        <div className="flex flex-col gap-x-4 border-b border-solid border-ax-border-neutral-subtle bg-white py-1">
+          <section aria-label="Dialog header">
+            <div className="flex flex-row gap-x-2 pl-4">
+              <Heading level="1" size="small">{valgtDialog.overskrift}</Heading>
+            </div>
+          </section>
         </div>
 
         {/* Meldinger + svarfelt, side ved side på lg+ */}
