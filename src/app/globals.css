@@ -25,6 +25,7 @@
 
   /* Aksel design tokens → Tailwind utility classes */
   --color-ax-bg-default: var(--ax-bg-default);
+  --color-ax-bg-sunken: var(--ax-bg-sunken);
   --color-ax-bg-neutral-soft: var(--ax-bg-neutral-soft);
   --color-ax-bg-neutral-moderate: var(--ax-bg-neutral-moderate);
   --color-ax-bg-accent-moderate-hover: var(--ax-bg-accent-moderate-hover);
@@ -32,6 +33,7 @@
   --color-ax-bg-success-moderate: var(--ax-bg-success-moderate);
   --color-ax-border-neutral: var(--ax-border-neutral);
   --color-ax-border-neutral-subtle: var(--ax-border-neutral-subtle);
+  --color-ax-border-accent: var(--ax-border-accent);
   --color-ax-border-default: var(--ax-border-default);
   --color-ax-text-neutral: var(--ax-text-neutral);
   --color-ax-text-info: var(--ax-text-info);
@@ -55,6 +57,16 @@ body {
 .bruker-lenke {
   color: #0067c5;
   text-decoration: none;
+}
+
+.chat-nav .aksel-chat__avatar {
+  background-color: #D8F9FF;
+  border-color: #0096b1;
+}
+
+.chat-bruker .aksel-chat__avatar {
+  background-color: #ffffff;
+  border-color: var(--ax-border-neutral);
 }
 .bruker-lenke:hover {
   text-decoration: underline;
