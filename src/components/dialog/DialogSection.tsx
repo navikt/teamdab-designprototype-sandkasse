@@ -3,15 +3,32 @@
 import { useState } from "react";
 import { Button, Modal } from "@navikt/ds-react";
 import { PlusIcon } from "@navikt/aksel-icons";
-import { demoDialoger } from "./dialogData";
+import { demoDialoger, DemoMelding } from "./dialogData";
 import { DialogPreviewListe } from "./DialogPreviewKort";
 import { MeldingerSeksjon } from "./MeldingerSeksjon";
+import { SvarfeltSeksjon } from "./SvarfeltSeksjon";
 
 export function DialogSection() {
   const [valgtId, setValgtId] = useState<string>("1");
   const [omDialogOpen, setOmDialogOpen] = useState(false);
+  const [meldinger, setMeldinger] = useState<Record<string, DemoMelding[]>>(
+    Object.fromEntries(demoDialoger.map((d) => [d.id, d.meldinger]))
+  );
 
   const valgtDialog = demoDialoger.find((d) => d.id === valgtId) ?? demoDialoger[0];
+
+  const handleSend = (tekst: string) => {
+    const nyMelding: DemoMelding = {
+      id: `${valgtId}-${Date.now()}`,
+      avsender: "VEILEDER",
+      tekst,
+      sendt: new Date().toISOString(),
+    };
+    setMeldinger((prev) => ({
+      ...prev,
+      [valgtId]: [...(prev[valgtId] ?? []), nyMelding],
+    }));
+  };
 
   return (
     <div className="flex flex-1 overflow-hidden">
@@ -55,13 +72,8 @@ export function DialogSection() {
 
         {/* Meldinger + svarfelt, side ved side på lg+ */}
         <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
-          <MeldingerSeksjon dialog={valgtDialog} />
-
-          {/* Svarfelt */}
-          <div className="flex flex-col border-t lg:border-t-0 lg:border-l border-ax-border-neutral-subtle p-4 flex-1">
-            <div className="flex-1 bg-gray-100 rounded mb-2" />
-            <div className="h-8 w-16 bg-gray-300 rounded" />
-          </div>
+          <MeldingerSeksjon dialog={valgtDialog} meldinger={meldinger[valgtId] ?? []} />
+          <SvarfeltSeksjon dialog={valgtDialog} onSend={handleSend} />
         </div>
       </div>
     </div>

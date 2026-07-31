@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { BodyShort, Chat } from "@navikt/ds-react";
 import { PersonIcon } from "@navikt/aksel-icons";
-import { DemoDialog, DemoMelding } from "./dialogData";
+import { DemoMelding } from "./dialogData";
 
 function formaterTidspunkt(iso: string): string {
   return new Date(iso).toLocaleString("nb-NO", {
@@ -42,9 +42,10 @@ function MeldingBoble({ melding }: { melding: DemoMelding }) {
 
 interface Props {
   dialog: DemoDialog;
+  meldinger: DemoMelding[];
 }
 
-export function MeldingerSeksjon({ dialog }: Props) {
+export function MeldingerSeksjon({ dialog, meldinger }: Props) {
   const scrollRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -53,7 +54,7 @@ export function MeldingerSeksjon({ dialog }: Props) {
         scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
       }
     });
-  }, [dialog.id]);
+  }, [dialog.id, meldinger.length]);
 
   return (
     <section
@@ -64,18 +65,18 @@ export function MeldingerSeksjon({ dialog }: Props) {
     >
       <div className="flex flex-col justify-end min-h-full">
         <div className="mb-4 flex flex-col">
-          {dialog.meldinger.map((melding) => (
+          {meldinger.map((melding) => (
             <MeldingBoble key={melding.id} melding={melding} />
           ))}
         </div>
-        <LestAvBruker dialog={dialog} />
+        <LestAvBruker meldinger={meldinger} />
       </div>
     </section>
   );
 }
 
-function LestAvBruker({ dialog }: { dialog: DemoDialog }) {
-  const sistNavMelding = [...dialog.meldinger].reverse().find((m) => m.avsender === "VEILEDER");
+function LestAvBruker({ meldinger }: { meldinger: DemoMelding[] }) {
+  const sistNavMelding = [...meldinger].reverse().find((m) => m.avsender === "VEILEDER");
   if (!sistNavMelding) return null;
 
   return (
