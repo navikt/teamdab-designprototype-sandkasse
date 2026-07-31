@@ -58,6 +58,16 @@ body {
   color: #0067c5;
   text-decoration: none;
 }
+
+.chat-nav .aksel-chat__avatar {
+  background-color: #D8F9FF;
+  border-color: #0096b1;
+}
+
+.chat-bruker .aksel-chat__avatar {
+  background-color: #ffffff;
+  border-color: var(--ax-border-neutral);
+}
 .bruker-lenke:hover {
   text-decoration: underline;
 }

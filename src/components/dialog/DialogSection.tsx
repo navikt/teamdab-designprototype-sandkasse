@@ -5,10 +5,13 @@ import { Button, Modal } from "@navikt/ds-react";
 import { PlusIcon } from "@navikt/aksel-icons";
 import { demoDialoger } from "./dialogData";
 import { DialogPreviewListe } from "./DialogPreviewKort";
+import { MeldingerSeksjon } from "./MeldingerSeksjon";
 
 export function DialogSection() {
   const [valgtId, setValgtId] = useState<string>("1");
   const [omDialogOpen, setOmDialogOpen] = useState(false);
+
+  const valgtDialog = demoDialoger.find((d) => d.id === valgtId) ?? demoDialoger[0];
 
   return (
     <div className="flex flex-1 overflow-hidden">
@@ -52,10 +55,7 @@ export function DialogSection() {
 
         {/* Meldinger + svarfelt, side ved side på lg+ */}
         <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
-          {/* Meldinger */}
-          <div className="flex flex-1 flex-col overflow-y-auto bg-ax-bg-sunken px-4 py-4">
-            <div className="h-full min-h-32" />
-          </div>
+          <MeldingerSeksjon dialog={valgtDialog} />
 
           {/* Svarfelt */}
           <div className="flex flex-col border-t lg:border-t-0 lg:border-l border-ax-border-neutral-subtle p-4 flex-1">
