@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { Button, Modal } from "@navikt/ds-react";
 import { PlusIcon } from "@navikt/aksel-icons";
-
-const PLACEHOLDER_DIALOGS = ["Dialog 1", "Dialog 2", "Dialog 3"];
+import { demoDialoger } from "./dialogData";
+import { DialogPreviewListe } from "./DialogPreviewKort";
 
 export function DialogSection() {
-  const [valgtId, setValgtId] = useState<string>("Dialog 1");
+  const [valgtId, setValgtId] = useState<string>("1");
   const [omDialogOpen, setOmDialogOpen] = useState(false);
 
   return (
@@ -34,15 +34,11 @@ export function DialogSection() {
             </Modal>
           </div>
           <div className="flex flex-col gap-2">
-            {PLACEHOLDER_DIALOGS.map((d) => (
-              <button
-                key={d}
-                onClick={() => setValgtId(d)}
-                className={`h-16 w-full rounded border text-left px-3 text-sm ${valgtId === d ? "bg-blue-50 border-blue-400" : "bg-white border-gray-200"}`}
-              >
-                {d}
-              </button>
-            ))}
+            <DialogPreviewListe
+              dialoger={demoDialoger}
+              valgtId={valgtId}
+              onVelgDialog={setValgtId}
+            />
           </div>
         </div>
       </div>
