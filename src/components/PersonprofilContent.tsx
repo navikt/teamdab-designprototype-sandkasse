@@ -7,6 +7,7 @@ import { InfoCard } from "./InfoCard";
 import { PersonprofilTabBar } from "./PersonprofilTabBar";
 import { AktivitetsplanSection } from "./AktivitetsplanSection";
 import { AktivitetsplanBoard } from "./aktivitetsplan/AktivitetsplanBoard";
+import { DialogSection } from "./dialog/DialogSection";
 import { ForlengOppfolgingModal } from "./ForlengOppfolgingModal";
 import { AvsluttOppfolgingModal } from "./AvsluttOppfolgingModal";
 
@@ -42,7 +43,7 @@ export function PersonprofilContent({ navn, fnr, merkelapper }: Props) {
         onOpenForleng={() => setForlengOpen(true)}
         onOpenAvslutt={() => setAvsluttOpen(true)}
       />
-<Tabs defaultValue="aktivitetsplan">
+<Tabs defaultValue="aktivitetsplan" className="flex flex-col flex-1 overflow-hidden">
         <PersonprofilTabBar />
         <Tabs.Panel value="aktivitetsplan" className="flex-1 flex flex-col items-center gap-6 py-6 overflow-x-hidden">
           {!infoCardHidden && (
@@ -60,6 +61,9 @@ export function PersonprofilContent({ navn, fnr, merkelapper }: Props) {
           <div className="w-full px-6">
             <AktivitetsplanBoard />
           </div>
+        </Tabs.Panel>
+        <Tabs.Panel value="dialog" className="flex flex-1 overflow-hidden">
+          <DialogSection />
         </Tabs.Panel>
       </Tabs>
 
