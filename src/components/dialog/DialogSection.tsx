@@ -35,22 +35,21 @@ export function DialogSection() {
 
   const handleNyDialogSend = (tema: string, melding: string, venterPaSvar: boolean) => {
     const nyId = String(Date.now());
-    const nyDialog: DemoDialog = {
-      id: nyId,
-      overskrift: tema,
-      lest: true,
-      sisteDato: new Date().toISOString().slice(0, 10),
-      antallMeldinger: 1,
-      ferdigBehandlet: false,
-      venterPaSvar,
-      viktig: false,
-      meldinger: [],
-    };
     const forsteMelding: DemoMelding = {
       id: `${nyId}-1`,
       avsender: "VEILEDER",
       tekst: melding,
       sendt: new Date().toISOString(),
+    };
+    const nyDialog: DemoDialog = {
+      id: nyId,
+      overskrift: tema,
+      lest: true,
+      sisteDato: new Date().toISOString().slice(0, 10),
+      ferdigBehandlet: false,
+      venterPaSvar,
+      viktig: false,
+      meldinger: [forsteMelding],
     };
     setDialoger((prev) => [nyDialog, ...prev]);
     setMeldinger((prev) => ({ ...prev, [nyId]: [forsteMelding] }));
@@ -91,6 +90,7 @@ export function DialogSection() {
               dialoger={dialoger}
               valgtId={valgtId}
               onVelgDialog={handleVelgDialog}
+              meldinger={meldinger}
             />
           </div>
         </div>

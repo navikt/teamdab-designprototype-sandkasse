@@ -2,10 +2,11 @@
 
 import { BodyShort, Detail, LinkCard, Tag } from "@navikt/ds-react";
 import { ChevronRightIcon } from "@navikt/aksel-icons";
-import { DemoDialog } from "./dialogData";
+import { DemoDialog, DemoMelding } from "./dialogData";
 
 interface Props {
   dialog: DemoDialog;
+  antallMeldinger: number;
   valgt: boolean;
   onClick: (id: string) => void;
 }
@@ -18,8 +19,8 @@ function formaterDato(isoDate: string): string {
   });
 }
 
-export function DialogPreviewKort({ dialog, valgt, onClick }: Props) {
-  const { id, overskrift, lest, sisteDato, antallMeldinger, ferdigBehandlet, venterPaSvar, viktig } = dialog;
+export function DialogPreviewKort({ dialog, antallMeldinger, valgt, onClick }: Props) {
+  const { id, overskrift, lest, sisteDato, ferdigBehandlet, venterPaSvar, viktig } = dialog;
 
   return (
     <LinkCard
@@ -82,15 +83,17 @@ interface ListeProps {
   valgtId: string;
   onVelgDialog: (id: string) => void;
   dialoger: DemoDialog[];
+  meldinger: Record<string, DemoMelding[]>;
 }
 
-export function DialogPreviewListe({ dialoger, valgtId, onVelgDialog }: ListeProps) {
+export function DialogPreviewListe({ dialoger, valgtId, onVelgDialog, meldinger }: ListeProps) {
   return (
     <ul aria-label="Dialogliste" className="flex flex-col gap-y-1">
       {dialoger.map((dialog) => (
         <li key={dialog.id}>
           <DialogPreviewKort
             dialog={dialog}
+            antallMeldinger={(meldinger[dialog.id] ?? dialog.meldinger).length}
             valgt={dialog.id === valgtId}
             onClick={onVelgDialog}
           />

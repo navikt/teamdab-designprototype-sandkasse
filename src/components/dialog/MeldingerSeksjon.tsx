@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { BodyShort, Chat } from "@navikt/ds-react";
 import { PersonIcon } from "@navikt/aksel-icons";
-import { DemoMelding } from "./dialogData";
+import { DemoDialog, DemoMelding } from "./dialogData";
 
 function formaterTidspunkt(iso: string): string {
   return new Date(iso).toLocaleString("nb-NO", {

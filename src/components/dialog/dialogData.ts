@@ -10,7 +10,6 @@ export interface DemoDialog {
   overskrift: string;
   lest: boolean;
   sisteDato: string;
-  antallMeldinger: number;
   ferdigBehandlet: boolean;
   venterPaSvar: boolean;
   viktig: boolean;
@@ -23,7 +22,6 @@ export const demoDialoger: DemoDialog[] = [
     overskrift: "Arbeidsrettet oppfølging",
     lest: false,
     sisteDato: "2026-07-30",
-    antallMeldinger: 4,
     ferdigBehandlet: false,
     venterPaSvar: true,
     viktig: false,
@@ -59,7 +57,6 @@ export const demoDialoger: DemoDialog[] = [
     overskrift: "Søknad om arbeidsmarkedstiltak",
     lest: true,
     sisteDato: "2026-07-28",
-    antallMeldinger: 2,
     ferdigBehandlet: false,
     venterPaSvar: false,
     viktig: true,
@@ -83,7 +80,6 @@ export const demoDialoger: DemoDialog[] = [
     overskrift: "Spørsmål om aktivitetsplan",
     lest: true,
     sisteDato: "2026-07-21",
-    antallMeldinger: 7,
     ferdigBehandlet: true,
     venterPaSvar: false,
     viktig: false,
@@ -113,7 +109,6 @@ export const demoDialoger: DemoDialog[] = [
     overskrift: "Oppfølging etter møte",
     lest: true,
     sisteDato: "2026-07-10",
-    antallMeldinger: 1,
     ferdigBehandlet: false,
     venterPaSvar: false,
     viktig: false,
