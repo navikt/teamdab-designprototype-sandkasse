@@ -4,27 +4,16 @@ import { useState } from "react";
 import NextLink from "next/link";
 import { Checkbox, Tag } from "@navikt/ds-react";
 import { ArrowDownIcon, ArrowUpIcon } from "@navikt/aksel-icons";
-import { brukere } from "@/data/brukere";
+import { Bruker } from "@/data/brukere";
 
-// Stil for sorteringsknapper — tilsvarer .lenke--frittstaende i prod
-const sorteringKnappStyle: React.CSSProperties = {
-  border: 0,
-  padding: "0 4px",
-  background: "none",
-  cursor: "pointer",
-  fontWeight: "normal",
-  fontSize: "inherit",
-  fontFamily: "inherit",
-  color: "var(--ax-text-action)",
-  textAlign: "left",
-  display: "inline-flex",
-  alignItems: "center",
-  gap: "4px",
-};
+// Beregner dato X dager frem i tid fra i dag
+function datoOmDager(dager: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + dager);
+  return d.toLocaleDateString("nb-NO", { day: "2-digit", month: "2-digit", year: "numeric" });
+}
 
-const data = brukere;
-
-type SortField = "navn" | "fnr" | "oppfolgingStartet" | "veileder" | "status";
+type SortField = "navn" | "fnr" | "oppfolgingStartet" | "automatiskAvslutning" | "veileder" | "status";
 type SortOrder = "stigende" | "synkende" | null;
 
 function SorteringHeader({
@@ -46,7 +35,8 @@ function SorteringHeader({
   return (
     <button
       onClick={() => onClick(felt)}
-      style={sorteringKnappStyle}
+      className="inline-flex items-center gap-1 border-0 bg-transparent cursor-pointer text-left font-normal text-blue-600 hover:text-blue-800 hover:underline"
+      style={{ fontSize: "0.75rem" }}
       aria-pressed={erValgt}
     >
       {tekst}
@@ -56,14 +46,17 @@ function SorteringHeader({
   );
 }
 
-export function BrukerTable() {
-  const [selectedRows, setSelectedRows] = useState<string[]>([]);
+export function BrukerTable({ data, selectedRows, onSelectedRowsChange }: {
+  data: Bruker[];
+  selectedRows: string[];
+  onSelectedRowsChange: (rows: string[]) => void;
+}) {
   const [sortFelt, setSortFelt] = useState<SortField | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>(null);
 
   const toggleRow = (id: string) =>
-    setSelectedRows((prev) =>
-      prev.includes(id) ? prev.filter((r) => r !== id) : [...prev, id],
+    onSelectedRowsChange(
+      selectedRows.includes(id) ? selectedRows.filter((r) => r !== id) : [...selectedRows, id],
     );
 
   const allSelected = selectedRows.length === data.length;
@@ -81,9 +74,18 @@ export function BrukerTable() {
 
   const sortertData = [...data].sort((a, b) => {
     if (!sortFelt || !sortOrder) return 0;
+    const dir = sortOrder === "stigende" ? 1 : -1;
+    if (sortFelt === "automatiskAvslutning") {
+      return (a.dagerTilAvslutning - b.dagerTilAvslutning) * dir;
+    }
+    if (sortFelt === "oppfolgingStartet") {
+      // Format DD.MM.YYYY — parse to YYYYMMDD for correct chronological sort
+      const toNum = (s: string) => s.split(".").reverse().join("");
+      return toNum(a.oppfolgingStartet).localeCompare(toNum(b.oppfolgingStartet)) * dir;
+    }
     const va = a[sortFelt];
     const vb = b[sortFelt];
-    return sortOrder === "stigende" ? va.localeCompare(vb) : vb.localeCompare(va);
+    return va.localeCompare(vb) * dir;
   });
 
   const sorteringProps = { aktivtFelt: sortFelt, rekkefolge: sortOrder, onClick: handleSort };
@@ -101,7 +103,7 @@ export function BrukerTable() {
             size="small"
             checked={allSelected}
             indeterminate={someSelected}
-            onChange={() => setSelectedRows(allSelected ? [] : data.map((d) => d.id))}
+            onChange={() => onSelectedRowsChange(allSelected ? [] : data.map((d) => d.id))}
             hideLabel
           >
             Velg alle
@@ -120,14 +122,17 @@ export function BrukerTable() {
             <SorteringHeader tekst="Oppfølging startet" felt="oppfolgingStartet" {...sorteringProps} />
           </div>
           <div className="flex-[2]">
+            <SorteringHeader tekst="Automatisk avslutning" felt="automatiskAvslutning" {...sorteringProps} />
+          </div>
+          <div className="flex-[2]">
             <SorteringHeader tekst="Veileder" felt="veileder" {...sorteringProps} />
           </div>
         </div>
 
         {/* Gutter right — status-kolonne */}
         <div className="flex flex-1 items-center">
-          <span className="text-sm" style={{ fontWeight: "normal", color: "var(--ax-text-neutral)", padding: "0 4px" }}>
-            Status
+          <span style={{ fontWeight: "normal", color: "var(--ax-text-neutral)", padding: "0 4px", fontSize: "0.75rem" }}>
+            
           </span>
         </div>
       </div>
@@ -191,6 +196,7 @@ export function BrukerTable() {
                   </div>
                   <div className="flex-[1] px-1">{bruker.fnr}</div>
                   <div className="flex-[2] px-1">{bruker.oppfolgingStartet}</div>
+                  <div className="flex-[2] px-1">{datoOmDager(bruker.dagerTilAvslutning)}</div>
                   <div className="flex-[2] px-1">{bruker.veileder}</div>
                 </div>
 

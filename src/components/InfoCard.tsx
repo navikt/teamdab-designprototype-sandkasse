@@ -7,9 +7,17 @@ interface InfoCardProps {
   onHide: () => void;
   onOpenForleng: () => void;
   onOpenAvslutt: () => void;
+  status?: string;
+  dagerTilAvslutning?: number;
 }
 
-export function InfoCard({ onHide, onOpenForleng, onOpenAvslutt }: InfoCardProps) {
+function datoOmDager(dager: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + dager);
+  return d.toLocaleDateString("nb-NO", { day: "2-digit", month: "2-digit", year: "numeric" });
+}
+
+export function InfoCard({ onHide, onOpenForleng, onOpenAvslutt, status, dagerTilAvslutning }: InfoCardProps) {
   return (
     <div
       className="flex flex-col items-start overflow-clip rounded-xl w-full"
@@ -47,8 +55,9 @@ export function InfoCard({ onHide, onOpenForleng, onOpenAvslutt }: InfoCardProps
 
       {/* Content */}
       <div className="flex flex-col gap-1 items-start pt-2 pb-3 px-4 w-full bg-white">
+        <p>Oppfølging blir automatisk avsluttet {dagerTilAvslutning != null ? `${datoOmDager(dagerTilAvslutning)} (om ${dagerTilAvslutning} dager)` : "om 28 dager"}</p>
         <ul className="list-disc pl-5 space-y-0.5">
-          <li><BodyLong as="span" size="small">Ikke lengre arbeidssøker</BodyLong></li>
+          <li><BodyLong as="span" size="small">{status ?? "Ikke lengre arbeidssøker"}</BodyLong></li>
         </ul>
       </div>
 
@@ -61,7 +70,7 @@ export function InfoCard({ onHide, onOpenForleng, onOpenAvslutt }: InfoCardProps
           iconPosition="left"
           onClick={onOpenAvslutt}
         >
-          Avslutt oppfølging
+          Avslutt oppfølging nå
         </Button>
         <Button
           variant="secondary"

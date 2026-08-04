@@ -17,9 +17,11 @@ interface Props {
   navn?: string;
   fnr?: string;
   merkelapper?: Merkelapp[];
+  status?: string;
+  dagerTilAvslutning?: number;
 }
 
-export function PersonprofilContent({ navn, fnr, merkelapper }: Props) {
+export function PersonprofilContent({ navn, fnr, merkelapper, status, dagerTilAvslutning }: Props) {
   const [infoCardHidden, setInfoCardHidden] = useState(false);
   const [forlengOpen, setForlengOpen] = useState(false);
   const [avsluttOpen, setAvsluttOpen] = useState(false);
@@ -39,7 +41,10 @@ export function PersonprofilContent({ navn, fnr, merkelapper }: Props) {
       <Visittkort
         navn={navn}
         fnr={fnr}
-        merkelapper={merkelapper}
+        merkelapper={[
+          ...(status ? [{ tekst: status, variant: "info" as const }] : []),
+          ...(merkelapper ?? []),
+        ]}
         onOpenForleng={() => setForlengOpen(true)}
         onOpenAvslutt={() => setAvsluttOpen(true)}
       />
@@ -52,6 +57,8 @@ export function PersonprofilContent({ navn, fnr, merkelapper }: Props) {
                 onHide={() => setInfoCardHidden(true)}
                 onOpenForleng={() => setForlengOpen(true)}
                 onOpenAvslutt={() => setAvsluttOpen(true)}
+                status={status}
+                dagerTilAvslutning={dagerTilAvslutning}
               />
             </div>
           )}

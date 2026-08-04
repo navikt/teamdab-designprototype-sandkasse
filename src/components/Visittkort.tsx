@@ -56,17 +56,11 @@ export function Visittkort({ navn, fnr, merkelapper, onOpenForleng, onOpenAvslut
 
       {/* Etiketter */}
       <div className="flex items-center gap-2 flex-wrap flex-1">
-        {merkelapper && merkelapper.length > 0 ? (
-          merkelapper.map((m) => (
-            <Tag key={m.tekst} variant={m.variant} size="small">
-              {m.tekst}
-            </Tag>
-          ))
-        ) : (
-          <Tag variant="info" size="small">
-            Ikke lengre arbeidssøker
+        {merkelapper?.map((m) => (
+          <Tag key={m.tekst} variant={m.variant} size="small">
+            {m.tekst}
           </Tag>
-        )}
+        ))}
       </div>
 
       {/* Veilederverktøy */}

@@ -8,8 +8,8 @@ export interface Bruker {
   navn: string;
   fnr: string;
   oppfolgingStartet: string;
+  dagerTilAvslutning: number;
   veileder: string;
-  utlopsdato: string;
   status: string;
   merkelapper: Merkelapp[];
 }
@@ -17,19 +17,95 @@ export interface Bruker {
 // Testdata: fiktive navn bygget som ord-kombinasjoner (substantiv, adjektiv).
 // Fnr-verdiene har dag-del "00" — ugyldig i alle norske nummersystemer.
 // Merkelapper er hentet fra etiketter.tsx i veilarbvisittkortfs.
+
+export const avsluttForlengBrukere: Bruker[] = [
+  {
+    id: "a1",
+    navn: "Horisont, Myk",
+    fnr: "00060167890",
+    oppfolgingStartet: "02.02.2023",
+    dagerTilAvslutning: 23,
+    veileder: "Vidde, Rolig",
+    status: "Ikke lenger KVP",
+    merkelapper: [
+      { tekst: "Antatt gode muligheter", variant: "info" },
+    ],
+  },
+  {
+    id: "a2",
+    navn: "Terreng, Lystig",
+    fnr: "00070178901",
+    oppfolgingStartet: "14.05.2024",
+    dagerTilAvslutning: 26,
+    veileder: "Retning, Stødig",
+    status: "Ikke lenger AAP",
+    merkelapper: [
+      { tekst: "Antatt gode muligheter", variant: "info" },
+    ],
+  },
+  {
+    id: "a3",
+    navn: "Grense, Romslig",
+    fnr: "00080189012",
+    oppfolgingStartet: "30.09.2022",
+    dagerTilAvslutning: 28,
+    veileder: "Utvikling, Klar",
+    status: "Ikke lenger på tiltak",
+    merkelapper: [
+      { tekst: "Språktolk", variant: "warning" },
+    ],
+  },
+  {
+    id: "a4",
+    navn: "Fjellet, Tydelig",
+    fnr: "00090190123",
+    oppfolgingStartet: "11.07.2023",
+    dagerTilAvslutning: 25,
+    veileder: "Vidde, Rolig",
+    status: "Lenge siden forrige kontakt med bruker",
+    merkelapper: [
+      { tekst: "I arbeidssøkerregisteret", variant: "info" },
+      { tekst: "Manuell oppfølging", variant: "warning" },
+      { tekst: "Språktolk", variant: "warning" },
+    ],
+  },
+  {
+    id: "a5",
+    navn: "Kilde, Frimodig",
+    fnr: "00100201234",
+    oppfolgingStartet: "19.03.2025",
+    dagerTilAvslutning: 24,
+    veileder: "Retning, Stødig",
+    status: "Ikke lenger KVP",
+    merkelapper: [
+      { tekst: "Ikke under oppfølging", variant: "info" },
+    ],
+  },
+  {
+    id: "a6",
+    navn: "Drops, Blandet",
+    fnr: "00100201235",
+    oppfolgingStartet: "19.03.2025",
+    dagerTilAvslutning: 24,
+    veileder: "Retning, Stødig",
+    status: "Ikke lenger i arbeidssøkerregister",
+    merkelapper: [
+      { tekst: "Antatt gode muligheter", variant: "info" },
+    ],
+  },
+];
+
 export const brukere: Bruker[] = [
   {
     id: "1",
     navn: "Kunnskap, Fattig",
     fnr: "00010112345",
     oppfolgingStartet: "14.03.2024",
+    dagerTilAvslutning: 27,
     veileder: "Vidde, Rolig",
-    utlopsdato: "12.07.2026",
-    status: "Ikke lengre arbeidssøker",
+    status: "Ikke lenger i arbeidssøkerregister",
     merkelapper: [
       { tekst: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse", variant: "warning" },
-      { tekst: "Manuell oppfølging", variant: "warning" },
-      { tekst: "Trenger oppfølgingsvedtak § 14 a", variant: "info" },
     ],
   },
   {
@@ -37,14 +113,12 @@ export const brukere: Bruker[] = [
     navn: "Avstand, Oversiktlig",
     fnr: "00020123456",
     oppfolgingStartet: "07.09.2023",
+    dagerTilAvslutning: 24,
     veileder: "Retning, Stødig",
-    utlopsdato: "03.08.2026",
-    status: "Ikke lengre arbeidssøker",
+    status: "Ikke lenger i arbeidssøkerregister",
     merkelapper: [
-      { tekst: "Skjermet", variant: "error" },
-      { tekst: "Kode 6", variant: "error" },
-      { tekst: "Vergemål", variant: "warning" },
-      { tekst: "Varsel", variant: "warning" },
+      { tekst: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse", variant: "warning" },
+      { tekst: "Antatt gode muligheter", variant: "info" },
     ],
   },
   {
@@ -52,13 +126,12 @@ export const brukere: Bruker[] = [
     navn: "Utsikt, Stille",
     fnr: "00030134567",
     oppfolgingStartet: "22.11.2024",
+    dagerTilAvslutning: 23,
     veileder: "Vidde, Rolig",
-    utlopsdato: "19.06.2026",
-    status: "Ikke lengre arbeidssøker",
+    status: "Ikke lenger i arbeidssøkerregister",
     merkelapper: [
-      { tekst: "Sykmeldt", variant: "info" },
-      { tekst: "Reservert KRR", variant: "warning" },
-      { tekst: "I Arbeidssøkerregisteret", variant: "info" },
+      { tekst: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse", variant: "warning" },
+      { tekst: "Språktolk", variant: "warning" },
     ],
   },
   {
@@ -66,14 +139,12 @@ export const brukere: Bruker[] = [
     navn: "Balanse, Skarp",
     fnr: "00040145678",
     oppfolgingStartet: "05.06.2025",
+    dagerTilAvslutning: 26,
     veileder: "Utvikling, Klar",
-    utlopsdato: "28.07.2026",
-    status: "Ikke lengre arbeidssøker",
+    status: "Ikke lenger i arbeidssøkerregister",
     merkelapper: [
+      { tekst: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse", variant: "warning" },
       { tekst: "Antatt gode muligheter", variant: "info" },
-      { tekst: "KVP", variant: "warning" },
-      { tekst: "Fullmakt Oppfølging", variant: "warning" },
-      { tekst: "Behov for AEV", variant: "info" },
     ],
   },
   {
@@ -81,13 +152,12 @@ export const brukere: Bruker[] = [
     navn: "Rutine, Åpen",
     fnr: "00050156789",
     oppfolgingStartet: "18.01.2025",
+    dagerTilAvslutning: 28,
     veileder: "Retning, Stødig",
-    utlopsdato: "15.09.2026",
-    status: "Ikke lengre arbeidssøker",
+    status: "Ikke lenger i arbeidssøkerregister",
     merkelapper: [
-      { tekst: "Oppgitt hindringer", variant: "info" },
-      { tekst: "Språktolk", variant: "warning" },
-      { tekst: "Ikke under oppfølging", variant: "warning" },
+      { tekst: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse", variant: "warning" },
+      { tekst: "Antatt gode muligheter", variant: "info" },
     ],
   },
 ];
