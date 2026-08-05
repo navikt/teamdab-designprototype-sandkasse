@@ -19,6 +19,7 @@ function PersonProfilInnhold() {
 
   return (
     <PersonprofilContent
+      brukerId={bruker?.id}
       navn={navn}
       fnr={fnr}
       merkelapper={bruker?.merkelapper}

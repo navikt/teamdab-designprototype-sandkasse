@@ -10,10 +10,14 @@ import { AktivitetsplanBoard } from "./aktivitetsplan/AktivitetsplanBoard";
 import { DialogSection } from "./dialog/DialogSection";
 import { ForlengOppfolgingModal } from "./ForlengOppfolgingModal";
 import { AvsluttOppfolgingModal } from "./AvsluttOppfolgingModal";
+import { KanIkkeAvslutteModal } from "./KanIkkeAvslutteModal";
 
 import { Merkelapp } from "@/data/brukere";
 
+const BLOKKERTE_BRUKERE = new Set(["a3"]);
+
 interface Props {
+  brukerId?: string;
   navn?: string;
   fnr?: string;
   merkelapper?: Merkelapp[];
@@ -21,7 +25,8 @@ interface Props {
   dagerTilAvslutning?: number;
 }
 
-export function PersonprofilContent({ navn, fnr, merkelapper, status, dagerTilAvslutning }: Props) {
+export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, dagerTilAvslutning }: Props) {
+  const erBlokkerteAvslutt = brukerId ? BLOKKERTE_BRUKERE.has(brukerId) : false;
   const [infoCardHidden, setInfoCardHidden] = useState(false);
   const [forlengOpen, setForlengOpen] = useState(false);
   const [avsluttOpen, setAvsluttOpen] = useState(false);
@@ -78,13 +83,21 @@ export function PersonprofilContent({ navn, fnr, merkelapper, status, dagerTilAv
         open={forlengOpen}
         onClose={() => setForlengOpen(false)}
         onBekreft={handleForlengBekreft}
+        status={status}
         merkelapper={merkelapper}
       />
-      <AvsluttOppfolgingModal
-        open={avsluttOpen}
-        onClose={() => setAvsluttOpen(false)}
-        onBekreft={handleAvsluttBekreft}
-      />
+      {erBlokkerteAvslutt ? (
+        <KanIkkeAvslutteModal
+          open={avsluttOpen}
+          onClose={() => setAvsluttOpen(false)}
+        />
+      ) : (
+        <AvsluttOppfolgingModal
+          open={avsluttOpen}
+          onClose={() => setAvsluttOpen(false)}
+          onBekreft={handleAvsluttBekreft}
+        />
+      )}
     </>
   );
 }
