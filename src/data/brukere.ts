@@ -69,8 +69,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     status: "Arbeidssøkerperiode avsluttet av bruker",
     statusVariant: "warning",
     merkelapper: [
-      { tekst: "Manuell oppfølging", variant: "warning" },
-      { tekst: "Språktolk", variant: "warning" },
+      { tekst: "Antatt gode muligheter", variant: "info" },
     ],
   },
   {
@@ -83,7 +82,8 @@ export const avsluttForlengBrukere: Bruker[] = [
     status: "Arbeidssøkerperiode avsluttet av veileder",
     statusVariant: "warning",
     merkelapper: [
-      { tekst: "Ikke under oppfølging", variant: "info" },
+      { tekst: "Manuell oppfølging", variant: "warning" },
+      { tekst: "Språktolk", variant: "warning" },
     ],
   },
   {
@@ -96,7 +96,6 @@ export const avsluttForlengBrukere: Bruker[] = [
     status: "Arbeidssøkerperiode avsluttet av system",
     statusVariant: "warning",
     merkelapper: [
-      { tekst: "Antatt gode muligheter", variant: "info" },
     ],
   },
   {

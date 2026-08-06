@@ -41,7 +41,7 @@ export function InfoCard({ onHide, onOpenForleng, onOpenAvslutt, status, dagerTi
           className="font-semibold text-lg leading-6 flex-1"
           style={{ color: "var(--ax-text-info, #002942)" }}
         >
-          Vurder om oppfølging skal avsluttes eller forlenges
+          Skal denne brukeren fortsatt ha oppfølging?
         </p>
         <Button
           variant="tertiary"
@@ -56,9 +56,7 @@ export function InfoCard({ onHide, onOpenForleng, onOpenAvslutt, status, dagerTi
       {/* Content */}
       <div className="flex flex-col gap-1 items-start pt-2 pb-3 px-4 w-full bg-white">
         <p>Oppfølging blir automatisk avsluttet {dagerTilAvslutning != null ? `${datoOmDager(dagerTilAvslutning)} (om ${dagerTilAvslutning} dager)` : "om 28 dager"}</p>
-        <ul className="list-disc pl-5 space-y-0.5">
-          <li><BodyLong as="span" size="small">{status ?? "Ikke lengre arbeidssøker"}</BodyLong></li>
-        </ul>
+        <BodyLong size="small">Årsak: <strong>{status ?? "Ikke lengre arbeidssøker"}</strong></BodyLong>
       </div>
 
       {/* Footer */}
