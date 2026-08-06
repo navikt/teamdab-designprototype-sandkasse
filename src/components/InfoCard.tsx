@@ -56,7 +56,7 @@ export function InfoCard({ onHide, onOpenForleng, onOpenAvslutt, status, dagerTi
       {/* Content */}
       <div className="flex flex-col gap-1 items-start pt-2 pb-3 px-4 w-full bg-white">
         <p>Oppfølging blir automatisk avsluttet {dagerTilAvslutning != null ? `${datoOmDager(dagerTilAvslutning)} (om ${dagerTilAvslutning} dager)` : "om 28 dager"}</p>
-        <BodyLong size="small">Årsak: <strong>{status ?? "Ikke lengre arbeidssøker"}</strong></BodyLong>
+        <BodyLong size="small">Årsak: <strong>{status ?? "Ikke lenger arbeidssøker"}</strong></BodyLong>
       </div>
 
       {/* Footer */}

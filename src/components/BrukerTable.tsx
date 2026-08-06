@@ -64,8 +64,9 @@ export function BrukerTable({ data, selectedRows, onSelectedRowsChange }: {
 
   const handleSort = (felt: SortField) => {
     if (sortFelt === felt) {
-      setSortOrder((prev) => (prev === "stigende" ? "synkende" : prev === "synkende" ? null : "stigende"));
-      if (sortOrder === "synkende") setSortFelt(null);
+      const next: SortOrder = sortOrder === "stigende" ? "synkende" : null;
+      setSortOrder(next);
+      if (next === null) setSortFelt(null);
     } else {
       setSortFelt(felt);
       setSortOrder("stigende");
@@ -130,11 +131,7 @@ export function BrukerTable({ data, selectedRows, onSelectedRowsChange }: {
         </div>
 
         {/* Gutter right — status-kolonne */}
-        <div className="flex flex-1 items-center">
-          <span style={{ fontWeight: "normal", color: "var(--ax-text-neutral)", padding: "0 4px", fontSize: "0.75rem" }}>
-            
-          </span>
-        </div>
+        <div className="flex flex-1 items-center" aria-label="Status" />
       </div>
 
       {/* Radliste — tilsvarer ul.brukerliste i prod */}
