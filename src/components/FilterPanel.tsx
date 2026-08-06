@@ -55,7 +55,7 @@ export function FilterPanel({
 
             <RadioGroup legend="Status 4" hideLegend size="small" value={statusFilter} onChange={onStatusFilterChange}>
               <Radio value="ikke-servicebehov">Ikke servicebehov</Radio>
-              <Radio value="avslutt-forleng">Avslutt eller forleng oppfølging</Radio>
+              <Radio value="avslutt-forleng">Kandidater for utmelding</Radio>
             </RadioGroup>
           </div>
         </Tabs.Panel>
