@@ -6,6 +6,7 @@ import {
   BodyShort,
   Button,
   DatePicker,
+  Detail,
   HStack,
   Link,
   Modal,
@@ -51,17 +52,15 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merke
     <Modal open={open} onClose={onClose} header={{ heading: "Forleng oppfølging" }} width="medium">
       <Modal.Body className="flex flex-col gap-4">
         <div className="flex flex-wrap gap-2">
-          {status && <Tag variant="info" size="small">{status}</Tag>}
+          {status && <Tag variant="warning" size="small">{status}</Tag>}
           {merkelapper?.map((m) => (
             <Tag key={m.tekst} variant={m.variant} size="small">{m.tekst}</Tag>
           ))}
         </div>
 
-        <Link href="#">Gå til aktivitetsplan</Link>
-
         <div className="flex flex-col gap-2">
           <DatePicker {...datepickerProps}>
-            <DatePicker.Input {...inputProps} label="Forleng til dato" description="Format: dd.mm.åååå" />
+            <DatePicker.Input {...inputProps} label="Forleng til dato" description="" />
           </DatePicker>
           <HStack gap="space-2">
             {PRESETS.map((days) => {
@@ -112,6 +111,10 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merke
       <Modal.Footer>
         <Button variant="primary" size="small" onClick={onBekreft}>Bekreft</Button>
         <Button variant="secondary" size="small" onClick={onClose}>Avbryt</Button>
+        <Detail className="text-ax-text-neutral self-end ml-auto text-right flex-1">
+          Forlengelse registrerer <strong>ikke</strong> personen som arbeidssøker.{" "}
+          <Link href="#" onClick={(e) => e.preventDefault()}>Gå til arbeidssøkerregisteret</Link>
+        </Detail>
       </Modal.Footer>
     </Modal>
   );
