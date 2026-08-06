@@ -9,12 +9,14 @@ import { Merkelapp } from "@/data/brukere";
 interface VisittkortProps {
   navn?: string;
   fnr?: string;
+  status?: string;
+  statusVariant?: "danger" | "neutral" | "warning" | "info";
   merkelapper?: Merkelapp[];
   onOpenForleng?: () => void;
   onOpenAvslutt?: () => void;
 }
 
-export function Visittkort({ navn, fnr, merkelapper, onOpenForleng, onOpenAvslutt }: VisittkortProps) {
+export function Visittkort({ navn, fnr, status, statusVariant, merkelapper, onOpenForleng, onOpenAvslutt }: VisittkortProps) {
   const router = useRouter();
   return (
     <div className="flex items-center gap-3 px-2 py-2 bg-ax-bg-default border-b border-ax-border-neutral-subtle min-h-[67px] max-w-[1920px]">
@@ -56,17 +58,16 @@ export function Visittkort({ navn, fnr, merkelapper, onOpenForleng, onOpenAvslut
 
       {/* Etiketter */}
       <div className="flex items-center gap-2 flex-wrap flex-1">
-        {merkelapper && merkelapper.length > 0 ? (
-          merkelapper.map((m) => (
-            <Tag key={m.tekst} variant={m.variant} size="small">
-              {m.tekst}
-            </Tag>
-          ))
-        ) : (
-          <Tag variant="info" size="small">
-            Ikke lengre arbeidssøker
+        {status && (
+          <Tag variant="outline" data-color={statusVariant ?? "info"} size="small">
+            {status}
           </Tag>
         )}
+        {merkelapper?.map((m) => (
+          <Tag key={m.tekst} variant={m.variant} size="small">
+            {m.tekst}
+          </Tag>
+        ))}
       </div>
 
       {/* Veilederverktøy */}

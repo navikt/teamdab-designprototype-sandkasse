@@ -3,7 +3,13 @@
 import { Heading, Radio, RadioGroup, Tabs } from "@navikt/ds-react";
 import { StarIcon, PersonGroupIcon, FunnelIcon, VitalsIcon } from "@navikt/aksel-icons";
 
-export function FilterPanel() {
+export function FilterPanel({
+  statusFilter,
+  onStatusFilterChange,
+}: {
+  statusFilter: string;
+  onStatusFilterChange: (value: string) => void;
+}) {
   return (
     <div className="bg-ax-bg-default w-[22rem] shrink-0">
       <Tabs defaultValue="status" size="small" iconPosition="top">
@@ -47,9 +53,9 @@ export function FilterPanel() {
 
             <hr className="border-t border-[var(--ax-border-default,#c6c2bf)]" />
 
-            <RadioGroup legend="Status 4" hideLegend size="small" defaultValue="avslutt-forleng">
+            <RadioGroup legend="Status 4" hideLegend size="small" value={statusFilter} onChange={onStatusFilterChange}>
               <Radio value="ikke-servicebehov">Ikke servicebehov</Radio>
-              <Radio value="avslutt-forleng">Avslutt eller forleng oppfølging</Radio>
+              <Radio value="avslutt-forleng">Kandidater for utmelding</Radio>
             </RadioGroup>
           </div>
         </Tabs.Panel>

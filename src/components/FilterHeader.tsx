@@ -3,7 +3,24 @@
 import { Button, Chips, Detail, TextField } from "@navikt/ds-react";
 import { StarIcon } from "@navikt/aksel-icons";
 
-export function FilterHeader() {
+const statusFilterLabels: Record<string, string> = {
+  "ikke-servicebehov": "Ikke servicebehov",
+  "avslutt-forleng": "Kandidater for utmelding",
+};
+
+export function FilterHeader({
+  statusFilter,
+  totalRows,
+  selectedCount,
+}: {
+  statusFilter: string;
+  totalRows: number;
+  selectedCount: number;
+}) {
+  const brukerTekst =
+    selectedCount === 0
+      ? "Ingen brukere valgt."
+      : `${selectedCount} brukere valgt.`;
   return (
     <div className="p-4 flex flex-col gap-3">
       <div className="flex items-start gap-2">
@@ -22,7 +39,7 @@ export function FilterHeader() {
       <div className="flex items-center gap-2 flex-wrap">
         <Chips>
           <Chips.Removable onClick={() => {}} variant="neutral">
-            Avslutt eller forleng oppfølging
+            {statusFilterLabels[statusFilter] ?? statusFilter}
           </Chips.Removable>
         </Chips>
 
@@ -32,7 +49,7 @@ export function FilterHeader() {
       </div>
 
       <Detail weight="semibold">
-        Viser 3 av totalt 3 brukere. 3 brukere valgt.
+        Viser {totalRows} av totalt {totalRows} brukere. {brukerTekst}
       </Detail>
     </div>
   );

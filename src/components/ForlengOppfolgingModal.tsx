@@ -1,17 +1,21 @@
 "use client";
 
-import { useState } from "react";
 import { ClockDashedIcon } from "@navikt/aksel-icons";
 import {
   Accordion,
   BodyShort,
   Button,
+  DatePicker,
+  Detail,
+  HStack,
   Link,
   Modal,
   Select,
   Tag,
   Textarea,
+  useDatepicker,
 } from "@navikt/ds-react";
+import { useState } from "react";
 
 import { Merkelapp } from "@/data/brukere";
 
@@ -19,53 +23,64 @@ interface ForlengOppfolgingModalProps {
   open: boolean;
   onClose: () => void;
   onBekreft: () => void;
+  status?: string;
   merkelapper?: Merkelapp[];
 }
 
-export function ForlengOppfolgingModal({ open, onClose, onBekreft, merkelapper }: ForlengOppfolgingModalProps) {
-  const [days, setDays] = useState(30);
+const PRESETS = [14, 30, 60, 90];
+
+function addDays(days: number): Date {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return d;
+}
+
+function isSameDay(a: Date, b: Date): boolean {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+}
+
+export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merkelapper }: ForlengOppfolgingModalProps) {
   const [begrunnelse, setBegrunnelse] = useState("");
   const [begrunnelseFritext, setBegrunnelseFritext] = useState("");
 
-  const forlengDato = new Date();
-  forlengDato.setDate(forlengDato.getDate() + days);
-  const datoStr = forlengDato.toLocaleDateString("nb-NO", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
+  const { datepickerProps, inputProps, setSelected, selectedDay } = useDatepicker({
+    defaultSelected: addDays(30),
+    fromDate: new Date(),
   });
 
   return (
     <Modal open={open} onClose={onClose} header={{ heading: "Forleng oppfølging" }} width="medium">
       <Modal.Body className="flex flex-col gap-4">
         <div className="flex flex-wrap gap-2">
-          {merkelapper && merkelapper.length > 0 ? (
-            merkelapper.map((m) => (
-              <Tag key={m.tekst} variant={m.variant} size="small">{m.tekst}</Tag>
-            ))
-          ) : (
-            <>
-              <Tag variant="info" size="small">Ikke lengre arbeidssøker</Tag>
-              <Tag variant="info" size="small">Ikke lovlig opphold</Tag>
-              <Tag variant="info" size="small">Død</Tag>
-            </>
-          )}
+          {status && <Tag variant="warning" size="small">{status}</Tag>}
+          {merkelapper?.map((m) => (
+            <Tag key={m.tekst} variant={m.variant} size="small">{m.tekst}</Tag>
+          ))}
         </div>
 
-        <Link href="#">Gå til aktivitetsplan</Link>
-
-        <div className="flex items-end gap-8">
-          <Select label="Forlengelsesperiode" className="w-40" value={String(days)} onChange={(e) => setDays(Number(e.target.value))}>
-            <option value="14">14 dager</option>
-            <option value="30">30 dager</option>
-            <option value="60">60 dager</option>
-            <option value="90">90 dager</option>
-          </Select>
-          <BodyShort className="mb-2">Oppfølging forlenges til {datoStr}</BodyShort>
+        <div className="flex flex-col gap-2">
+          <DatePicker {...datepickerProps}>
+            <DatePicker.Input {...inputProps} label="Forleng til dato" description="" />
+          </DatePicker>
+          <HStack gap="space-2">
+            {PRESETS.map((days) => {
+              const presetDate = addDays(days);
+              const isActive = selectedDay != null && isSameDay(selectedDay, presetDate);
+              return (
+                <Button key={days} variant={isActive ? "primary" : "secondary"} size="small" onClick={() => setSelected(presetDate)}>
+                  {days} dager
+                </Button>
+              );
+            })}
+          </HStack>
         </div>
 
         <Select label="Begrunnelse" value={begrunnelse} onChange={(e) => setBegrunnelse(e.target.value)}>
-          <option value="">[forhåndsdefinert årsak]</option>
+          <option value="" disabled hidden>Velg begrunnelse</option>
+          <option value="arsak1">Årsak 1</option>
+          <option value="arsak2">Årsak 2</option>
+          <option value="arsak3">Årsak 3</option>
+          <option value="arsak4">Årsak 4</option>
           <option value="annet">Annet</option>
         </Select>
 
@@ -96,6 +111,10 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, merkelapper }
       <Modal.Footer>
         <Button variant="primary" size="small" onClick={onBekreft}>Bekreft</Button>
         <Button variant="secondary" size="small" onClick={onClose}>Avbryt</Button>
+        <Detail className="text-ax-text-neutral self-end ml-auto text-right flex-1">
+          Forlengelse registrerer <strong>ikke</strong> personen som arbeidssøker.{" "}
+          <Link href="#" onClick={(e) => e.preventDefault()}>Gå til arbeidssøkerregisteret</Link>
+        </Detail>
       </Modal.Footer>
     </Modal>
   );

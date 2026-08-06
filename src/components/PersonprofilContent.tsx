@@ -10,16 +10,24 @@ import { AktivitetsplanBoard } from "./aktivitetsplan/AktivitetsplanBoard";
 import { DialogSection } from "./dialog/DialogSection";
 import { ForlengOppfolgingModal } from "./ForlengOppfolgingModal";
 import { AvsluttOppfolgingModal } from "./AvsluttOppfolgingModal";
+import { KanIkkeAvslutteModal } from "./KanIkkeAvslutteModal";
 
 import { Merkelapp } from "@/data/brukere";
 
+const BLOKKERTE_BRUKERE = new Set(["a3"]);
+
 interface Props {
+  brukerId?: string;
   navn?: string;
   fnr?: string;
   merkelapper?: Merkelapp[];
+  status?: string;
+  statusVariant?: "danger" | "neutral" | "warning" | "info";
+  dagerTilAvslutning?: number;
 }
 
-export function PersonprofilContent({ navn, fnr, merkelapper }: Props) {
+export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, statusVariant, dagerTilAvslutning }: Props) {
+  const erBlokkerteAvslutt = brukerId ? BLOKKERTE_BRUKERE.has(brukerId) : false;
   const [infoCardHidden, setInfoCardHidden] = useState(false);
   const [forlengOpen, setForlengOpen] = useState(false);
   const [avsluttOpen, setAvsluttOpen] = useState(false);
@@ -39,6 +47,8 @@ export function PersonprofilContent({ navn, fnr, merkelapper }: Props) {
       <Visittkort
         navn={navn}
         fnr={fnr}
+        status={status}
+        statusVariant={statusVariant}
         merkelapper={merkelapper}
         onOpenForleng={() => setForlengOpen(true)}
         onOpenAvslutt={() => setAvsluttOpen(true)}
@@ -52,6 +62,8 @@ export function PersonprofilContent({ navn, fnr, merkelapper }: Props) {
                 onHide={() => setInfoCardHidden(true)}
                 onOpenForleng={() => setForlengOpen(true)}
                 onOpenAvslutt={() => setAvsluttOpen(true)}
+                status={status}
+                dagerTilAvslutning={dagerTilAvslutning}
               />
             </div>
           )}
@@ -71,13 +83,21 @@ export function PersonprofilContent({ navn, fnr, merkelapper }: Props) {
         open={forlengOpen}
         onClose={() => setForlengOpen(false)}
         onBekreft={handleForlengBekreft}
+        status={status}
         merkelapper={merkelapper}
       />
-      <AvsluttOppfolgingModal
-        open={avsluttOpen}
-        onClose={() => setAvsluttOpen(false)}
-        onBekreft={handleAvsluttBekreft}
-      />
+      {erBlokkerteAvslutt ? (
+        <KanIkkeAvslutteModal
+          open={avsluttOpen}
+          onClose={() => setAvsluttOpen(false)}
+        />
+      ) : (
+        <AvsluttOppfolgingModal
+          open={avsluttOpen}
+          onClose={() => setAvsluttOpen(false)}
+          onBekreft={handleAvsluttBekreft}
+        />
+      )}
     </>
   );
 }
