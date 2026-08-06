@@ -11,7 +11,7 @@ export interface Bruker {
   dagerTilAvslutning: number;
   veileder: string;
   status: string;
-  statusVariant?: "error" | "neutral" | "warning" | "info";
+  statusVariant?: "danger" | "neutral" | "warning" | "info";
   merkelapper: Merkelapp[];
 }
 

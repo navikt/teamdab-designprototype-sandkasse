@@ -22,7 +22,7 @@ interface Props {
   fnr?: string;
   merkelapper?: Merkelapp[];
   status?: string;
-  statusVariant?: "error" | "neutral" | "warning" | "info";
+  statusVariant?: "danger" | "neutral" | "warning" | "info";
   dagerTilAvslutning?: number;
 }
 

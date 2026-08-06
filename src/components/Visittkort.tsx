@@ -10,7 +10,7 @@ interface VisittkortProps {
   navn?: string;
   fnr?: string;
   status?: string;
-  statusVariant?: "error" | "neutral" | "warning" | "info";
+  statusVariant?: "danger" | "neutral" | "warning" | "info";
   merkelapper?: Merkelapp[];
   onOpenForleng?: () => void;
   onOpenAvslutt?: () => void;
