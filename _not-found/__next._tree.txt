@@ -1,0 +1,3 @@
+:HL["/teamdab-designprototype-sandkasse/_next/static/chunks/1mo8los4fvwyc.css","style"]
+:HL["https://cdn.nav.no/aksel/fonts/SourceSans3-normal.woff2","font",{"crossOrigin":"anonymous","type":"font/woff2"}]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"oHnr7RXqRSAI92Ky4w0rS"}
