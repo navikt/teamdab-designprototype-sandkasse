@@ -22,10 +22,11 @@ interface Props {
   fnr?: string;
   merkelapper?: Merkelapp[];
   status?: string;
+  statusVariant?: "error" | "neutral" | "warning" | "info";
   dagerTilAvslutning?: number;
 }
 
-export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, dagerTilAvslutning }: Props) {
+export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, statusVariant, dagerTilAvslutning }: Props) {
   const erBlokkerteAvslutt = brukerId ? BLOKKERTE_BRUKERE.has(brukerId) : false;
   const [infoCardHidden, setInfoCardHidden] = useState(false);
   const [forlengOpen, setForlengOpen] = useState(false);
@@ -46,10 +47,9 @@ export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, 
       <Visittkort
         navn={navn}
         fnr={fnr}
-        merkelapper={[
-          ...(status ? [{ tekst: status, variant: "info" as const }] : []),
-          ...(merkelapper ?? []),
-        ]}
+        status={status}
+        statusVariant={statusVariant}
+        merkelapper={merkelapper}
         onOpenForleng={() => setForlengOpen(true)}
         onOpenAvslutt={() => setAvsluttOpen(true)}
       />

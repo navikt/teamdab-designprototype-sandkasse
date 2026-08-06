@@ -202,7 +202,7 @@ export function BrukerTable({ data, selectedRows, onSelectedRowsChange }: {
 
                 {/* Gutter right — etiketter, tilsvarer brukerliste__gutter-right */}
                 <div className="flex flex-1 items-center gap-1">
-                  <Tag variant="outline" data-color="info" size="small" style={{ fontSize: "0.75rem" }}>
+                  <Tag variant="outline" data-color={bruker.statusVariant ?? "info"} size="small" style={{ fontSize: "0.75rem" }}>
                     {bruker.status}
                   </Tag>
                 </div>

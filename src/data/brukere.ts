@@ -11,6 +11,7 @@ export interface Bruker {
   dagerTilAvslutning: number;
   veileder: string;
   status: string;
+  statusVariant?: "error" | "neutral" | "warning" | "info";
   merkelapper: Merkelapp[];
 }
 
@@ -26,7 +27,8 @@ export const avsluttForlengBrukere: Bruker[] = [
     oppfolgingStartet: "02.02.2023",
     dagerTilAvslutning: 23,
     veileder: "Vidde, Rolig",
-    status: "Ikke lenger KVP",
+    status: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse",
+    statusVariant: "warning",
     merkelapper: [
       { tekst: "Antatt gode muligheter", variant: "info" },
     ],
@@ -38,7 +40,8 @@ export const avsluttForlengBrukere: Bruker[] = [
     oppfolgingStartet: "14.05.2024",
     dagerTilAvslutning: 26,
     veileder: "Retning, Stødig",
-    status: "Ikke lenger AAP",
+    status: "Arbeidssøkerperiode avsluttet: Svarte nei i bekreftelse",
+    statusVariant: "warning",
     merkelapper: [
       { tekst: "Antatt gode muligheter", variant: "info" },
     ],
@@ -50,7 +53,8 @@ export const avsluttForlengBrukere: Bruker[] = [
     oppfolgingStartet: "30.09.2022",
     dagerTilAvslutning: 28,
     veileder: "Utvikling, Klar",
-    status: "Ikke lenger på tiltak",
+    status: "Arbeidssøkerperiode avsluttet",
+    statusVariant: "warning",
     merkelapper: [
       { tekst: "Språktolk", variant: "warning" },
     ],
@@ -62,9 +66,9 @@ export const avsluttForlengBrukere: Bruker[] = [
     oppfolgingStartet: "11.07.2023",
     dagerTilAvslutning: 25,
     veileder: "Vidde, Rolig",
-    status: "Lenge siden forrige kontakt med bruker",
+    status: "Arbeidssøkerperiode avsluttet av bruker",
+    statusVariant: "warning",
     merkelapper: [
-      { tekst: "I arbeidssøkerregisteret", variant: "info" },
       { tekst: "Manuell oppfølging", variant: "warning" },
       { tekst: "Språktolk", variant: "warning" },
     ],
@@ -76,7 +80,8 @@ export const avsluttForlengBrukere: Bruker[] = [
     oppfolgingStartet: "19.03.2025",
     dagerTilAvslutning: 24,
     veileder: "Retning, Stødig",
-    status: "Ikke lenger KVP",
+    status: "Arbeidssøkerperiode avsluttet av veileder",
+    statusVariant: "warning",
     merkelapper: [
       { tekst: "Ikke under oppfølging", variant: "info" },
     ],
@@ -88,10 +93,22 @@ export const avsluttForlengBrukere: Bruker[] = [
     oppfolgingStartet: "19.03.2025",
     dagerTilAvslutning: 24,
     veileder: "Retning, Stødig",
-    status: "Ikke lenger i arbeidssøkerregister",
+    status: "Arbeidssøkerperiode avsluttet av system",
+    statusVariant: "warning",
     merkelapper: [
       { tekst: "Antatt gode muligheter", variant: "info" },
     ],
+  },
+  {
+    id: "a7",
+    navn: "Elveleie, Stille",
+    fnr: "00110212346",
+    oppfolgingStartet: "08.11.2024",
+    dagerTilAvslutning: 27,
+    veileder: "Utvikling, Klar",
+    status: "Arbeidssøkerperiode avsluttet (ukjent årsak)",
+    statusVariant: "warning",
+    merkelapper: [],
   },
 ];
 

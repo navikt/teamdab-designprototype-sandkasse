@@ -24,6 +24,7 @@ function PersonProfilInnhold() {
       fnr={fnr}
       merkelapper={bruker?.merkelapper}
       status={bruker?.status}
+      statusVariant={bruker?.statusVariant}
       dagerTilAvslutning={bruker?.dagerTilAvslutning}
     />
   );
