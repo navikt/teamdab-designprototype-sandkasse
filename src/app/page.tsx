@@ -67,7 +67,7 @@ function MinOversiktInnhold() {
           onClearFilter={handleClearFilter}
         />
         <Toolbar />
-        <BrukerTable data={tableData} selectedRows={selectedRows} onSelectedRowsChange={setSelectedRows} />
+        <BrukerTable data={tableData} selectedRows={selectedRows} onSelectedRowsChange={setSelectedRows} minOversikt />
       </div>
     </main>
   );

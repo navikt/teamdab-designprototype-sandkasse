@@ -3,6 +3,8 @@ export interface Merkelapp {
   variant: "error" | "neutral" | "warning" | "info";
 }
 
+export type Fargekategori = "A" | "B" | "C" | "D" | "E" | "F" | null;
+
 export interface Bruker {
   id: string;
   navn: string;
@@ -10,9 +12,12 @@ export interface Bruker {
   oppfolgingStartet: string;
   dagerTilAvslutning: number;
   veileder: string;
+  tildelingsdato?: string;
   status: string;
   statusVariant?: "danger" | "neutral" | "warning" | "info";
   merkelapper: Merkelapp[];
+  fargekategori?: Fargekategori;
+  huskelapp?: boolean;
 }
 
 // Testdata: fiktive navn bygget som ord-kombinasjoner (substantiv, adjektiv).
@@ -27,6 +32,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     oppfolgingStartet: "02.02.2023",
     dagerTilAvslutning: 23,
     veileder: "Vidde, Rolig",
+    tildelingsdato: "12.03.2023",
     status: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse",
     statusVariant: "warning",
     merkelapper: [
@@ -40,6 +46,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     oppfolgingStartet: "14.05.2024",
     dagerTilAvslutning: 26,
     veileder: "Retning, Stødig",
+    tildelingsdato: "05.06.2024",
     status: "Arbeidssøkerperiode avsluttet: Svarte nei i bekreftelse",
     statusVariant: "warning",
     merkelapper: [
@@ -53,6 +60,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     oppfolgingStartet: "30.09.2022",
     dagerTilAvslutning: 28,
     veileder: "Utvikling, Klar",
+    tildelingsdato: "18.10.2022",
     status: "Arbeidssøkerperiode avsluttet",
     statusVariant: "warning",
     merkelapper: [
@@ -66,6 +74,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     oppfolgingStartet: "11.07.2023",
     dagerTilAvslutning: 25,
     veileder: "Vidde, Rolig",
+    tildelingsdato: "22.07.2023",
     status: "Arbeidssøkerperiode avsluttet av bruker",
     statusVariant: "warning",
     merkelapper: [
@@ -79,6 +88,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     oppfolgingStartet: "19.03.2025",
     dagerTilAvslutning: 24,
     veileder: "Retning, Stødig",
+    tildelingsdato: "19.03.2025",
     status: "Arbeidssøkerperiode avsluttet av veileder",
     statusVariant: "warning",
     merkelapper: [
@@ -93,6 +103,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     oppfolgingStartet: "19.03.2025",
     dagerTilAvslutning: 24,
     veileder: "Retning, Stødig",
+    tildelingsdato: "19.03.2025",
     status: "Arbeidssøkerperiode avsluttet av system",
     statusVariant: "warning",
     merkelapper: [
@@ -105,6 +116,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     oppfolgingStartet: "08.11.2024",
     dagerTilAvslutning: 27,
     veileder: "Utvikling, Klar",
+    tildelingsdato: "08.11.2024",
     status: "Arbeidssøkerperiode avsluttet (ukjent årsak)",
     statusVariant: "warning",
     merkelapper: [],
@@ -119,7 +131,10 @@ export const brukere: Bruker[] = [
     oppfolgingStartet: "14.03.2024",
     dagerTilAvslutning: 27,
     veileder: "Vidde, Rolig",
+    tildelingsdato: "14.03.2024",
     status: "Ikke lenger i arbeidssøkerregister",
+    fargekategori: "A",
+    huskelapp: true,
     merkelapper: [
       { tekst: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse", variant: "warning" },
     ],
@@ -131,7 +146,9 @@ export const brukere: Bruker[] = [
     oppfolgingStartet: "07.09.2023",
     dagerTilAvslutning: 24,
     veileder: "Retning, Stødig",
+    tildelingsdato: "07.09.2023",
     status: "Ikke lenger i arbeidssøkerregister",
+    fargekategori: "B",
     merkelapper: [
       { tekst: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse", variant: "warning" },
       { tekst: "Antatt gode muligheter", variant: "info" },
@@ -144,7 +161,10 @@ export const brukere: Bruker[] = [
     oppfolgingStartet: "22.11.2024",
     dagerTilAvslutning: 23,
     veileder: "Vidde, Rolig",
+    tildelingsdato: "22.11.2024",
     status: "Ikke lenger i arbeidssøkerregister",
+    fargekategori: "C",
+    huskelapp: true,
     merkelapper: [
       { tekst: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse", variant: "warning" },
       { tekst: "Språktolk", variant: "warning" },
@@ -157,7 +177,9 @@ export const brukere: Bruker[] = [
     oppfolgingStartet: "05.06.2025",
     dagerTilAvslutning: 26,
     veileder: "Utvikling, Klar",
+    tildelingsdato: "05.06.2025",
     status: "Ikke lenger i arbeidssøkerregister",
+    fargekategori: "D",
     merkelapper: [
       { tekst: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse", variant: "warning" },
       { tekst: "Antatt gode muligheter", variant: "info" },
@@ -170,6 +192,7 @@ export const brukere: Bruker[] = [
     oppfolgingStartet: "18.01.2025",
     dagerTilAvslutning: 28,
     veileder: "Retning, Stødig",
+    tildelingsdato: "18.01.2025",
     status: "Ikke lenger i arbeidssøkerregister",
     merkelapper: [
       { tekst: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse", variant: "warning" },
