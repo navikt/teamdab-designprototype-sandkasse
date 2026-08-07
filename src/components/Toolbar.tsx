@@ -3,16 +3,18 @@
 import { Button } from "@navikt/ds-react";
 import { PersonPlusIcon, MagnifyingGlassIcon, TableIcon } from "@navikt/aksel-icons";
 
-export function Toolbar() {
+export function Toolbar({ minOversikt = false }: { minOversikt?: boolean }) {
   return (
     <div className="px-4 py-2 flex items-center justify-between">
       <div className="flex items-center gap-6">
         <Button variant="tertiary-neutral" size="xsmall" icon={<PersonPlusIcon aria-hidden />} iconPosition="left">
           Tildel veileder
         </Button>
-        <Button variant="tertiary-neutral" size="xsmall" icon={<MagnifyingGlassIcon aria-hidden />} iconPosition="left">
-          Søk veileder
-        </Button>
+        {!minOversikt && (
+          <Button variant="tertiary-neutral" size="xsmall" icon={<MagnifyingGlassIcon aria-hidden />} iconPosition="left">
+            Søk veileder
+          </Button>
+        )}
       </div>
 
       <div className="flex items-center gap-4">

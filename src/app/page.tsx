@@ -66,7 +66,7 @@ function MinOversiktInnhold() {
           selectedCount={selectedRows.length}
           onClearFilter={handleClearFilter}
         />
-        <Toolbar />
+        <Toolbar minOversikt />
         <Brukerliste data={tableData} selectedRows={selectedRows} onSelectedRowsChange={setSelectedRows} minOversikt />
       </div>
     </main>
