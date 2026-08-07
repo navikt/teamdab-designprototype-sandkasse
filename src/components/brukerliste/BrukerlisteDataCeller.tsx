@@ -28,17 +28,17 @@ export function BrukerlisteDataCeller({ bruker, minOversikt }: Props) {
                 </div>
                 <div style={{ flex: 1, padding: "0 0.25rem" }}>{bruker.fnr}</div>
                 <div style={{ flex: 2, padding: "0 0.25rem" }}>{bruker.oppfolgingStartet}</div>
-                <div style={{ flex: 2, padding: "0 0.25rem" }}>{datoOmDager(bruker.dagerTilAvslutning)}</div>
                 {minOversikt ? (
                     <div style={{ flex: 2, padding: "0 0.25rem" }}>{bruker.tildelingsdato ?? "—"}</div>
                 ) : (
                     <div style={{ flex: 2, padding: "0 0.25rem" }}>{bruker.veileder}</div>
                 )}
+                <div style={{ flex: 2, padding: "0 0.25rem" }}>{datoOmDager(bruker.dagerTilAvslutning)}</div>
             </div>
             <div className="brukerliste__gutter-right">
                 <div className="brukerliste__etiketter">
                     {bruker.merkelapper.map((m) => (
-                        <Tag key={m.tekst} variant="outline" data-color={m.variant} size="small">
+                        <Tag key={m.tekst} variant="outline" data-color={m.variant === "error" ? "danger" : m.variant} size="small">
                             {m.tekst}
                         </Tag>
                     ))}

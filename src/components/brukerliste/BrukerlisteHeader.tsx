@@ -67,9 +67,6 @@ export function BrukerlisteHeader({
                 <div style={{ flex: 2, padding: "0 0.25rem" }}>
                     <SorteringHeader tekst="Oppfølging startet" felt="oppfolgingStartet" {...sorteringProps} />
                 </div>
-                <div style={{ flex: 2, padding: "0 0.25rem" }}>
-                    <SorteringHeader tekst="Automatisk avslutning" felt="automatiskAvslutning" {...sorteringProps} />
-                </div>
                 {minOversikt ? (
                     <div style={{ flex: 2, padding: "0 0.25rem" }}>
                         <SorteringHeader tekst="Tildelingsdato" felt="tildelingsdato" {...sorteringProps} />
@@ -79,6 +76,9 @@ export function BrukerlisteHeader({
                         <SorteringHeader tekst="Veileder" felt="veileder" {...sorteringProps} />
                     </div>
                 )}
+                <div style={{ flex: 2, padding: "0 0.25rem" }}>
+                    <SorteringHeader tekst="Automatisk avslutning" felt="automatiskAvslutning" {...sorteringProps} />
+                </div>
             </div>
             <div className="brukerliste__gutter-right" aria-label="Status" />
         </div>
