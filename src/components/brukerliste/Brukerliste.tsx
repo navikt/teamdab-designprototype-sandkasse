@@ -10,7 +10,7 @@ import "./brukerliste.css";
 interface Props {
     data: Bruker[];
     selectedRows: string[];
-    onSelectedRowsChange: (rows: string[]) => void;
+    onSelectedRowsChange: (rows: string[] | ((prev: string[]) => string[])) => void;
     minOversikt?: boolean;
 }
 
@@ -24,9 +24,9 @@ function sorterBrukere(data: Bruker[], felt: Sorteringsfelt | null, rekkefolge: 
         if (felt === "automatiskAvslutning") {
             return (a.dagerTilAvslutning - b.dagerTilAvslutning) * dir;
         }
-        if (felt === "oppfolgingStartet") {
-            const toNum = (s: string) => s.split(".").reverse().join("");
-            return toNum(a.oppfolgingStartet).localeCompare(toNum(b.oppfolgingStartet)) * dir;
+        if (felt === "oppfolgingStartet" || felt === "tildelingsdato") {
+            const toNum = (s: string | undefined) => (s ? s.split(".").reverse().join("") : "");
+            return toNum(a[felt]).localeCompare(toNum(b[felt])) * dir;
         }
         if (felt === "huskelapp") {
             return ((a.huskelapp ? 1 : 0) - (b.huskelapp ? 1 : 0)) * dir;
@@ -67,8 +67,8 @@ export function Brukerliste({ data, selectedRows, onSelectedRowsChange, minOvers
         onSelectedRowsChange(alleValgt ? [] : data.map((d) => d.id));
 
     const settMarkert = (id: string, markert: boolean) =>
-        onSelectedRowsChange(
-            markert ? [...selectedRows, id] : selectedRows.filter((r) => r !== id)
+        onSelectedRowsChange((prev) =>
+            markert ? [...new Set([...prev, id])] : prev.filter((r) => r !== id)
         );
 
     const sortertData = sorterBrukere(data, sortFelt, sortRekkefolge);

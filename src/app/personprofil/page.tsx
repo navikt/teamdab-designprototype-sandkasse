@@ -11,11 +11,12 @@ import { brukere, avsluttForlengBrukere } from "@/data/brukere";
 // via useSearchParams, som må stå i en Suspense-boundary.
 function PersonProfilInnhold() {
   const searchParams = useSearchParams();
-  const navn = searchParams.get("navn") ?? undefined;
-  const fnr = searchParams.get("fnr") ?? undefined;
-  const bruker = fnr
-    ? [...brukere, ...avsluttForlengBrukere].find((b) => b.fnr === fnr)
+  const id = searchParams.get("id") ?? undefined;
+  const bruker = id
+    ? [...brukere, ...avsluttForlengBrukere].find((b) => b.id === id)
     : undefined;
+  const navn = bruker?.navn;
+  const fnr = bruker?.fnr;
 
   return (
     <PersonprofilContent

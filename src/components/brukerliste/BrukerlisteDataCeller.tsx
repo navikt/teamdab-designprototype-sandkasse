@@ -20,7 +20,7 @@ export function BrukerlisteDataCeller({ bruker, minOversikt }: Props) {
             <div className="brukerliste__innhold">
                 <div style={{ flex: 2, padding: "0 0.25rem" }}>
                     <NextLink
-                        href={`/personprofil?navn=${encodeURIComponent(bruker.navn)}&fnr=${encodeURIComponent(bruker.fnr)}`}
+                        href={`/personprofil?id=${encodeURIComponent(bruker.id)}`}
                         className="bruker-lenke"
                     >
                         {bruker.navn}

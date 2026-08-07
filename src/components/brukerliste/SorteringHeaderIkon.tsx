@@ -49,7 +49,6 @@ export function SorteringHeaderIkon({
                     ? `${title}, ${rekkefolge} rekkefølge`
                     : `${title}, ingen sortering`
             }
-            aria-live="polite"
         />
     );
 }
