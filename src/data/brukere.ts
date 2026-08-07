@@ -133,11 +133,7 @@ export const brukere: Bruker[] = [
     veileder: "Vidde, Rolig",
     tildelingsdato: "14.03.2024",
     status: "Ikke lenger i arbeidssøkerregister",
-    fargekategori: "A",
-    huskelapp: true,
-    merkelapper: [
-      { tekst: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse", variant: "warning" },
-    ],
+    merkelapper: [],
   },
   {
     id: "2",
@@ -148,11 +144,7 @@ export const brukere: Bruker[] = [
     veileder: "Retning, Stødig",
     tildelingsdato: "07.09.2023",
     status: "Ikke lenger i arbeidssøkerregister",
-    fargekategori: "B",
-    merkelapper: [
-      { tekst: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse", variant: "warning" },
-      { tekst: "Antatt gode muligheter", variant: "info" },
-    ],
+    merkelapper: [],
   },
   {
     id: "3",
@@ -163,12 +155,7 @@ export const brukere: Bruker[] = [
     veileder: "Vidde, Rolig",
     tildelingsdato: "22.11.2024",
     status: "Ikke lenger i arbeidssøkerregister",
-    fargekategori: "C",
-    huskelapp: true,
-    merkelapper: [
-      { tekst: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse", variant: "warning" },
-      { tekst: "Språktolk", variant: "warning" },
-    ],
+    merkelapper: [],
   },
   {
     id: "4",
@@ -179,11 +166,7 @@ export const brukere: Bruker[] = [
     veileder: "Utvikling, Klar",
     tildelingsdato: "05.06.2025",
     status: "Ikke lenger i arbeidssøkerregister",
-    fargekategori: "D",
-    merkelapper: [
-      { tekst: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse", variant: "warning" },
-      { tekst: "Antatt gode muligheter", variant: "info" },
-    ],
+    merkelapper: [],
   },
   {
     id: "5",
@@ -194,9 +177,6 @@ export const brukere: Bruker[] = [
     veileder: "Retning, Stødig",
     tildelingsdato: "18.01.2025",
     status: "Ikke lenger i arbeidssøkerregister",
-    merkelapper: [
-      { tekst: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse", variant: "warning" },
-      { tekst: "Antatt gode muligheter", variant: "info" },
-    ],
+    merkelapper: [],
   },
 ];
