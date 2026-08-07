@@ -9,7 +9,7 @@ import { FilterPanel } from "@/components/FilterPanel";
 import { MinOversiktFilterPanel } from "@/components/MinOversiktFilterPanel";
 import { MinOversiktFilterHeader } from "@/components/MinOversiktFilterHeader";
 import { Toolbar } from "@/components/Toolbar";
-import { BrukerTable } from "@/components/BrukerTable";
+import { Brukerliste } from "@/components/brukerliste/Brukerliste";
 import { brukere, avsluttForlengBrukere } from "@/data/brukere";
 
 function EnhetensOversiktInnhold() {
@@ -32,7 +32,7 @@ function EnhetensOversiktInnhold() {
       <div className="flex flex-col gap-2 flex-1">
         <FilterHeader statusFilter={statusFilter} totalRows={tableData.length} selectedCount={selectedRows.length} />
         <Toolbar />
-        <BrukerTable data={tableData} selectedRows={selectedRows} onSelectedRowsChange={setSelectedRows} />
+        <Brukerliste data={tableData} selectedRows={selectedRows} onSelectedRowsChange={setSelectedRows} />
       </div>
     </main>
   );
@@ -67,7 +67,7 @@ function MinOversiktInnhold() {
           onClearFilter={handleClearFilter}
         />
         <Toolbar />
-        <BrukerTable data={tableData} selectedRows={selectedRows} onSelectedRowsChange={setSelectedRows} minOversikt />
+        <Brukerliste data={tableData} selectedRows={selectedRows} onSelectedRowsChange={setSelectedRows} minOversikt />
       </div>
     </main>
   );
