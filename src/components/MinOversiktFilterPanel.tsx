@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { Label, RadioGroup, Tabs } from "@navikt/ds-react";
-import { StarIcon, PersonGroupIcon, FunnelIcon, VitalsIcon } from "@navikt/aksel-icons";
-import { statustallEnhet as st } from "@/data/statustall";
+import { StarIcon, FunnelIcon, VitalsIcon } from "@navikt/aksel-icons";
+import { statustallMinOversikt as st } from "@/data/statustall";
 import { BarInputRadio } from "./sidebar/BarInputRadio";
 import { BarInputCheckbox } from "./sidebar/BarInputCheckbox";
 
-export function FilterPanel({
+export function MinOversiktFilterPanel({
   statusFilter,
   onStatusFilterChange,
 }: {
@@ -28,7 +28,6 @@ export function FilterPanel({
         <Tabs.List>
           <Tabs.Tab value="status" icon={<VitalsIcon aria-hidden />} label="Status" />
           <Tabs.Tab value="mine-filter" icon={<StarIcon aria-hidden />} label="Mine filter" />
-          <Tabs.Tab value="veiledergrupper" icon={<PersonGroupIcon aria-hidden />} label="Veiledergrupper" />
           <Tabs.Tab value="filter" icon={<FunnelIcon aria-hidden />} label="Filter" />
         </Tabs.List>
 
@@ -37,10 +36,10 @@ export function FilterPanel({
 
           <div className="mt-2">
             <BarInputCheckbox
-              filterVerdi="ufordelte-brukere"
-              labelTekst="Ufordelte brukere"
-              antall={st.ufordelteBrukere}
-              checked={checkboxFilters.includes("ufordelte-brukere")}
+              filterVerdi="nye-brukere"
+              labelTekst="Nye brukere"
+              antall={st.nyeBrukereForVeileder}
+              checked={checkboxFilters.includes("nye-brukere")}
               onChange={handleCheckboxChange}
             />
           </div>
@@ -68,13 +67,13 @@ export function FilterPanel({
               <BarInputRadio filterVerdi="ikke-servicebehov" labelTekst="Ikke servicebehov" statustall={st.inaktiveBrukere} />
               <BarInputRadio filterVerdi="avslutt-forleng" labelTekst="Kandidater for utmelding" statustall={0} />
             </div>
+            <div className="forste-barlabel-i-gruppe">
+              <BarInputRadio filterVerdi="mine-huskelapper" labelTekst="Huskelapper" statustall={st.mineHuskelapper} />
+            </div>
           </RadioGroup>
         </Tabs.Panel>
 
         <Tabs.Panel value="mine-filter" className="p-6">
-          {null}
-        </Tabs.Panel>
-        <Tabs.Panel value="veiledergrupper" className="p-6">
           {null}
         </Tabs.Panel>
         <Tabs.Panel value="filter" className="p-6">
