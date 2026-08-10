@@ -33,14 +33,18 @@ const TAG_CONFIG: Record<TagVariant, TagConfig> = {
 interface Props {
   kort: AktivitetsKort;
   onDragStart: (e: React.DragEvent, id: string) => void;
+  onKlikk: (kort: AktivitetsKort) => void;
 }
 
-export function AktivitetsKortCard({ kort, onDragStart }: Props) {
+export function AktivitetsKortCard({ kort, onDragStart, onKlikk }: Props) {
+  const erKlikkbar = !!kort.samtalereferatData;
+
   return (
     <div
       draggable
       onDragStart={(e) => onDragStart(e, kort.id)}
-      className="bg-ax-bg-default rounded-md border border-ax-border-neutral p-3 pb-4 flex flex-col gap-1 cursor-grab active:cursor-grabbing active:opacity-60 select-none"
+      onClick={erKlikkbar ? () => onKlikk(kort) : undefined}
+      className={`bg-ax-bg-default rounded-md border border-ax-border-neutral p-3 pb-4 flex flex-col gap-1 cursor-grab active:cursor-grabbing active:opacity-60 select-none${erKlikkbar ? " hover:border-ax-border-action cursor-pointer" : ""}`}
     >
       {/* Type label + blue dot */}
       <div className="flex items-baseline gap-1.5">

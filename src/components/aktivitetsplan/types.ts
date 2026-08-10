@@ -46,6 +46,15 @@ export type TagVariant =
   | "ikke-aktuell"           // IKKAKTUELL / IKKE_AKTUELL → 'Ikke aktuell for tiltaket'
   | "fatt-avslag";           // AVSLAG (tiltak) → 'Fått avslag'
 
+export type MoteForm = "Oppmøte" | "Videomøte" | "Telefonmøte";
+
+export interface SamtalereferatData {
+  dato: string;
+  moteform: MoteForm;
+  referatTekst: string;
+  erReferatPublisert: boolean;
+}
+
 export interface AktivitetsKort {
   id: string;
   kolonne: KolonneId;
@@ -55,4 +64,5 @@ export interface AktivitetsKort {
   extraLine?: string;
   tags: TagVariant[];
   hasBlueDot?: boolean;
+  samtalereferatData?: SamtalereferatData;
 }

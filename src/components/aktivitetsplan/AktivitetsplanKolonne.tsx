@@ -8,9 +8,10 @@ interface Props {
   kort: AktivitetsKort[];
   onDragStart: (e: React.DragEvent, id: string) => void;
   onDrop: (e: React.DragEvent, kolonneId: KolonneId) => void;
+  onKortKlikk: (kort: AktivitetsKort) => void;
 }
 
-export function AktivitetsplanKolonne({ kolonneId, kort, onDragStart, onDrop }: Props) {
+export function AktivitetsplanKolonne({ kolonneId, kort, onDragStart, onDrop, onKortKlikk }: Props) {
   const [isDragOver, setIsDragOver] = useState(false);
   const showVisEldre = kolonneId === "fullfort" || kolonneId === "avbrutt";
 
@@ -42,7 +43,7 @@ export function AktivitetsplanKolonne({ kolonneId, kort, onDragStart, onDrop }: 
       {/* Cards */}
       <div className="flex flex-col gap-2">
         {kort.map((k) => (
-          <AktivitetsKortCard key={k.id} kort={k} onDragStart={onDragStart} />
+          <AktivitetsKortCard key={k.id} kort={k} onDragStart={onDragStart} onKlikk={onKortKlikk} />
         ))}
       </div>
 

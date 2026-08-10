@@ -101,9 +101,29 @@ export const initialKort: AktivitetsKort[] = [
     kolonne: "fullfort",
     type: "Samtalereferat",
     title: "Oppfølgingssamtale",
-    dateRange: "10. jun – 10. jun 2026",
-    extraLine: "Telefon",
+    dateRange: "10. jun 2026",
     tags: [],
+    samtalereferatData: {
+      dato: "10. jun 2026",
+      moteform: "Telefonmøte",
+      referatTekst:
+        "Vi hadde en god samtale om veien videre. Motivert for å søke stillinger innenfor sitt fagfelt.\n\nVi avtalte at du skal sende inn en søknad i løpet av neste uke.\n\nDu ønsker også bistand til å oppdatere CV-en sin.",
+      erReferatPublisert: true,
+    },
+  },
+  {
+    id: "15",
+    kolonne: "gjennomforer",
+    type: "Samtalereferat",
+    title: "Statusmøte",
+    dateRange: "5. aug 2026",
+    tags: [],
+    samtalereferatData: {
+      dato: "5. aug 2026",
+      moteform: "Oppmøte",
+      referatTekst: "Kort statusmøte. Bruker er i gang med tiltak og trives godt.",
+      erReferatPublisert: true,
+    },
   },
   // --- Avbrutt ---
   {
