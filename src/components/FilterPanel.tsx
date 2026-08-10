@@ -66,7 +66,7 @@ export function FilterPanel({
             </div>
             <div className="forste-barlabel-i-gruppe">
               <BarInputRadio filterVerdi="ikke-servicebehov" labelTekst="Ikke servicebehov" statustall={st.inaktiveBrukere} />
-              <BarInputRadio filterVerdi="avslutt-forleng" labelTekst="Kandidater for utmelding" statustall={0} />
+              <BarInputRadio filterVerdi="avslutt-forleng" labelTekst="Kandidater for utmelding" statustall={st.kandidaterForUtmelding} />
             </div>
           </RadioGroup>
         </Tabs.Panel>

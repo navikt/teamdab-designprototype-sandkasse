@@ -1,3 +1,5 @@
+import { brukere, avsluttForlengBrukere } from "./brukere";
+
 export const statustallEnhet = {
   totalt: 247,
   ufordelteBrukere: 32,
@@ -14,7 +16,8 @@ export const statustallEnhet = {
   utlopteAktiviteter: 123,
   ikkeIavtaltAktivitet: 1231,
   iavtaltAktivitet: 2323,
-  inaktiveBrukere: 23,
+  inaktiveBrukere: brukere.length,
+  kandidaterForUtmelding: avsluttForlengBrukere.length,
 };
 
 export const statustallMinOversikt = {
@@ -32,6 +35,7 @@ export const statustallMinOversikt = {
   utlopteAktiviteter: 9,
   ikkeIavtaltAktivitet: 22,
   iavtaltAktivitet: 41,
-  inaktiveBrukere: 6,
+  inaktiveBrukere: brukere.length,
+  kandidaterForUtmelding: avsluttForlengBrukere.length,
   mineHuskelapper: 16,
 };
