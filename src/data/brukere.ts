@@ -126,7 +126,7 @@ export const avsluttForlengBrukere: Bruker[] = [
 export const brukere: Bruker[] = [
   {
     id: "1",
-    navn: "Kunnskap, Fattig",
+    navn: "Kunnskap, Enkel",
     fnr: "00010112345",
     oppfolgingStartet: "14.03.2024",
     dagerTilAvslutning: 27,
