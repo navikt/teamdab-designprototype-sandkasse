@@ -45,14 +45,14 @@ export function BrukerlisteHeader({
                 <div className="brukerliste__minoversikt-ikonknapper">
                     <SorteringHeaderIkon
                         ikon={huskelappIkonHeader}
-                        felt="huskelapp"
-                        title="Sorter på huskelapp"
+                        felt="fargekategori"
+                        title="Sorter på fargekategori"
                         {...sorteringProps}
                     />
                     <SorteringHeaderIkon
                         ikon={fargekategoriIkonHeader}
-                        felt="fargekategori"
-                        title="Sorter på fargekategori"
+                        felt="huskelapp"
+                        title="Sorter på huskelapp"
                         {...sorteringProps}
                     />
                 </div>
