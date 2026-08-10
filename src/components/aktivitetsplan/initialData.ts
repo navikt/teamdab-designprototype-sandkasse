@@ -107,7 +107,7 @@ export const initialKort: AktivitetsKort[] = [
       dato: "10. jun 2026",
       moteform: "Telefonmøte",
       referatTekst:
-        "Vi hadde en god samtale om veien videre. Motivert for å søke stillinger innenfor sitt fagfelt.\n\nVi avtalte at du skal sende inn en søknad i løpet av neste uke.\n\nDu ønsker også bistand til å oppdatere CV-en sin.",
+        "Vi hadde en god samtale om veien videre. Motivert for å søke stillinger innenfor ditt fagfelt.\n\nVi avtalte at du skal sende inn en søknad i løpet av neste uke.\n\nDu ønsker også bistand til å oppdatere CV-en din.",
       erReferatPublisert: true,
     },
   },
