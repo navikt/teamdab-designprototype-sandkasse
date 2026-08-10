@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { AktivitetsKort, KolonneId } from "./types";
+import { AktivitetsKort, KolonneId, Perspektiv } from "./types";
 import { initialKort } from "./initialData";
 import { AktivitetsplanKolonne } from "./AktivitetsplanKolonne";
 import { SamtalereferatModal } from "./samtalereferat/SamtalereferatModal";
 
 const KOLONNER: KolonneId[] = ["forslag", "planlegger", "gjennomforer", "fullfort", "avbrutt"];
 
-export function AktivitetsplanBoard() {
+export function AktivitetsplanBoard({ perspektiv }: { perspektiv: Perspektiv }) {
   const [kort, setKort] = useState(initialKort);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [aktivtKort, setAktivtKort] = useState<AktivitetsKort | null>(null);
@@ -44,7 +44,7 @@ export function AktivitetsplanBoard() {
         />
       ))}
       {aktivtKort?.samtalereferatData && (
-        <SamtalereferatModal kort={aktivtKort} onClose={() => setAktivtKort(null)} />
+        <SamtalereferatModal kort={aktivtKort} perspektiv={perspektiv} onClose={() => setAktivtKort(null)} />
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Tabs } from "@navikt/ds-react";
+import { Tabs, ToggleGroup } from "@navikt/ds-react";
 import { Visittkort } from "./Visittkort";
 import { InfoCard } from "./InfoCard";
 import { PersonprofilTabBar } from "./PersonprofilTabBar";
@@ -13,6 +13,7 @@ import { AvsluttOppfolgingModal } from "./AvsluttOppfolgingModal";
 import { KanIkkeAvslutteModal } from "./KanIkkeAvslutteModal";
 
 import { Merkelapp } from "@/data/brukere";
+import { Perspektiv } from "./aktivitetsplan/types";
 
 const BLOKKERTE_BRUKERE = new Set(["a3"]);
 
@@ -29,6 +30,7 @@ interface Props {
 export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, statusVariant, dagerTilAvslutning }: Props) {
   const erBlokkerteAvslutt = brukerId ? BLOKKERTE_BRUKERE.has(brukerId) : false;
   const [infoCardHidden, setInfoCardHidden] = useState(false);
+  const [perspektiv, setPerspektiv] = useState<Perspektiv>("veileder");
   const [forlengOpen, setForlengOpen] = useState(false);
   const [avsluttOpen, setAvsluttOpen] = useState(false);
 
@@ -68,16 +70,28 @@ export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, 
             </div>
           )}
           <div className="w-full max-w-3xl px-6">
-            <AktivitetsplanSection />
+            <AktivitetsplanSection perspektiv={perspektiv} onPerspektivChange={setPerspektiv} />
           </div>
           <div className="w-full px-6">
-            <AktivitetsplanBoard />
+            <AktivitetsplanBoard perspektiv={perspektiv} />
           </div>
         </Tabs.Panel>
         <Tabs.Panel value="dialog" className="flex flex-1 overflow-hidden">
           <DialogSection />
         </Tabs.Panel>
       </Tabs>
+
+      <div className="fixed bottom-6 right-6 z-50 bg-ax-bg-default shadow-lg rounded-lg p-2">
+        <ToggleGroup
+          value={perspektiv}
+          onChange={(v) => setPerspektiv(v as Perspektiv)}
+          size="small"
+          label="Vis som"
+        >
+          <ToggleGroup.Item value="veileder">Veileder</ToggleGroup.Item>
+          <ToggleGroup.Item value="bruker">Bruker</ToggleGroup.Item>
+        </ToggleGroup>
+      </div>
 
       <ForlengOppfolgingModal
         open={forlengOpen}

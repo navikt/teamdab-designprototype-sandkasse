@@ -1,17 +1,19 @@
 "use client";
 
 import { Accordion, Alert, BodyShort, Button, Heading, Modal } from "@navikt/ds-react";
-import { AktivitetsKort } from "../types";
+import { AktivitetsKort, Perspektiv } from "../types";
 import { DetaljFelt } from "../shared/DetaljFelt";
 import { EkspanderbartTekstomrade } from "../shared/EkspanderbartTekstomrade";
 
 interface Props {
   kort: AktivitetsKort;
+  perspektiv: Perspektiv;
   onClose: () => void;
 }
 
-export function SamtalereferatModal({ kort, onClose }: Props) {
+export function SamtalereferatModal({ kort, perspektiv, onClose }: Props) {
   const data = kort.samtalereferatData!;
+  const erVeileder = perspektiv === "veileder";
 
   return (
     <Modal open onClose={onClose} closeOnBackdropClick aria-labelledby="samtalereferat-heading" className="lg:w-120">
@@ -44,37 +46,44 @@ export function SamtalereferatModal({ kort, onClose }: Props) {
             {/* Handlingsrad */}
             <div className="flex gap-4">
               <Button variant="secondary">Send en melding</Button>
+              {erVeileder && <Button variant="secondary">Endre referat</Button>}
             </div>
 
-            {/* Samtalereferat-seksjon */}
+            {/* Samtalereferat-seksjon — kun synlig for bruker hvis publisert */}
+            {(erVeileder || data.erReferatPublisert) && (
             <section className="my-4 border-t border-ax-border-neutral pt-8">
               <Heading level="2" size="large" className="mb-4">
                 Samtalereferat
               </Heading>
               <EkspanderbartTekstomrade tekst={data.referatTekst} antallTegn={275} />
-              <div className="flex flex-col mt-8 space-y-4">
-                {data.erReferatPublisert && (
-                  <Alert variant="success" inline>
-                    Delt med bruker
-                  </Alert>
-                )}
-                <div className="flex gap-4">
-                  <Button variant="secondary">Endre referat</Button>
+              {erVeileder && (
+                <div className="flex flex-col mt-8 space-y-4">
+                  {data.erReferatPublisert && (
+                    <Alert variant="success" inline>
+                      Delt med bruker
+                    </Alert>
+                  )}
+                  <div className="flex gap-4">
+                    <Button variant="secondary">Endre referat</Button>
+                  </div>
                 </div>
-              </div>
+              )}
             </section>
+            )}
           </div>
 
-          {/* Accordion-seksjon — utenfor space-y-8 som i prod */}
+          {/* Accordion — «Hva er status» kun for veileder */}
           <Accordion className="mt-8">
+            {erVeileder && (
             <Accordion.Item>
               <Accordion.Header>
                 <Heading level="2" size="small" className="flex text-ax-text-neutral">
                   Hva er status på aktiviteten?
                 </Heading>
               </Accordion.Header>
-              <Accordion.Content />
+              <Accordion.Content>{null}</Accordion.Content>
             </Accordion.Item>
+            )}
 
             <Accordion.Item>
               <Accordion.Header>
@@ -85,7 +94,7 @@ export function SamtalereferatModal({ kort, onClose }: Props) {
               <Accordion.Content>
                 <section>
                   <div className="pb-4">
-                    <b>Veileder</b> endret referatet
+                    <b>Veileder</b> {erVeileder ? "endret referatet" : "delte referatet med deg"}
                     <BodyShort>28. juli 2026 kl. 13.35</BodyShort>
                   </div>
                   <div className="pb-4">

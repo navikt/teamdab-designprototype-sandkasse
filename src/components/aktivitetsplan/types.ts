@@ -1,3 +1,5 @@
+export type Perspektiv = "veileder" | "bruker";
+
 export type KolonneId =
   | "forslag"
   | "planlegger"
