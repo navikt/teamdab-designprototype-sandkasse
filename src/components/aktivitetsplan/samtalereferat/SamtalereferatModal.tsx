@@ -178,10 +178,6 @@ function TidligereVersjonVisning({ referatTekst, erVeileder: _erVeileder, onTilb
   return (
     <div className="flex flex-col max-w-2xl mx-auto space-y-4">
       <EkspanderbartTekstomrade tekst={versjon1Tekst} antallTegn={275} />
-      <div className="pb-4">
-        <b>Veileder</b> endret referatet
-        <BodyShort>28. juli 2026 kl. 13.35</BodyShort>
-      </div>
       <LocalAlert status="warning" size="small">
         <LocalAlert.Header>
           <LocalAlert.Title>Du ser på en tidligere versjon av referatet</LocalAlert.Title>

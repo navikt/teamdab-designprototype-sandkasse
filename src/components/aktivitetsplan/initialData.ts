@@ -107,7 +107,7 @@ export const initialKort: AktivitetsKort[] = [
       dato: "10. jun 2026",
       moteform: "Telefonmøte",
       referatTekst:
-        "Vi hadde en god samtale om veien videre. Motivert for å søke stillinger innenfor ditt fagfelt.\n\nVi avtalte at du skal sende inn en søknad i løpet av neste uke.\n\nDu ønsker også bistand til å oppdatere CV-en din.",
+        "Vi hadde en god samtale om veien videre. Motivert for å søke stillinger innenfor ditt fagfelt.\n\nVi avtalte at du skal sende inn en søknad i løpet av neste uke.\n\nDu ønsker også bistand til å oppdatere CV-en din.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
       erReferatPublisert: true,
     },
   },
@@ -121,7 +121,7 @@ export const initialKort: AktivitetsKort[] = [
     samtalereferatData: {
       dato: "5. aug 2026",
       moteform: "Oppmøte",
-      referatTekst: "Kort statusmøte. Bruker er i gang med tiltak og trives godt.",
+      referatTekst: "Kort statusmøte. Vi gikk gjennom fremdrift og avtalte neste steg.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\n\nExcepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.",
       erReferatPublisert: true,
     },
   },
