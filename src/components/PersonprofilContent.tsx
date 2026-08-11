@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Tabs, ToggleGroup } from "@navikt/ds-react";
+import { Button, Tabs, ToggleGroup } from "@navikt/ds-react";
+import { TimerStartIcon, XMarkIcon, ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from "@navikt/aksel-icons";
 import { Visittkort } from "./Visittkort";
-import { InfoCard } from "./InfoCard";
 import { PersonprofilTabBar } from "./PersonprofilTabBar";
 import { AktivitetsplanSection } from "./AktivitetsplanSection";
 import { AktivitetsplanBoard } from "./aktivitetsplan/AktivitetsplanBoard";
@@ -30,6 +30,7 @@ interface Props {
 export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, statusVariant, dagerTilAvslutning }: Props) {
   const erBlokkerteAvslutt = brukerId ? BLOKKERTE_BRUKERE.has(brukerId) : false;
   const [infoCardHidden, setInfoCardHidden] = useState(false);
+  const [alertVariant, setAlertVariant] = useState<"info" | "warning">("info");
   const [perspektiv, setPerspektiv] = useState<Perspektiv>("veileder");
   const [forlengOpen, setForlengOpen] = useState(false);
   const [avsluttOpen, setAvsluttOpen] = useState(false);
@@ -55,20 +56,59 @@ export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, 
         onOpenForleng={() => setForlengOpen(true)}
         onOpenAvslutt={() => setAvsluttOpen(true)}
       />
+      {!infoCardHidden && dagerTilAvslutning != null && (
+        <div className={`flex items-center w-full px-4 py-2 ${
+            alertVariant === "info"
+              ? "bg-[var(--ax-bg-info-moderate)] text-[var(--ax-text-info)]"
+              : "bg-[var(--ax-bg-warning-moderate)] text-[var(--ax-text-warning)]"
+          }`}>
+          {alertVariant === "info" ? (
+            <InformationSquareFillIcon
+              aria-hidden
+              fontSize="1.25rem"
+              className="shrink-0 -translate-y-[2px] cursor-pointer"
+              style={{ color: "var(--ax-border-info)" }}
+              onClick={() => setAlertVariant("warning")}
+            />
+          ) : (
+            <ExclamationmarkTriangleFillIcon
+              aria-hidden
+              fontSize="1.25rem"
+              className="shrink-0 -translate-y-[2px] cursor-pointer"
+              style={{ color: "var(--ax-border-warning)" }}
+              onClick={() => setAlertVariant("info")}
+            />
+          )}
+          <div className="flex items-center gap-3 flex-1 mx-3">
+            <span>
+              <strong>Skal denne brukeren fortsatt ha oppfølging?</strong>{" "}
+              Oppfølging avsluttes automatisk om {dagerTilAvslutning} dager.
+            </span>
+            <Button
+              variant="secondary-neutral"
+              size="small"
+              icon={<TimerStartIcon aria-hidden />}
+              iconPosition="left"
+              onClick={() => setForlengOpen(true)}
+              className="shrink-0"
+              style={{ backgroundColor: "white" }}
+            >
+              Forleng oppfølging
+            </Button>
+          </div>
+          <Button
+            variant="tertiary-neutral"
+            size="small"
+            icon={<XMarkIcon aria-hidden />}
+            aria-label="Lukk"
+            onClick={() => setInfoCardHidden(true)}
+            className="shrink-0"
+          />
+        </div>
+      )}
 <Tabs defaultValue="aktivitetsplan" className="flex flex-col flex-1 overflow-hidden">
         <PersonprofilTabBar />
         <Tabs.Panel value="aktivitetsplan" className="flex-1 flex flex-col items-center gap-6 py-6 overflow-x-hidden">
-          {!infoCardHidden && (
-            <div className="inline-block px-6">
-              <InfoCard
-                onHide={() => setInfoCardHidden(true)}
-                onOpenForleng={() => setForlengOpen(true)}
-                onOpenAvslutt={() => setAvsluttOpen(true)}
-                status={status}
-                dagerTilAvslutning={dagerTilAvslutning}
-              />
-            </div>
-          )}
           <div className="w-full max-w-3xl px-6">
             <AktivitetsplanSection perspektiv={perspektiv} onPerspektivChange={setPerspektiv} />
           </div>
