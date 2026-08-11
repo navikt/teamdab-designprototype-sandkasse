@@ -1,15 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { KolonneId } from "./types";
+import { AktivitetsKort, KolonneId, Perspektiv } from "./types";
 import { initialKort } from "./initialData";
 import { AktivitetsplanKolonne } from "./AktivitetsplanKolonne";
+import { SamtalereferatModal } from "./samtalereferat/SamtalereferatModal";
 
 const KOLONNER: KolonneId[] = ["forslag", "planlegger", "gjennomforer", "fullfort", "avbrutt"];
 
-export function AktivitetsplanBoard() {
+export function AktivitetsplanBoard({ perspektiv }: { perspektiv: Perspektiv }) {
   const [kort, setKort] = useState(initialKort);
   const [draggingId, setDraggingId] = useState<string | null>(null);
+  const [aktivtKort, setAktivtKort] = useState<AktivitetsKort | null>(null);
+
+  const handleKortKlikk = (k: AktivitetsKort) => {
+    if (k.samtalereferatData) setAktivtKort(k);
+  };
 
   const handleDragStart = (e: React.DragEvent, id: string) => {
     setDraggingId(id);
@@ -34,8 +40,12 @@ export function AktivitetsplanBoard() {
           kort={kort.filter((k) => k.kolonne === kolonneId)}
           onDragStart={handleDragStart}
           onDrop={handleDrop}
+          onKortKlikk={handleKortKlikk}
         />
       ))}
+      {aktivtKort?.samtalereferatData && (
+        <SamtalereferatModal kort={aktivtKort} perspektiv={perspektiv} onClose={() => setAktivtKort(null)} />
+      )}
     </div>
   );
 }

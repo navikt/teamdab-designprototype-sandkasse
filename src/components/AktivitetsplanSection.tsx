@@ -1,7 +1,13 @@
 import { BriefcaseIcon, PlusIcon } from "@navikt/aksel-icons";
 import { BodyLong, BodyShort, Button, Heading, Link, Select } from "@navikt/ds-react";
+import { Perspektiv } from "./aktivitetsplan/types";
 
-export function AktivitetsplanSection() {
+interface Props {
+  perspektiv: Perspektiv;
+  onPerspektivChange: (p: Perspektiv) => void;
+}
+
+export function AktivitetsplanSection({ perspektiv: _perspektiv, onPerspektivChange: _onPerspektivChange }: Props) {
   return (
     <div className="flex flex-col gap-4 w-full">
       {/* Top links row */}
@@ -37,7 +43,7 @@ export function AktivitetsplanSection() {
         <Button variant="primary" size="small" icon={<PlusIcon aria-hidden />} iconPosition="left">
           Legg til en aktivitet
         </Button>
-        <div className="flex flex-1 justify-end">
+        <div className="flex justify-end">
           <Select label="" hideLabel className="w-64">
             <option value="navarende">Nåværende periode</option>
           </Select>
