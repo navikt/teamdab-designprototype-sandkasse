@@ -35,9 +35,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     tildelingsdato: "12.03.2023",
     status: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse",
     statusVariant: "warning",
-    merkelapper: [
-      { tekst: "Antatt gode muligheter", variant: "info" },
-    ],
+    merkelapper: [],
   },
   {
     id: "a2",
@@ -49,9 +47,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     tildelingsdato: "05.06.2024",
     status: "Arbeidssøkerperiode avsluttet: Svarte nei i bekreftelse",
     statusVariant: "warning",
-    merkelapper: [
-      { tekst: "Antatt gode muligheter", variant: "info" },
-    ],
+    merkelapper: [],
   },
   {
     id: "a3",
@@ -63,9 +59,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     tildelingsdato: "18.10.2022",
     status: "Arbeidssøkerperiode avsluttet",
     statusVariant: "warning",
-    merkelapper: [
-      { tekst: "Språktolk", variant: "warning" },
-    ],
+    merkelapper: [],
   },
   {
     id: "a4",
@@ -77,9 +71,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     tildelingsdato: "22.07.2023",
     status: "Arbeidssøkerperiode avsluttet av bruker",
     statusVariant: "warning",
-    merkelapper: [
-      { tekst: "Antatt gode muligheter", variant: "info" },
-    ],
+    merkelapper: [],
   },
   {
     id: "a5",
@@ -91,10 +83,6 @@ export const avsluttForlengBrukere: Bruker[] = [
     tildelingsdato: "19.03.2025",
     status: "Arbeidssøkerperiode avsluttet av veileder",
     statusVariant: "warning",
-    merkelapper: [
-      { tekst: "Manuell oppfølging", variant: "warning" },
-      { tekst: "Språktolk", variant: "warning" },
-    ],
   },
   {
     id: "a6",
