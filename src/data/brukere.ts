@@ -83,6 +83,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     tildelingsdato: "19.03.2025",
     status: "Arbeidssøkerperiode avsluttet av veileder",
     statusVariant: "warning",
+    merkelapper: [],
   },
   {
     id: "a6",
