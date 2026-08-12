@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button, Tabs, ToggleGroup } from "@navikt/ds-react";
-import { TimerStartIcon, XMarkIcon, ExclamationmarkTriangleFillIcon, InformationSquareFillIcon } from "@navikt/aksel-icons";
+import { TimerStartIcon, XMarkIcon, ExclamationmarkTriangleFillIcon, InformationSquareFillIcon, LeaveIcon } from "@navikt/aksel-icons";
 import { Visittkort } from "./Visittkort";
 import { PersonprofilTabBar } from "./PersonprofilTabBar";
 import { AktivitetsplanSection } from "./AktivitetsplanSection";
@@ -30,7 +30,7 @@ interface Props {
 export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, statusVariant, dagerTilAvslutning }: Props) {
   const erBlokkerteAvslutt = brukerId ? BLOKKERTE_BRUKERE.has(brukerId) : false;
   const [infoCardHidden, setInfoCardHidden] = useState(false);
-  const [alertVariant, setAlertVariant] = useState<"info" | "warning">("info");
+  const [alertVariant, setAlertVariant] = useState<"info" | "warning">("warning");
   const [perspektiv, setPerspektiv] = useState<Perspektiv>("veileder");
   const [forlengOpen, setForlengOpen] = useState(false);
   const [avsluttOpen, setAvsluttOpen] = useState(false);
@@ -80,10 +80,8 @@ export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, 
             />
           )}
           <div className="flex items-center gap-3 flex-1 mx-3">
-            <span>
-              <strong>Skal denne brukeren fortsatt ha oppfølging?</strong>{" "}
-              Oppfølging avsluttes automatisk om {dagerTilAvslutning} dager.
-            </span>
+            <span><strong>Oppfølging avsluttes automatisk om {dagerTilAvslutning} dager hvis du ikke foretar deg noe.</strong></span>
+            <span>Skal denne brukeren fortsatt ha oppfølging?</span>
             <Button
               variant="secondary-neutral"
               size="small"
@@ -93,7 +91,18 @@ export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, 
               className="shrink-0"
               style={{ backgroundColor: "white" }}
             >
-              Forleng oppfølging
+              Ja, forleng oppfølging
+            </Button>
+            <Button
+              variant="secondary-neutral"
+              size="small"
+              icon={<LeaveIcon aria-hidden />}
+              iconPosition="left"
+              onClick={() => setAvsluttOpen(true)}
+              className="shrink-0"
+              style={{ backgroundColor: "white" }}
+            >
+              Nei, avslutt nå
             </Button>
           </div>
           <Button
