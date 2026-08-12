@@ -37,11 +37,9 @@ export function BrukerlisteDataCeller({ bruker, minOversikt }: Props) {
             </div>
             <div className="brukerliste__gutter-right">
                 <div className="brukerliste__etiketter">
-                    {bruker.merkelapper.map((m) => (
-                        <Tag key={m.tekst} variant="outline" data-color={m.variant === "error" ? "danger" : m.variant} size="small">
-                            {m.tekst}
-                        </Tag>
-                    ))}
+                    <Tag variant="outline" data-color={bruker.statusVariant ?? "neutral"} size="small">
+                        {bruker.status}
+                    </Tag>
                 </div>
             </div>
         </>
