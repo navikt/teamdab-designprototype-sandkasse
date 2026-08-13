@@ -58,24 +58,18 @@ export function BrukerlisteHeader({
                 </div>
             )}
             <div className="brukerliste__innhold">
-                <div style={{ flex: 2, padding: "0 0.25rem" }}>
+                <div style={{ flex: 1.5, padding: "0 0.25rem" }}>
                     <SorteringHeader tekst="Etternavn, fornavn" felt="navn" {...sorteringProps} />
                 </div>
                 <div style={{ flex: 1, padding: "0 0.25rem" }}>
                     <SorteringHeader tekst="Fødselsnr." felt="fnr" {...sorteringProps} />
                 </div>
-                <div style={{ flex: 2, padding: "0 0.25rem" }}>
+                <div style={{ flex: 1.5, padding: "0 0.25rem" }}>
                     <SorteringHeader tekst="Oppfølging startet" felt="oppfolgingStartet" {...sorteringProps} />
                 </div>
-                {minOversikt ? (
-                    <div style={{ flex: 2, padding: "0 0.25rem" }}>
-                        <SorteringHeader tekst="Tildelingsdato" felt="tildelingsdato" {...sorteringProps} />
-                    </div>
-                ) : (
-                    <div style={{ flex: 2, padding: "0 0.25rem" }}>
-                        <SorteringHeader tekst="Veileder" felt="veileder" {...sorteringProps} />
-                    </div>
-                )}
+                <div style={{ flex: 3, padding: "0 0.25rem" }}>
+                    <SorteringHeader tekst="Hendelse" felt="status" {...sorteringProps} />
+                </div>
                 <div style={{ flex: 2, padding: "0 0.25rem" }}>
                     <SorteringHeader tekst="Automatisk avslutning" felt="automatiskAvslutning" {...sorteringProps} />
                 </div>

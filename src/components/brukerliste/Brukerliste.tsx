@@ -24,7 +24,7 @@ function sorterBrukere(data: Bruker[], felt: Sorteringsfelt | null, rekkefolge: 
         if (felt === "automatiskAvslutning") {
             return (a.dagerTilAvslutning - b.dagerTilAvslutning) * dir;
         }
-        if (felt === "oppfolgingStartet" || felt === "tildelingsdato") {
+        if (felt === "oppfolgingStartet") {
             const toNum = (s: string | undefined) => (s ? s.split(".").reverse().join("") : "");
             return toNum(a[felt]).localeCompare(toNum(b[felt])) * dir;
         }
