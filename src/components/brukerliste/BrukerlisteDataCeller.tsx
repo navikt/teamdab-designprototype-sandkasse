@@ -1,5 +1,4 @@
 import NextLink from "next/link";
-import { Tag } from "@navikt/ds-react";
 import { Bruker } from "@/data/brukere";
 import "./brukerliste.css";
 
@@ -17,7 +16,7 @@ export function BrukerlisteDataCeller({ bruker }: Props) {
     return (
         <>
             <div className="brukerliste__innhold">
-                <div style={{ flex: 2, padding: "0 0.25rem" }}>
+                <div style={{ flex: 1.5, padding: "0 0.25rem" }}>
                     <NextLink
                         href={`/personprofil?id=${encodeURIComponent(bruker.id)}`}
                         className="bruker-lenke"
@@ -26,8 +25,8 @@ export function BrukerlisteDataCeller({ bruker }: Props) {
                     </NextLink>
                 </div>
                 <div style={{ flex: 1, padding: "0 0.25rem" }}>{bruker.fnr}</div>
-                <div style={{ flex: 2, padding: "0 0.25rem" }}>{bruker.oppfolgingStartet}</div>
-                <div style={{ flex: 2, padding: "0 0.25rem" }}>
+                <div style={{ flex: 1.5, padding: "0 0.25rem" }}>{bruker.oppfolgingStartet}</div>
+                <div style={{ flex: 3, padding: "0 0.25rem" }}>
                     <NextLink
                         href={`/personprofil?id=${encodeURIComponent(bruker.id)}`}
                         className="bruker-lenke"
@@ -37,13 +36,7 @@ export function BrukerlisteDataCeller({ bruker }: Props) {
                 </div>
                 <div style={{ flex: 2, padding: "0 0.25rem" }}>{datoOmDager(bruker.dagerTilAvslutning)}</div>
             </div>
-            <div className="brukerliste__gutter-right">
-                <div className="brukerliste__etiketter">
-                    <Tag variant="outline" data-color={bruker.statusVariant ?? "neutral"} size="small">
-                        {bruker.status}
-                    </Tag>
-                </div>
-            </div>
+            <div className="brukerliste__gutter-right" />
         </>
     );
 }
