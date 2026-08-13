@@ -31,12 +31,11 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merke
   const [begrunnelse, setBegrunnelse] = useState("");
   const [forlengType, setForlengType] = useState<"ubestemt" | "dato">("ubestemt");
   const [submitted, setSubmitted] = useState(false);
-  const [formKey, setFormKey] = useState(0);
 
   const defaultDate = new Date();
   defaultDate.setDate(defaultDate.getDate() + 14);
 
-  const { datepickerProps, inputProps, selectedDay } = useDatepicker({
+  const { datepickerProps, inputProps, selectedDay, reset: resetDatepicker } = useDatepicker({
     defaultSelected: defaultDate,
     fromDate: new Date(),
   });
@@ -45,7 +44,7 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merke
     setBegrunnelse("");
     setForlengType("ubestemt");
     setSubmitted(false);
-    setFormKey((k) => k + 1);
+    resetDatepicker();
   }
 
   function handleBekreft() {
@@ -83,7 +82,7 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merke
         </RadioGroup>
 
         {forlengType === "dato" && (
-          <DatePicker key={formKey} {...datepickerProps}>
+          <DatePicker {...datepickerProps}>
             <DatePicker.Input {...inputProps} label="Forleng til dato" required error={submitted && !selectedDay ? "Velg en dato" : undefined} />
           </DatePicker>
         )}
