@@ -60,7 +60,9 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merke
         <RadioGroup
           legend="Forlengelsestype"
           value={forlengType}
-          onChange={(v) => setForlengType(v as "ubestemt" | "dato")}
+          onChange={(v) => {
+            if (v === "ubestemt" || v === "dato") setForlengType(v);
+          }}
         >
           <Radio value="ubestemt">Forleng oppfølging på ubestemt tid</Radio>
           <Radio value="dato">Forleng oppfølging til en dato</Radio>
