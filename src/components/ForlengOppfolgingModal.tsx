@@ -31,6 +31,7 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merke
   const [begrunnelse, setBegrunnelse] = useState("");
   const [forlengType, setForlengType] = useState<"ubestemt" | "dato">("ubestemt");
   const [submitted, setSubmitted] = useState(false);
+  const [formKey, setFormKey] = useState(0);
 
   const defaultDate = new Date();
   defaultDate.setDate(defaultDate.getDate() + 14);
@@ -40,15 +41,28 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merke
     fromDate: new Date(),
   });
 
+  function resetForm() {
+    setBegrunnelse("");
+    setForlengType("ubestemt");
+    setSubmitted(false);
+    setFormKey((k) => k + 1);
+  }
+
   function handleBekreft() {
     setSubmitted(true);
     if (forlengType === "dato" && !selectedDay) return;
     if (!begrunnelse.trim()) return;
     onBekreft();
+    resetForm();
+  }
+
+  function handleClose() {
+    resetForm();
+    onClose();
   }
 
   return (
-    <Modal open={open} onClose={onClose} header={{ heading: "Forleng arbeidsrettet oppfølging" }} width="medium">
+    <Modal open={open} onClose={handleClose} header={{ heading: "Forleng arbeidsrettet oppfølging" }} width="medium">
       <Modal.Body className="flex flex-col gap-4">
         <div className="flex flex-wrap gap-2">
           {status && <Tag variant="warning" size="small">{status}</Tag>}
@@ -69,7 +83,7 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merke
         </RadioGroup>
 
         {forlengType === "dato" && (
-          <DatePicker {...datepickerProps}>
+          <DatePicker key={formKey} {...datepickerProps}>
             <DatePicker.Input {...inputProps} label="Forleng til dato" required error={submitted && !selectedDay ? "Velg en dato" : undefined} />
           </DatePicker>
         )}
@@ -99,7 +113,7 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merke
 
       <Modal.Footer>
         <Button variant="primary" size="small" onClick={handleBekreft}>Bekreft</Button>
-        <Button variant="secondary" size="small" onClick={onClose}>Avbryt</Button>
+        <Button variant="secondary" size="small" onClick={handleClose}>Avbryt</Button>
         <Detail className="text-ax-text-neutral self-end ml-auto text-right flex-1">
           Forlengelse registrerer <strong>ikke</strong> personen som arbeidssøker.{" "}
           <Link href="#" onClick={(e) => e.preventDefault()}>Gå til arbeidssøkerregisteret</Link>
