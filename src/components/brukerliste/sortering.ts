@@ -6,6 +6,5 @@ export type Sorteringsfelt =
     | "oppfolgingStartet"
     | "automatiskAvslutning"
     | "veileder"
-    | "tildelingsdato"
     | "huskelapp"
     | "fargekategori";
