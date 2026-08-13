@@ -68,7 +68,7 @@ export function BrukerlisteHeader({
                     <SorteringHeader tekst="Oppfølging startet" felt="oppfolgingStartet" {...sorteringProps} />
                 </div>
                 <div style={{ flex: 3, padding: "0 0.25rem" }}>
-                    Hendelse
+                    <SorteringHeader tekst="Hendelse" felt="status" {...sorteringProps} />
                 </div>
                 <div style={{ flex: 2, padding: "0 0.25rem" }}>
                     <SorteringHeader tekst="Automatisk avslutning" felt="automatiskAvslutning" {...sorteringProps} />
