@@ -108,12 +108,6 @@ function HovedVisning({ data, erVeileder, onVisVersjon }: HovedVisningProps) {
             )}
             {erVeileder && (
               <div className="flex flex-col mt-8 space-y-4">
-                <div>
-                  <BodyShort weight="semibold">Det finnes tidligere versjoner av dette referatet</BodyShort>
-                  <Link as="button" onClick={onVisVersjon} className="cursor-pointer">
-                    Versjon 1: 27. juli 2026 kl. 13.46
-                  </Link>
-                </div>
                 {data.erReferatPublisert && (
                   <Alert variant="success" inline>
                     Delt med bruker
@@ -148,7 +142,7 @@ function HovedVisning({ data, erVeileder, onVisVersjon }: HovedVisningProps) {
           <Accordion.Content>
             <section>
               <div className="pb-4">
-                <b>Veileder</b> endret referatet
+                <b>Veileder</b> endret referatet (Gjeldende versjon)
                 <BodyShort>28. juli 2026 kl. 13.55</BodyShort>
               </div>
               <div className="pb-4">
@@ -159,7 +153,7 @@ function HovedVisning({ data, erVeileder, onVisVersjon }: HovedVisningProps) {
                 <b>Veileder</b> opprettet aktiviteten
                 <BodyShort>27. juli 2026 kl. 13.46</BodyShort>
                 <Link as="button" onClick={onVisVersjon} className="cursor-pointer">
-                  Versjon 1
+                  Se tidligere versjon av referatet
                 </Link>
               </div>
             </section>
