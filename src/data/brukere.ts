@@ -35,7 +35,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     tildelingsdato: "12.03.2023",
     status: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse",
     statusVariant: "warning",
-    merkelapper: [],
+    merkelapper: [{ tekst: "Kandidat for utmelding", variant: "info" }],
   },
   {
     id: "a2",
@@ -47,7 +47,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     tildelingsdato: "05.06.2024",
     status: "Arbeidssøkerperiode avsluttet: Svarte nei i bekreftelse",
     statusVariant: "warning",
-    merkelapper: [],
+    merkelapper: [{ tekst: "Kandidat for utmelding", variant: "info" }],
   },
   {
     id: "a3",
@@ -59,7 +59,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     tildelingsdato: "18.10.2022",
     status: "Arbeidssøkerperiode avsluttet",
     statusVariant: "warning",
-    merkelapper: [],
+    merkelapper: [{ tekst: "Kandidat for utmelding", variant: "info" }],
   },
   {
     id: "a4",
@@ -71,7 +71,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     tildelingsdato: "22.07.2023",
     status: "Arbeidssøkerperiode avsluttet av bruker",
     statusVariant: "warning",
-    merkelapper: [],
+    merkelapper: [{ tekst: "Kandidat for utmelding", variant: "info" }],
   },
   {
     id: "a5",
@@ -83,7 +83,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     tildelingsdato: "19.03.2025",
     status: "Arbeidssøkerperiode avsluttet av veileder",
     statusVariant: "warning",
-    merkelapper: [],
+    merkelapper: [{ tekst: "Kandidat for utmelding", variant: "info" }],
   },
   {
     id: "a6",
@@ -95,8 +95,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     tildelingsdato: "19.03.2025",
     status: "Arbeidssøkerperiode avsluttet av system",
     statusVariant: "warning",
-    merkelapper: [
-    ],
+    merkelapper: [{ tekst: "Kandidat for utmelding", variant: "info" }],
   },
   {
     id: "a7",
@@ -108,7 +107,7 @@ export const avsluttForlengBrukere: Bruker[] = [
     tildelingsdato: "08.11.2024",
     status: "Arbeidssøkerperiode avsluttet (ukjent årsak)",
     statusVariant: "warning",
-    merkelapper: [],
+    merkelapper: [{ tekst: "Kandidat for utmelding", variant: "info" }],
   },
 ];
 
@@ -122,7 +121,7 @@ export const brukere: Bruker[] = [
     veileder: "Vidde, Rolig",
     tildelingsdato: "14.03.2024",
     status: "Ikke lenger i arbeidssøkerregister",
-    merkelapper: [],
+    merkelapper: [{ tekst: "Kandidat for utmelding", variant: "info" }],
   },
   {
     id: "2",
@@ -133,7 +132,7 @@ export const brukere: Bruker[] = [
     veileder: "Retning, Stødig",
     tildelingsdato: "07.09.2023",
     status: "Ikke lenger i arbeidssøkerregister",
-    merkelapper: [],
+    merkelapper: [{ tekst: "Kandidat for utmelding", variant: "info" }],
   },
   {
     id: "3",
@@ -144,7 +143,7 @@ export const brukere: Bruker[] = [
     veileder: "Vidde, Rolig",
     tildelingsdato: "22.11.2024",
     status: "Ikke lenger i arbeidssøkerregister",
-    merkelapper: [],
+    merkelapper: [{ tekst: "Kandidat for utmelding", variant: "info" }],
   },
   {
     id: "4",
@@ -155,7 +154,7 @@ export const brukere: Bruker[] = [
     veileder: "Utvikling, Klar",
     tildelingsdato: "05.06.2025",
     status: "Ikke lenger i arbeidssøkerregister",
-    merkelapper: [],
+    merkelapper: [{ tekst: "Kandidat for utmelding", variant: "info" }],
   },
   {
     id: "5",
@@ -166,6 +165,6 @@ export const brukere: Bruker[] = [
     veileder: "Retning, Stødig",
     tildelingsdato: "18.01.2025",
     status: "Ikke lenger i arbeidssøkerregister",
-    merkelapper: [],
+    merkelapper: [{ tekst: "Kandidat for utmelding", variant: "info" }],
   },
 ];
