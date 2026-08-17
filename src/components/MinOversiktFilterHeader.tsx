@@ -19,7 +19,7 @@ const statusFilterLabels: Record<string, string> = {
   "ikke-i-avtalt-aktivitet": "Ikke i avtalt aktivitet",
   "i-avtalt-aktivitet": "I avtalt aktivitet",
   "ikke-servicebehov": "Ikke servicebehov",
-  "avslutt-forleng": "Kandidater for utmelding",
+  "avslutt-forleng": "Kandidater for avslutning",
 };
 
 export function MinOversiktFilterHeader({
