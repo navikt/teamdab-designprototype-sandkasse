@@ -7,6 +7,7 @@ import {
   Button,
   DatePicker,
   Detail,
+  ErrorSummary,
   Link,
   Modal,
   Radio,
@@ -15,7 +16,8 @@ import {
   Textarea,
   useDatepicker,
 } from "@navikt/ds-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { flushSync } from "react-dom";
 
 import { Merkelapp } from "@/data/brukere";
 
@@ -40,6 +42,13 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merke
     fromDate: new Date(),
   });
 
+  const errorSummaryRef = useRef<HTMLDivElement>(null);
+
+  const errors = [
+    ...(submitted && forlengType === "dato" && !selectedDay ? [{ id: "forleng-dato", message: "Velg en dato" }] : []),
+    ...(submitted && !begrunnelse.trim() ? [{ id: "forleng-begrunnelse", message: "Begrunnelse er påkrevd" }] : []),
+  ];
+
   function resetForm() {
     setBegrunnelse("");
     setForlengType("ubestemt");
@@ -48,9 +57,15 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merke
   }
 
   function handleBekreft() {
-    setSubmitted(true);
-    if (forlengType === "dato" && !selectedDay) return;
-    if (!begrunnelse.trim()) return;
+    const hasDateError = forlengType === "dato" && !selectedDay;
+    const hasBegrunnelseError = !begrunnelse.trim();
+
+    flushSync(() => setSubmitted(true));
+
+    if (hasDateError || hasBegrunnelseError) {
+      errorSummaryRef.current?.focus();
+      return;
+    }
     onBekreft();
     resetForm();
   }
@@ -63,15 +78,26 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merke
   return (
     <Modal open={open} onClose={handleClose} header={{ heading: "Forleng arbeidsrettet oppfølging" }} width="medium">
       <Modal.Body className="flex flex-col gap-4">
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2" aria-label="Status og merkelapper">
           {status && <Tag variant="warning" size="small">{status}</Tag>}
           {merkelapper?.map((m) => (
             <Tag key={m.tekst} variant={m.variant} size="small">{m.tekst}</Tag>
           ))}
         </div>
 
+        {errors.length > 0 && (
+          <ErrorSummary ref={errorSummaryRef} heading="Du må rette disse feilene">
+            {errors.map((e) => (
+              <ErrorSummary.Item key={e.id} href={`#${e.id}`}>
+                {e.message}
+              </ErrorSummary.Item>
+            ))}
+          </ErrorSummary>
+        )}
+
         <RadioGroup
-          legend="Forlengelsestype"
+          legend="Hvor lang tid skal oppfølging forlenges?"
+          size="medium"
           value={forlengType}
           onChange={(v) => {
             if (v === "ubestemt" || v === "dato") setForlengType(v);
@@ -83,11 +109,12 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merke
 
         {forlengType === "dato" && (
           <DatePicker {...datepickerProps}>
-            <DatePicker.Input {...inputProps} label="Forleng til dato" required error={submitted && !selectedDay ? "Velg en dato" : undefined} />
+            <DatePicker.Input {...inputProps} id="forleng-dato" label="Forleng til dato" required error={submitted && !selectedDay ? "Velg en dato" : undefined} />
           </DatePicker>
         )}
 
         <Textarea
+          id="forleng-begrunnelse"
           label="Begrunnelse"
           value={begrunnelse}
           onChange={(e) => setBegrunnelse(e.target.value)}

@@ -88,8 +88,7 @@ export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, 
               icon={<TimerStartIcon aria-hidden />}
               iconPosition="left"
               onClick={() => setForlengOpen(true)}
-              className="shrink-0"
-              style={{ backgroundColor: "white" }}
+              className="shrink-0 !bg-white hover:!bg-[var(--ax-bg-neutral-moderate-hover)]"
             >
               Ja, forleng oppfølging
             </Button>
@@ -99,8 +98,7 @@ export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, 
               icon={<LeaveIcon aria-hidden />}
               iconPosition="left"
               onClick={() => setAvsluttOpen(true)}
-              className="shrink-0"
-              style={{ backgroundColor: "white" }}
+              className="shrink-0 !bg-white hover:!bg-[var(--ax-bg-neutral-moderate-hover)]"
             >
               Nei, avslutt nå
             </Button>

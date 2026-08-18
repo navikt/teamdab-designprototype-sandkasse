@@ -5,7 +5,7 @@ import { StarIcon } from "@navikt/aksel-icons";
 
 const statusFilterLabels: Record<string, string> = {
   "ikke-servicebehov": "Ikke servicebehov",
-  "avslutt-forleng": "Kandidater for utmelding",
+  "avslutt-forleng": "Kandidater for avslutning",
 };
 
 export function FilterHeader({
