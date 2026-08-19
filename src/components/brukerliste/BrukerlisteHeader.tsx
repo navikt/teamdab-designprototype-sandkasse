@@ -16,6 +16,7 @@ interface Props {
     rekkefolge: Sorteringsrekkefolge;
     onSort: (felt: Sorteringsfelt) => void;
     minOversikt: boolean;
+    avslutning?: boolean;
 }
 
 export function BrukerlisteHeader({
@@ -26,6 +27,7 @@ export function BrukerlisteHeader({
     rekkefolge,
     onSort,
     minOversikt,
+    avslutning = false,
 }: Props) {
     const sorteringProps = { aktivtFelt, rekkefolge, onClick: onSort };
 
@@ -64,14 +66,16 @@ export function BrukerlisteHeader({
                 <div style={{ flex: 1, padding: "0 0.5rem" }}>
                     <SorteringHeader tekst="Fødselsnr." felt="fnr" {...sorteringProps} />
                 </div>
-                <div style={{ flex: 1.5, padding: "0 0.5rem" }}>
-                    <SorteringHeader tekst="Oppfølging startet" felt="oppfolgingStartet" {...sorteringProps} />
-                </div>
+                {!(minOversikt && avslutning) && (
+                    <div style={{ flex: 1.5, padding: "0 0.5rem" }}>
+                        <SorteringHeader tekst={avslutning ? "Veileder" : "Oppfølging startet"} felt="oppfolgingStartet" {...sorteringProps} />
+                    </div>
+                )}
                 <div style={{ flex: 3, padding: "0 0.5rem" }}>
-                    <SorteringHeader tekst="Hendelse" felt="status" {...sorteringProps} />
+                    <SorteringHeader tekst={avslutning ? "Årsak til avslutning" : "Hendelse"} felt="status" {...sorteringProps} />
                 </div>
                 <div style={{ flex: 2, padding: "0 0.5rem" }}>
-                    <SorteringHeader tekst="Automatisk avslutning" felt="automatiskAvslutning" {...sorteringProps} />
+                    <SorteringHeader tekst={avslutning ? "Dato for årsak" : "Automatisk avslutning"} felt="automatiskAvslutning" {...sorteringProps} />
                 </div>
                 <div style={{ flex: 2, padding: "0 0.5rem" }}><span style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap" }}>Merkelapper</span></div>
             </div>

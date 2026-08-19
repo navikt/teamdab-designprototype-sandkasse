@@ -32,7 +32,7 @@ function EnhetensOversiktInnhold() {
       <div className="flex flex-col gap-2 flex-1">
         <FilterHeader statusFilter={statusFilter} totalRows={tableData.length} selectedCount={selectedRows.length} />
         <Toolbar />
-        <Brukerliste data={tableData} selectedRows={selectedRows} onSelectedRowsChange={setSelectedRows} />
+        <Brukerliste data={tableData} selectedRows={selectedRows} onSelectedRowsChange={setSelectedRows} avslutning={statusFilter !== "ikke-servicebehov"} />
       </div>
     </main>
   );
@@ -67,7 +67,7 @@ function MinOversiktInnhold() {
           onClearFilter={handleClearFilter}
         />
         <Toolbar minOversikt />
-        <Brukerliste data={tableData} selectedRows={selectedRows} onSelectedRowsChange={setSelectedRows} minOversikt />
+        <Brukerliste data={tableData} selectedRows={selectedRows} onSelectedRowsChange={setSelectedRows} minOversikt avslutning={statusFilter !== "ikke-servicebehov"} />
       </div>
     </main>
   );
