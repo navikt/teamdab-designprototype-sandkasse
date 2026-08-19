@@ -9,11 +9,19 @@ function datoOmDager(dager: number): string {
     return d.toLocaleDateString("nb-NO", { day: "2-digit", month: "2-digit", year: "numeric" });
 }
 
-interface Props {
-    bruker: Bruker;
+function datoForDagerSiden(dager: number): string {
+    const d = new Date();
+    d.setDate(d.getDate() - dager);
+    return d.toLocaleDateString("nb-NO", { day: "2-digit", month: "2-digit", year: "numeric" });
 }
 
-export function BrukerlisteDataCeller({ bruker }: Props) {
+interface Props {
+    bruker: Bruker;
+    avslutning?: boolean;
+    minOversikt?: boolean;
+}
+
+export function BrukerlisteDataCeller({ bruker, avslutning = false, minOversikt = false }: Props) {
     return (
         <>
             <div className="brukerliste__innhold">
@@ -26,7 +34,11 @@ export function BrukerlisteDataCeller({ bruker }: Props) {
                     </NextLink>
                 </div>
                 <div style={{ flex: 1, padding: "0 0.5rem" }}>{bruker.fnr}</div>
-                <div style={{ flex: 1.5, padding: "0 0.5rem" }}>{bruker.oppfolgingStartet}</div>
+                {!(minOversikt && avslutning) && (
+                    <div style={{ flex: 1.5, padding: "0 0.5rem" }}>
+                        {avslutning ? bruker.veileder : bruker.oppfolgingStartet}
+                    </div>
+                )}
                 <div style={{ flex: 3, padding: "0 0.5rem" }}>
                     <NextLink
                         href={`/personprofil?id=${encodeURIComponent(bruker.id)}`}
@@ -35,7 +47,11 @@ export function BrukerlisteDataCeller({ bruker }: Props) {
                         {bruker.status}
                     </NextLink>
                 </div>
-                <div style={{ flex: 2, padding: "0 0.5rem" }}>{datoOmDager(bruker.dagerTilAvslutning)}</div>
+                <div style={{ flex: 2, padding: "0 0.5rem" }}>
+                    {avslutning && bruker.dagerSidenÅrsakOppsto != null
+                        ? datoForDagerSiden(bruker.dagerSidenÅrsakOppsto)
+                        : datoOmDager(bruker.dagerTilAvslutning)}
+                </div>
                 <div style={{ flex: 2, padding: "0 0.5rem", display: "flex", gap: "0.25rem", flexWrap: "wrap" }}>
                     {bruker.merkelapper.map((m, i) => (
                         <Tag key={i} variant={m.variant} size="small">{m.tekst}</Tag>

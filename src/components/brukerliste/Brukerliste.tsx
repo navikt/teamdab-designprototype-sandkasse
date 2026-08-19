@@ -12,6 +12,7 @@ interface Props {
     selectedRows: string[];
     onSelectedRowsChange: (rows: string[] | ((prev: string[]) => string[])) => void;
     minOversikt?: boolean;
+    avslutning?: boolean;
 }
 
 const fargekategoriOrdre: Record<string, number> = { A: 1, B: 2, C: 3, D: 4, E: 5, F: 6 };
@@ -42,7 +43,7 @@ function sorterBrukere(data: Bruker[], felt: Sorteringsfelt | null, rekkefolge: 
     });
 }
 
-export function Brukerliste({ data, selectedRows, onSelectedRowsChange, minOversikt = false }: Props) {
+export function Brukerliste({ data, selectedRows, onSelectedRowsChange, minOversikt = false, avslutning = false }: Props) {
     const [sortFelt, setSortFelt] = useState<Sorteringsfelt | null>(null);
     const [sortRekkefolge, setSortRekkefolge] = useState<Sorteringsrekkefolge>("ikke_satt");
 
@@ -83,6 +84,7 @@ export function Brukerliste({ data, selectedRows, onSelectedRowsChange, minOvers
                 rekkefolge={sortRekkefolge}
                 onSort={handleSort}
                 minOversikt={minOversikt}
+                avslutning={avslutning}
             />
             <div className="brukerliste-tabell">
                 <ul className="brukerliste">
@@ -93,6 +95,7 @@ export function Brukerliste({ data, selectedRows, onSelectedRowsChange, minOvers
                             markert={selectedRows.includes(bruker.id)}
                             settMarkert={settMarkert}
                             minOversikt={minOversikt}
+                            avslutning={avslutning}
                         />
                     ))}
                 </ul>
