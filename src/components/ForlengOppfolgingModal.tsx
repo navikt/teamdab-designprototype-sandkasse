@@ -8,12 +8,10 @@ import {
   DatePicker,
   Detail,
   ErrorSummary,
+  HelpText,
   Link,
   Modal,
-  Radio,
-  RadioGroup,
   Tag,
-  Textarea,
   useDatepicker,
 } from "@navikt/ds-react";
 import { useRef, useState } from "react";
@@ -30,39 +28,36 @@ interface ForlengOppfolgingModalProps {
 }
 
 export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merkelapper }: ForlengOppfolgingModalProps) {
-  const [begrunnelse, setBegrunnelse] = useState("");
-  const [forlengType, setForlengType] = useState<"ubestemt" | "dato">("ubestemt");
   const [submitted, setSubmitted] = useState(false);
 
+  const today = new Date();
   const defaultDate = new Date();
   defaultDate.setDate(defaultDate.getDate() + 14);
 
+  const maxDate = new Date();
+  maxDate.setMonth(maxDate.getMonth() + 6);
+
   const { datepickerProps, inputProps, selectedDay, reset: resetDatepicker } = useDatepicker({
     defaultSelected: defaultDate,
-    fromDate: new Date(),
+    fromDate: today,
+    toDate: maxDate,
   });
 
   const errorSummaryRef = useRef<HTMLDivElement>(null);
 
   const errors = [
-    ...(submitted && forlengType === "dato" && !selectedDay ? [{ id: "forleng-dato", message: "Velg en dato" }] : []),
-    ...(submitted && !begrunnelse.trim() ? [{ id: "forleng-begrunnelse", message: "Begrunnelse er påkrevd" }] : []),
+    ...(submitted && !selectedDay ? [{ id: "forleng-dato", message: "Velg en dato" }] : []),
   ];
 
   function resetForm() {
-    setBegrunnelse("");
-    setForlengType("ubestemt");
     setSubmitted(false);
     resetDatepicker();
   }
 
   function handleBekreft() {
-    const hasDateError = forlengType === "dato" && !selectedDay;
-    const hasBegrunnelseError = !begrunnelse.trim();
-
     flushSync(() => setSubmitted(true));
 
-    if (hasDateError || hasBegrunnelseError) {
+    if (!selectedDay) {
       errorSummaryRef.current?.focus();
       return;
     }
@@ -76,7 +71,7 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merke
   }
 
   return (
-    <Modal open={open} onClose={handleClose} header={{ heading: "Forleng arbeidsrettet oppfølging" }} width="medium">
+    <Modal open={open} onClose={handleClose} header={{ heading: "Forleng arbeidsrettet oppfølging" }}>
       <Modal.Body className="flex flex-col gap-4">
         <div className="flex flex-wrap gap-2" aria-label="Status og merkelapper">
           {status && <Tag variant="warning" size="small">{status}</Tag>}
@@ -95,32 +90,22 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merke
           </ErrorSummary>
         )}
 
-        <RadioGroup
-          legend="Hvor lang tid skal oppfølging forlenges?"
-          size="medium"
-          value={forlengType}
-          onChange={(v) => {
-            if (v === "ubestemt" || v === "dato") setForlengType(v);
-          }}
-        >
-          <Radio value="ubestemt">Forleng oppfølging på ubestemt tid</Radio>
-          <Radio value="dato">Forleng oppfølging til en dato</Radio>
-        </RadioGroup>
-
-        {forlengType === "dato" && (
-          <DatePicker {...datepickerProps}>
-            <DatePicker.Input {...inputProps} id="forleng-dato" label="Forleng til dato" required error={submitted && !selectedDay ? "Velg en dato" : undefined} />
-          </DatePicker>
-        )}
-
-        <Textarea
-          id="forleng-begrunnelse"
-          label="Begrunnelse"
-          value={begrunnelse}
-          onChange={(e) => setBegrunnelse(e.target.value)}
-          maxLength={200}
-          error={submitted && !begrunnelse.trim() ? "Begrunnelse er påkrevd" : undefined}
-        />
+        <DatePicker {...datepickerProps}>
+          <DatePicker.Input
+            {...inputProps}
+            id="forleng-dato"
+            label={
+              <span className="flex items-center gap-1">
+                Velg når personen igjen skal bli kandidat for avslutning
+                <HelpText title="Forklaring">
+                  På valgt dato legges personen igjen i filteret «Kandidater for avslutning». Du kan velge en dato inntil 6 måneder frem i tid. 
+                </HelpText>
+              </span>
+            }
+            required
+            error={submitted && !selectedDay ? "Velg en dato" : undefined}
+          />
+        </DatePicker>
 
         <Accordion>
           <Accordion.Item>
