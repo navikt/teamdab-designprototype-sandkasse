@@ -10,7 +10,7 @@ import { MinOversiktFilterPanel } from "@/components/MinOversiktFilterPanel";
 import { MinOversiktFilterHeader } from "@/components/MinOversiktFilterHeader";
 import { Toolbar } from "@/components/Toolbar";
 import { Brukerliste } from "@/components/brukerliste/Brukerliste";
-import { brukere, avsluttForlengBrukere } from "@/data/brukere";
+import { brukere, avsluttForlengBrukere, avsluttForlengBrukereFase2 } from "@/data/brukere";
 
 function EnhetensOversiktInnhold() {
   const router = useRouter();
@@ -19,7 +19,10 @@ function EnhetensOversiktInnhold() {
   const tab = searchParams.get("tab") ?? "enhetens-oversikt";
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
-  const tableData = statusFilter === "ikke-servicebehov" ? brukere : avsluttForlengBrukere;
+  const tableData =
+    statusFilter === "ikke-servicebehov" ? brukere
+    : statusFilter === "avslutt-forleng-fase-2" ? avsluttForlengBrukereFase2
+    : avsluttForlengBrukere;
 
   const handleStatusFilterChange = (value: string) => {
     setSelectedRows([]);
@@ -44,7 +47,10 @@ function MinOversiktInnhold() {
   const statusFilter = searchParams.get("filter");
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
-  const tableData = statusFilter === "ikke-servicebehov" ? brukere : avsluttForlengBrukere;
+  const tableData =
+    statusFilter === "ikke-servicebehov" ? brukere
+    : statusFilter === "avslutt-forleng-fase-2" ? avsluttForlengBrukereFase2
+    : avsluttForlengBrukere;
 
   const handleStatusFilterChange = (value: string) => {
     setSelectedRows([]);

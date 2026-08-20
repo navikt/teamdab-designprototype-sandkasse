@@ -98,7 +98,7 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merke
               <span className="flex items-center gap-1">
                 Velg når personen igjen skal bli kandidat for avslutning
                 <HelpText title="Forklaring">
-                  På valgt dato legges personen igjen i filteret «Kandidater for avslutning». Du kan velge en dato inntil 6 måneder frem i tid. 
+                  På valgt dato legges personen igjen i filteret «Kandidater for avslutning (fase 1)». Du kan velge en dato inntil 6 måneder frem i tid. 
                 </HelpText>
               </span>
             }
