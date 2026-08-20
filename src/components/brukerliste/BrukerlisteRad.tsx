@@ -14,10 +14,11 @@ interface Props {
     settMarkert: (id: string, markert: boolean) => void;
     minOversikt: boolean;
     avslutning?: boolean;
+    fase2?: boolean;
     erForrigeBruker?: boolean;
 }
 
-export function BrukerlisteRad({ bruker, markert, settMarkert, minOversikt, avslutning = false, erForrigeBruker = false }: Props) {
+export function BrukerlisteRad({ bruker, markert, settMarkert, minOversikt, avslutning = false, fase2 = false, erForrigeBruker = false }: Props) {
     return (
         <li className={classNames("brukerliste_rad", { "brukerliste--forrigeBruker": erForrigeBruker })}>
             <div className="brukerliste__element">
@@ -36,7 +37,7 @@ export function BrukerlisteRad({ bruker, markert, settMarkert, minOversikt, avsl
                         <div style={{ width: "2.5rem" }}><FargekategoriIkon kategori={bruker.fargekategori} /></div>
                     </div>
                 )}
-                <BrukerlisteDataCeller bruker={bruker} avslutning={avslutning} minOversikt={minOversikt} />
+                <BrukerlisteDataCeller bruker={bruker} avslutning={avslutning} fase2={fase2} minOversikt={minOversikt} />
             </div>
         </li>
     );

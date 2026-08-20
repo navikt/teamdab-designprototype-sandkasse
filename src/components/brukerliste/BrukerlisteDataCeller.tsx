@@ -18,10 +18,11 @@ function datoForDagerSiden(dager: number): string {
 interface Props {
     bruker: Bruker;
     avslutning?: boolean;
+    fase2?: boolean;
     minOversikt?: boolean;
 }
 
-export function BrukerlisteDataCeller({ bruker, avslutning = false, minOversikt = false }: Props) {
+export function BrukerlisteDataCeller({ bruker, avslutning = false, fase2 = false, minOversikt = false }: Props) {
     return (
         <>
             <div className="brukerliste__innhold">
@@ -48,7 +49,7 @@ export function BrukerlisteDataCeller({ bruker, avslutning = false, minOversikt 
                     </NextLink>
                 </div>
                 <div style={{ flex: 2, padding: "0 0.5rem" }}>
-                    {avslutning && bruker.dagerSidenÅrsakOppsto != null
+                    {avslutning && !fase2 && bruker.dagerSidenÅrsakOppsto != null
                         ? datoForDagerSiden(bruker.dagerSidenÅrsakOppsto)
                         : datoOmDager(bruker.dagerTilAvslutning)}
                 </div>

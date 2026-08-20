@@ -17,6 +17,7 @@ interface Props {
     onSort: (felt: Sorteringsfelt) => void;
     minOversikt: boolean;
     avslutning?: boolean;
+    fase2?: boolean;
 }
 
 export function BrukerlisteHeader({
@@ -28,6 +29,7 @@ export function BrukerlisteHeader({
     onSort,
     minOversikt,
     avslutning = false,
+    fase2 = false,
 }: Props) {
     const sorteringProps = { aktivtFelt, rekkefolge, onClick: onSort };
 
@@ -75,7 +77,7 @@ export function BrukerlisteHeader({
                     <SorteringHeader tekst={avslutning ? "Årsak til avslutning" : "Hendelse"} felt="status" {...sorteringProps} />
                 </div>
                 <div style={{ flex: 2, padding: "0 0.5rem" }}>
-                    <SorteringHeader tekst={avslutning ? "Dato for årsak" : "Automatisk avslutning"} felt="automatiskAvslutning" {...sorteringProps} />
+                    <SorteringHeader tekst={avslutning ? (fase2 ? "Dato for avslutning" : "Dato for årsak") : "Automatisk avslutning"} felt="automatiskAvslutning" {...sorteringProps} />
                 </div>
                 <div style={{ flex: 2, padding: "0 0.5rem" }}><span style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap" }}>Merkelapper</span></div>
             </div>
