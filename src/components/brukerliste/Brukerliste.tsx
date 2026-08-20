@@ -24,7 +24,7 @@ function sorterBrukere(data: Bruker[], felt: Sorteringsfelt | null, rekkefolge: 
 
     return [...data].sort((a, b) => {
         if (felt === "automatiskAvslutning") {
-            return (a.dagerTilAvslutning - b.dagerTilAvslutning) * dir;
+            return ((a.dagerTilAvslutning ?? Infinity) - (b.dagerTilAvslutning ?? Infinity)) * dir;
         }
         if (felt === "oppfolgingStartet") {
             const toNum = (s: string | undefined) => (s ? s.split(".").reverse().join("") : "");

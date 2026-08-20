@@ -28,7 +28,7 @@ export function BrukerlisteDataCeller({ bruker, avslutning = false, fase2 = fals
             <div className="brukerliste__innhold">
                 <div style={{ flex: 1.5, padding: "0 0.5rem" }}>
                     <NextLink
-                        href={`/personprofil?id=${encodeURIComponent(bruker.id)}`}
+                        href={`/personprofil?id=${encodeURIComponent(bruker.id)}${avslutning ? "&avslutning=1" : ""}${fase2 ? "&fase2=1" : ""}`}
                         className="bruker-lenke"
                     >
                         {bruker.navn}
@@ -42,7 +42,7 @@ export function BrukerlisteDataCeller({ bruker, avslutning = false, fase2 = fals
                 )}
                 <div style={{ flex: 3, padding: "0 0.5rem" }}>
                     <NextLink
-                        href={`/personprofil?id=${encodeURIComponent(bruker.id)}`}
+                        href={`/personprofil?id=${encodeURIComponent(bruker.id)}${avslutning ? "&avslutning=1" : ""}${fase2 ? "&fase2=1" : ""}`}
                         className="bruker-lenke"
                     >
                         {bruker.status}
@@ -51,7 +51,9 @@ export function BrukerlisteDataCeller({ bruker, avslutning = false, fase2 = fals
                 <div style={{ flex: 2, padding: "0 0.5rem" }}>
                     {avslutning && !fase2 && bruker.dagerSidenÅrsakOppsto != null
                         ? datoForDagerSiden(bruker.dagerSidenÅrsakOppsto)
-                        : datoOmDager(bruker.dagerTilAvslutning)}
+                        : bruker.dagerTilAvslutning != null
+                        ? datoOmDager(bruker.dagerTilAvslutning)
+                        : "—"}
                 </div>
                 <div style={{ flex: 2, padding: "0 0.5rem", display: "flex", gap: "0.25rem", flexWrap: "wrap" }}>
                     {bruker.merkelapper.map((m, i) => (

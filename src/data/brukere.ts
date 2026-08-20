@@ -10,7 +10,7 @@ export interface Bruker {
   navn: string;
   fnr: string;
   oppfolgingStartet: string;
-  dagerTilAvslutning: number;
+  dagerTilAvslutning?: number;
   dagerSidenÅrsakOppsto?: number;
   veileder: string;
   tildelingsdato?: string;
@@ -31,7 +31,6 @@ export const avsluttForlengBrukereFase2: Bruker[] = [
     navn: "Lysglimt, Varsom",
     fnr: "00010167891",
     oppfolgingStartet: "15.01.2023",
-    dagerTilAvslutning: 31,
     veileder: "Vidde, Rolig",
     tildelingsdato: "20.01.2023",
     status: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse",
@@ -43,7 +42,6 @@ export const avsluttForlengBrukereFase2: Bruker[] = [
     navn: "Skogsti, Bred",
     fnr: "00020178902",
     oppfolgingStartet: "03.04.2024",
-    dagerTilAvslutning: 34,
     veileder: "Retning, Stødig",
     tildelingsdato: "10.04.2024",
     status: "Arbeidssøkerperiode avsluttet: Svarte nei i bekreftelse",

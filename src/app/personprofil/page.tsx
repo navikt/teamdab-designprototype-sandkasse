@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Topbar } from "@/components/Topbar";
 import { PersonprofilContent } from "@/components/PersonprofilContent";
-import { brukere, avsluttForlengBrukere } from "@/data/brukere";
+import { brukere, avsluttForlengBrukere, avsluttForlengBrukereFase2 } from "@/data/brukere";
 
 // `searchParams` som server-prop krever en server og støttes ikke ved
 // statisk eksport (output: "export"). Leser derfor query-param på klienten
@@ -12,8 +12,10 @@ import { brukere, avsluttForlengBrukere } from "@/data/brukere";
 function PersonProfilInnhold() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id") ?? undefined;
+  const avslutning = searchParams.get("avslutning") === "1";
+  const fase2 = searchParams.get("fase2") === "1";
   const bruker = id
-    ? [...brukere, ...avsluttForlengBrukere].find((b) => b.id === id)
+    ? [...brukere, ...avsluttForlengBrukere, ...avsluttForlengBrukereFase2].find((b) => b.id === id)
     : undefined;
   const navn = bruker?.navn;
   const fnr = bruker?.fnr;
@@ -27,6 +29,8 @@ function PersonProfilInnhold() {
       status={bruker?.status}
       statusVariant={bruker?.statusVariant}
       dagerTilAvslutning={bruker?.dagerTilAvslutning}
+      avslutning={avslutning}
+      fase2={fase2}
     />
   );
 }
