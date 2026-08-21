@@ -10,7 +10,7 @@ export interface Bruker {
   navn: string;
   fnr: string;
   oppfolgingStartet: string;
-  dagerTilAvslutning: number;
+  dagerTilAvslutning?: number;
   dagerSidenÅrsakOppsto?: number;
   veileder: string;
   tildelingsdato?: string;
@@ -24,6 +24,67 @@ export interface Bruker {
 // Testdata: fiktive navn bygget som ord-kombinasjoner (substantiv, adjektiv).
 // Fnr-verdiene har dag-del "00" — ugyldig i alle norske nummersystemer.
 // Merkelapper er hentet fra etiketter.tsx i veilarbvisittkortfs.
+
+export const avsluttForlengBrukereFase2: Bruker[] = [
+  {
+    id: "b1",
+    navn: "Lysglimt, Varsom",
+    fnr: "00010167891",
+    oppfolgingStartet: "15.01.2023",
+    veileder: "Vidde, Rolig",
+    tildelingsdato: "20.01.2023",
+    status: "Arbeidssøkerperiode avsluttet: Ikke levert bekreftelse",
+    statusVariant: "warning",
+    merkelapper: [{ tekst: "Kandidat for avslutning", variant: "warning" }],
+  },
+  {
+    id: "b2",
+    navn: "Skogsti, Bred",
+    fnr: "00020178902",
+    oppfolgingStartet: "03.04.2024",
+    veileder: "Retning, Stødig",
+    tildelingsdato: "10.04.2024",
+    status: "Arbeidssøkerperiode avsluttet: Svarte nei i bekreftelse",
+    statusVariant: "warning",
+    merkelapper: [{ tekst: "Kandidat for avslutning", variant: "warning" }],
+  },
+  {
+    id: "b3",
+    navn: "Havbris, Lett",
+    fnr: "00030189013",
+    oppfolgingStartet: "28.08.2022",
+    dagerTilAvslutning: 27,
+    veileder: "Utvikling, Klar",
+    tildelingsdato: "05.09.2022",
+    status: "Arbeidssøkerperiode avsluttet",
+    statusVariant: "warning",
+    merkelapper: [{ tekst: "Kandidat for avslutning", variant: "warning" }],
+  },
+  {
+    id: "b4",
+    navn: "Vindkast, Sterk",
+    fnr: "00040190124",
+    oppfolgingStartet: "20.06.2023",
+    dagerTilAvslutning: 25,
+    veileder: "Vidde, Rolig",
+    tildelingsdato: "01.07.2023",
+    status: "Arbeidssøkerperiode avsluttet av bruker",
+    statusVariant: "warning",
+    merkelapper: [{ tekst: "Kandidat for avslutning", variant: "warning" }],
+  },
+  {
+    id: "b5",
+    navn: "Morgen, Klar",
+    fnr: "00050201235",
+    oppfolgingStartet: "11.02.2025",
+    dagerTilAvslutning: 23,
+    veileder: "Retning, Stødig",
+    tildelingsdato: "11.02.2025",
+    status: "Arbeidssøkerperiode avsluttet av veileder",
+    statusVariant: "warning",
+    merkelapper: [{ tekst: "Kandidat for avslutning", variant: "warning" }],
+  },
+];
 
 export const avsluttForlengBrukere: Bruker[] = [
   {

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button, Tabs, ToggleGroup } from "@navikt/ds-react";
-import { TimerStartIcon, XMarkIcon, ExclamationmarkTriangleFillIcon, InformationSquareFillIcon, LeaveIcon } from "@navikt/aksel-icons";
+import { TimerStartIcon, XMarkIcon, ExclamationmarkTriangleFillIcon, InformationSquareFillIcon, LeaveIcon, ChatIcon } from "@navikt/aksel-icons";
 import { Visittkort } from "./Visittkort";
 import { PersonprofilTabBar } from "./PersonprofilTabBar";
 import { AktivitetsplanSection } from "./AktivitetsplanSection";
@@ -25,13 +25,16 @@ interface Props {
   status?: string;
   statusVariant?: "danger" | "neutral" | "warning" | "info";
   dagerTilAvslutning?: number;
+  avslutning?: boolean;
+  fase2?: boolean;
 }
 
-export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, statusVariant, dagerTilAvslutning }: Props) {
+export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, statusVariant, dagerTilAvslutning, avslutning = false, fase2 = false }: Props) {
   const erBlokkerteAvslutt = brukerId ? BLOKKERTE_BRUKERE.has(brukerId) : false;
   const [infoCardHidden, setInfoCardHidden] = useState(false);
   const [alertVariant, setAlertVariant] = useState<"info" | "warning">("warning");
   const [perspektiv, setPerspektiv] = useState<Perspektiv>("veileder");
+  const [aktivTab, setAktivTab] = useState("aktivitetsplan");
   const [forlengOpen, setForlengOpen] = useState(false);
   const [avsluttOpen, setAvsluttOpen] = useState(false);
 
@@ -56,7 +59,48 @@ export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, 
         onOpenForleng={() => setForlengOpen(true)}
         onOpenAvslutt={() => setAvsluttOpen(true)}
       />
-      {!infoCardHidden && dagerTilAvslutning != null && (
+      {!infoCardHidden && avslutning && !(fase2 && dagerTilAvslutning != null) && (
+        <div className="bg-[var(--ax-bg-warning-moderate)] text-[var(--ax-text-warning)] flex items-center w-full px-4 py-2">
+          <ExclamationmarkTriangleFillIcon
+            aria-hidden
+            fontSize="1.25rem"
+            className="shrink-0 -translate-y-[2px]"
+            style={{ color: "var(--ax-border-warning)" }}
+          />
+          <div className="flex items-center gap-3 flex-1 mx-3">
+            <span>Skal denne brukeren fortsatt ha oppfølging?</span>
+            <Button
+              variant="secondary-neutral"
+              size="small"
+              icon={<TimerStartIcon aria-hidden />}
+              iconPosition="left"
+              onClick={() => setForlengOpen(true)}
+              className="shrink-0 !bg-white hover:!bg-[var(--ax-bg-neutral-moderate-hover)]"
+            >
+              Ja, forleng oppfølging
+            </Button>
+            <Button
+              variant="secondary-neutral"
+              size="small"
+              icon={<LeaveIcon aria-hidden />}
+              iconPosition="left"
+              onClick={() => setAvsluttOpen(true)}
+              className="shrink-0 !bg-white hover:!bg-[var(--ax-bg-neutral-moderate-hover)]"
+            >
+              Nei, avslutt nå
+            </Button>
+          </div>
+          <Button
+            variant="tertiary-neutral"
+            size="small"
+            icon={<XMarkIcon aria-hidden />}
+            aria-label="Lukk"
+            onClick={() => setInfoCardHidden(true)}
+            className="shrink-0"
+          />
+        </div>
+      )}
+      {!infoCardHidden && avslutning && fase2 && dagerTilAvslutning != null && (
         <div className={`flex items-center w-full px-4 py-2 ${
             alertVariant === "info"
               ? "bg-[var(--ax-bg-info-moderate)] text-[var(--ax-text-info)]"
@@ -113,7 +157,7 @@ export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, 
           />
         </div>
       )}
-<Tabs defaultValue="aktivitetsplan" className="flex flex-col flex-1 overflow-hidden">
+<Tabs value={aktivTab} onChange={setAktivTab} className="flex flex-col flex-1 overflow-hidden">
         <PersonprofilTabBar />
         <Tabs.Panel value="aktivitetsplan" className="flex-1 flex flex-col items-center gap-6 py-6 overflow-x-hidden">
           <div className="w-full max-w-3xl px-6">
