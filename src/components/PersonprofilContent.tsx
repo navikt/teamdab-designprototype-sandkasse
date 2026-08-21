@@ -100,7 +100,7 @@ export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, 
           />
         </div>
       )}
-      {!infoCardHidden && fase2 && dagerTilAvslutning != null && (
+      {!infoCardHidden && avslutning && fase2 && dagerTilAvslutning != null && (
         <div className={`flex items-center w-full px-4 py-2 ${
             alertVariant === "info"
               ? "bg-[var(--ax-bg-info-moderate)] text-[var(--ax-text-info)]"
