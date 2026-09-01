@@ -3,15 +3,12 @@ import { Tag } from "@navikt/ds-react";
 import { Bruker } from "@/data/brukere";
 import "./brukerliste.css";
 
-function datoOmDager(dager: number): string {
+// Dato for årsak inntreffer alltid 28 dager før automatisk avslutning.
+const DAGER_ARSAK_FOR_AVSLUTNING = 28;
+
+function datoFraIdag(dager: number): string {
     const d = new Date();
     d.setDate(d.getDate() + dager);
-    return d.toLocaleDateString("nb-NO", { day: "2-digit", month: "2-digit", year: "numeric" });
-}
-
-function datoForDagerSiden(dager: number): string {
-    const d = new Date();
-    d.setDate(d.getDate() - dager);
     return d.toLocaleDateString("nb-NO", { day: "2-digit", month: "2-digit", year: "numeric" });
 }
 
@@ -19,10 +16,9 @@ interface Props {
     bruker: Bruker;
     avslutning?: boolean;
     fase2?: boolean;
-    minOversikt?: boolean;
 }
 
-export function BrukerlisteDataCeller({ bruker, avslutning = false, fase2 = false, minOversikt = false }: Props) {
+export function BrukerlisteDataCeller({ bruker, avslutning = false, fase2 = false }: Props) {
     return (
         <>
             <div className="brukerliste__innhold">
@@ -35,9 +31,9 @@ export function BrukerlisteDataCeller({ bruker, avslutning = false, fase2 = fals
                     </NextLink>
                 </div>
                 <div style={{ flex: 1, padding: "0 0.5rem" }}>{bruker.fnr}</div>
-                {!(minOversikt && avslutning) && (
+                {!avslutning && (
                     <div style={{ flex: 1.5, padding: "0 0.5rem" }}>
-                        {avslutning ? bruker.veileder : bruker.oppfolgingStartet}
+                        {bruker.oppfolgingStartet}
                     </div>
                 )}
                 <div style={{ flex: 3, padding: "0 0.5rem" }}>
@@ -48,12 +44,13 @@ export function BrukerlisteDataCeller({ bruker, avslutning = false, fase2 = fals
                         {bruker.status}
                     </NextLink>
                 </div>
+                {avslutning && (
+                    <div style={{ flex: 2, padding: "0 0.5rem" }}>
+                        {bruker.dagerTilAvslutning != null ? datoFraIdag(bruker.dagerTilAvslutning - DAGER_ARSAK_FOR_AVSLUTNING) : "—"}
+                    </div>
+                )}
                 <div style={{ flex: 2, padding: "0 0.5rem" }}>
-                    {avslutning && !fase2 && bruker.dagerSidenÅrsakOppsto != null
-                        ? datoForDagerSiden(bruker.dagerSidenÅrsakOppsto)
-                        : bruker.dagerTilAvslutning != null
-                        ? datoOmDager(bruker.dagerTilAvslutning)
-                        : "—"}
+                    {bruker.dagerTilAvslutning != null ? datoFraIdag(bruker.dagerTilAvslutning) : "—"}
                 </div>
                 <div style={{ flex: 2, padding: "0 0.5rem", display: "flex", gap: "0.25rem", flexWrap: "wrap" }}>
                     {bruker.merkelapper.map((m, i) => (

@@ -10,18 +10,17 @@ import { MinOversiktFilterPanel } from "@/components/MinOversiktFilterPanel";
 import { MinOversiktFilterHeader } from "@/components/MinOversiktFilterHeader";
 import { Toolbar } from "@/components/Toolbar";
 import { Brukerliste } from "@/components/brukerliste/Brukerliste";
-import { brukere, avsluttForlengBrukere, avsluttForlengBrukereFase2 } from "@/data/brukere";
+import { avsluttForlengBrukere, avsluttForlengBrukereFase2 } from "@/data/brukere";
 
 function EnhetensOversiktInnhold() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const statusFilter = searchParams.get("filter") ?? "avslutt-forleng";
+  const statusFilter = searchParams.get("filter") ?? "avslutt-forleng-fase-2";
   const tab = searchParams.get("tab") ?? "enhetens-oversikt";
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
   const tableData =
-    statusFilter === "ikke-servicebehov" ? brukere
-    : statusFilter === "avslutt-forleng-fase-2" ? avsluttForlengBrukereFase2
+    statusFilter === "avslutt-forleng-fase-2" ? avsluttForlengBrukereFase2
     : avsluttForlengBrukere;
 
   const handleStatusFilterChange = (value: string) => {
@@ -35,7 +34,7 @@ function EnhetensOversiktInnhold() {
       <div className="flex flex-col gap-2 flex-1">
         <FilterHeader statusFilter={statusFilter} totalRows={tableData.length} selectedCount={selectedRows.length} />
         <Toolbar />
-        <Brukerliste data={tableData} selectedRows={selectedRows} onSelectedRowsChange={setSelectedRows} avslutning={statusFilter !== "ikke-servicebehov"} fase2={statusFilter === "avslutt-forleng-fase-2"} />
+        <Brukerliste data={tableData} selectedRows={selectedRows} onSelectedRowsChange={setSelectedRows} avslutning fase2={statusFilter === "avslutt-forleng-fase-2"} />
       </div>
     </main>
   );
@@ -48,8 +47,7 @@ function MinOversiktInnhold() {
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
   const tableData =
-    statusFilter === "ikke-servicebehov" ? brukere
-    : statusFilter === "avslutt-forleng-fase-2" ? avsluttForlengBrukereFase2
+    statusFilter === "avslutt-forleng-fase-2" ? avsluttForlengBrukereFase2
     : avsluttForlengBrukere;
 
   const handleStatusFilterChange = (value: string) => {
@@ -73,7 +71,7 @@ function MinOversiktInnhold() {
           onClearFilter={handleClearFilter}
         />
         <Toolbar minOversikt />
-        <Brukerliste data={tableData} selectedRows={selectedRows} onSelectedRowsChange={setSelectedRows} minOversikt avslutning={statusFilter !== "ikke-servicebehov"} fase2={statusFilter === "avslutt-forleng-fase-2"} />
+        <Brukerliste data={tableData} selectedRows={selectedRows} onSelectedRowsChange={setSelectedRows} minOversikt avslutning fase2={statusFilter === "avslutt-forleng-fase-2"} />
       </div>
     </main>
   );

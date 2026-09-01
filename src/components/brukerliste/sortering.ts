@@ -4,6 +4,7 @@ export type Sorteringsfelt =
     | "navn"
     | "fnr"
     | "oppfolgingStartet"
+    | "datoForArsak"
     | "automatiskAvslutning"
     | "veileder"
     | "status"
