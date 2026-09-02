@@ -4,9 +4,7 @@ import { Button, Chips, Detail, TextField } from "@navikt/ds-react";
 import { StarIcon } from "@navikt/aksel-icons";
 
 const statusFilterLabels: Record<string, string> = {
-  "ikke-servicebehov": "Ikke servicebehov",
-  "avslutt-forleng": "Kandidater for avslutning (fase 1)",
-  "avslutt-forleng-fase-2": "Kandidater for avslutning (fase 2)",
+  "avslutt-forleng-fase-2": "Kandidater for avslutning",
 };
 
 export function FilterHeader({

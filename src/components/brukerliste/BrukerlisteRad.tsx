@@ -37,7 +37,7 @@ export function BrukerlisteRad({ bruker, markert, settMarkert, minOversikt, avsl
                         <div style={{ width: "2.5rem" }}><FargekategoriIkon kategori={bruker.fargekategori} /></div>
                     </div>
                 )}
-                <BrukerlisteDataCeller bruker={bruker} avslutning={avslutning} fase2={fase2} minOversikt={minOversikt} />
+                <BrukerlisteDataCeller bruker={bruker} avslutning={avslutning} fase2={fase2} />
             </div>
         </li>
     );

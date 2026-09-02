@@ -18,9 +18,7 @@ const statusFilterLabels: Record<string, string> = {
   "utlopte-aktiviteter": "Utløpte aktiviteter",
   "ikke-i-avtalt-aktivitet": "Ikke i avtalt aktivitet",
   "i-avtalt-aktivitet": "I avtalt aktivitet",
-  "ikke-servicebehov": "Ikke servicebehov",
-  "avslutt-forleng": "Kandidater for avslutning (fase 1)",
-  "avslutt-forleng-fase-2": "Kandidater for avslutning (fase 2)",
+  "avslutt-forleng-fase-2": "Kandidater for avslutning",
 };
 
 export function MinOversiktFilterHeader({

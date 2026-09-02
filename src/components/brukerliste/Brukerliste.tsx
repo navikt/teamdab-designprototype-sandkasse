@@ -26,6 +26,9 @@ function sorterBrukere(data: Bruker[], felt: Sorteringsfelt | null, rekkefolge: 
         if (felt === "automatiskAvslutning") {
             return ((a.dagerTilAvslutning ?? Infinity) - (b.dagerTilAvslutning ?? Infinity)) * dir;
         }
+        if (felt === "datoForArsak") {
+            return ((a.dagerTilAvslutning ?? Infinity) - (b.dagerTilAvslutning ?? Infinity)) * dir;
+        }
         if (felt === "oppfolgingStartet") {
             const toNum = (s: string | undefined) => (s ? s.split(".").reverse().join("") : "");
             return toNum(a[felt]).localeCompare(toNum(b[felt])) * dir;
@@ -86,7 +89,6 @@ export function Brukerliste({ data, selectedRows, onSelectedRowsChange, minOvers
                 onSort={handleSort}
                 minOversikt={minOversikt}
                 avslutning={avslutning}
-                fase2={fase2}
             />
             <div className="brukerliste-tabell">
                 <ul className="brukerliste">
