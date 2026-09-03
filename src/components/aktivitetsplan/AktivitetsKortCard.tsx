@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import Image from "next/image";
 import {
   BriefcaseIcon,
   Buildings2Icon,
@@ -54,6 +55,20 @@ const TYPE_IKON: Record<string, typeof BriefcaseIcon> = {
   "Samtalereferat": FileCheckmarkIcon,
 };
 
+// Pictogram per aktivitetstype, brukt i "romslig" visning. Gjenbruker der det ikke finnes unikt.
+const TYPE_PICTOGRAM: Record<string, string> = {
+  "Stilling": "/Stilling_pictogram.svg",
+  "Stilling fra Nav": "/stillingfranav_pictogram.svg",
+  "Jobb jeg har nå": "/Stilling_pictogram.svg",
+  "Jobbsøking": "/jobbsoking_pictogram.svg",
+  "Jobbrettet egenaktivitet": "/jobbrettetegenaktivitet_pictogram.svg",
+  "Møte med Nav": "/motemednav_pictogram.svg",
+  "Tiltak gjennom Nav": "/tiltakgjennomnav_pictogram.svg",
+  "Arbeidstrening": "/arbeidstrening_pictogram.svg",
+  "Behandling": "/behandling_pictogram.svg",
+  "Samtalereferat": "/motemednav_pictogram.svg",
+};
+
 interface Props {
   kort: AktivitetsKort;
   onDragStart?: (e: React.DragEvent, id: string) => void;
@@ -69,6 +84,7 @@ export function AktivitetsKortCard({ kort, onDragStart, onKlikk, visSnart, onAvt
   const erKlikkbar = !!kort.samtalereferatData;
   const erRomslig = visning === "romslig";
   const Ikon = TYPE_IKON[kort.type] ?? ClipboardIcon;
+  const pictogram = TYPE_PICTOGRAM[kort.type];
 
   const innhold = (
     <>
@@ -86,7 +102,7 @@ export function AktivitetsKortCard({ kort, onDragStart, onKlikk, visSnart, onAvt
       </div>
 
       {/* Title */}
-      <Heading level="3" size="xsmall">
+      <Heading level="3" size="small">
         {kort.title}
       </Heading>
 
@@ -142,17 +158,22 @@ export function AktivitetsKortCard({ kort, onDragStart, onKlikk, visSnart, onAvt
       onClick={erKlikkbar ? () => onKlikk(kort) : undefined}
       className={classNames(
         "bg-ax-bg-default select-none",
-        erRomslig ? "rounded-xl p-4 shadow-sm" : "rounded-md p-3 pb-4 flex flex-col gap-1 border border-ax-border-neutral",
+        erRomslig ? "rounded-xl p-6 shadow-sm" : "rounded-md p-3 pb-4 flex flex-col gap-1 border border-ax-border-neutral",
         onDragStart && "cursor-grab active:cursor-grabbing active:opacity-60",
-        erKlikkbar && (erRomslig
-          ? "hover:shadow-[var(--ax-shadow-dialog)] cursor-pointer transition-shadow"
-          : "hover:border-ax-border-accent cursor-pointer"),
+        erRomslig
+          ? "hover:shadow-[var(--ax-shadow-dialog)] transition-shadow"
+          : "hover:border-ax-border-accent",
+        erKlikkbar && "cursor-pointer",
       )}
     >
       {erRomslig ? (
-        <div className="flex items-start gap-4">
-          <span className="shrink-0 flex items-center justify-center w-16 h-16 rounded-full bg-ax-bg-neutral-moderate">
-            <Ikon aria-hidden fontSize="2rem" className="text-[var(--ax-text-neutral-subtle)]" />
+        <div className="flex items-start gap-7">
+          <span className="shrink-0 flex items-center justify-center w-16 h-16">
+            {pictogram ? (
+              <Image src={pictogram} alt="" width={64} height={64} />
+            ) : (
+              <Ikon aria-hidden fontSize="2rem" className="text-[var(--ax-text-neutral-subtle)]" />
+            )}
           </span>
           <div className="flex flex-col gap-1 flex-1 min-w-0">{innhold}</div>
         </div>
