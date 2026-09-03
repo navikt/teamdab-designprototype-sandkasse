@@ -1,3 +1,13 @@
+import classNames from "classnames";
+import {
+  BriefcaseIcon,
+  Buildings2Icon,
+  ClipboardIcon,
+  DocPencilIcon,
+  FileCheckmarkIcon,
+  PersonChatIcon,
+  StethoscopeIcon,
+} from "@navikt/aksel-icons";
 import { Tag, Detail, Heading, BodyShort } from "@navikt/ds-react";
 import { AktivitetsKort, TagVariant } from "./types";
 
@@ -30,22 +40,38 @@ const TAG_CONFIG: Record<TagVariant, TagConfig> = {
   "fatt-avslag":        { label: "Fått avslag",                   variant: "neutral" },
 };
 
+// Ikonvalg per aktivitetstype, uten fargekoding (kommer senere). Fallback: ClipboardIcon.
+const TYPE_IKON: Record<string, typeof BriefcaseIcon> = {
+  "Stilling": BriefcaseIcon,
+  "Stilling fra Nav": BriefcaseIcon,
+  "Jobb jeg har nå": BriefcaseIcon,
+  "Jobbsøking": DocPencilIcon,
+  "Jobbrettet egenaktivitet": DocPencilIcon,
+  "Møte med Nav": PersonChatIcon,
+  "Tiltak gjennom Nav": Buildings2Icon,
+  "Arbeidstrening": Buildings2Icon,
+  "Behandling": StethoscopeIcon,
+  "Samtalereferat": FileCheckmarkIcon,
+};
+
 interface Props {
   kort: AktivitetsKort;
-  onDragStart: (e: React.DragEvent, id: string) => void;
+  onDragStart?: (e: React.DragEvent, id: string) => void;
   onKlikk: (kort: AktivitetsKort) => void;
+  // Vises kun i bruker-flatens kronologiske liste, ikke i veileders kanban.
+  visSnart?: boolean;
+  onAvtaltKlikk?: () => void;
+  // "kompakt" = veileders kanban (uendret), "romslig" = bruker-flatens lister.
+  visning?: "kompakt" | "romslig";
 }
 
-export function AktivitetsKortCard({ kort, onDragStart, onKlikk }: Props) {
+export function AktivitetsKortCard({ kort, onDragStart, onKlikk, visSnart, onAvtaltKlikk, visning = "kompakt" }: Props) {
   const erKlikkbar = !!kort.samtalereferatData;
+  const erRomslig = visning === "romslig";
+  const Ikon = TYPE_IKON[kort.type] ?? ClipboardIcon;
 
-  return (
-    <div
-      draggable
-      onDragStart={(e) => onDragStart(e, kort.id)}
-      onClick={erKlikkbar ? () => onKlikk(kort) : undefined}
-      className={`bg-ax-bg-default rounded-md border border-ax-border-neutral p-3 pb-4 flex flex-col gap-1 cursor-grab active:cursor-grabbing active:opacity-60 select-none${erKlikkbar ? " hover:border-ax-border-action cursor-pointer" : ""}`}
-    >
+  const innhold = (
+    <>
       {/* Type label + blue dot */}
       <div className="flex items-baseline gap-1.5">
         {kort.hasBlueDot && (
@@ -75,10 +101,29 @@ export function AktivitetsKortCard({ kort, onDragStart, onKlikk }: Props) {
       )}
 
       {/* Tags */}
-      {kort.tags.length > 0 && (
+      {(kort.tags.length > 0 || visSnart) && (
         <div className="flex flex-wrap gap-1 pt-1">
+          {visSnart && (
+            <Tag variant="warning" size="small">Snart</Tag>
+          )}
           {kort.tags.map((t) => {
             const cfg = TAG_CONFIG[t];
+            if (t === "avtalt-med-nav" && onAvtaltKlikk) {
+              return (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onAvtaltKlikk();
+                  }}
+                >
+                  <Tag variant={cfg.variant} size="small" className="cursor-pointer hover:opacity-80">
+                    {cfg.label}
+                  </Tag>
+                </button>
+              );
+            }
             return (
               <Tag key={t} variant={cfg.variant} size="small">
                 {cfg.label}
@@ -86,6 +131,33 @@ export function AktivitetsKortCard({ kort, onDragStart, onKlikk }: Props) {
             );
           })}
         </div>
+      )}
+    </>
+  );
+
+  return (
+    <div
+      draggable={!!onDragStart}
+      onDragStart={onDragStart ? (e) => onDragStart(e, kort.id) : undefined}
+      onClick={erKlikkbar ? () => onKlikk(kort) : undefined}
+      className={classNames(
+        "bg-ax-bg-default select-none",
+        erRomslig ? "rounded-xl p-4 shadow-sm" : "rounded-md p-3 pb-4 flex flex-col gap-1 border border-ax-border-neutral",
+        onDragStart && "cursor-grab active:cursor-grabbing active:opacity-60",
+        erKlikkbar && (erRomslig
+          ? "hover:shadow-[var(--ax-shadow-dialog)] cursor-pointer transition-shadow"
+          : "hover:border-ax-border-accent cursor-pointer"),
+      )}
+    >
+      {erRomslig ? (
+        <div className="flex items-start gap-4">
+          <span className="shrink-0 flex items-center justify-center w-16 h-16 rounded-full bg-ax-bg-neutral-moderate">
+            <Ikon aria-hidden fontSize="2rem" className="text-[var(--ax-text-neutral-subtle)]" />
+          </span>
+          <div className="flex flex-col gap-1 flex-1 min-w-0">{innhold}</div>
+        </div>
+      ) : (
+        innhold
       )}
     </div>
   );

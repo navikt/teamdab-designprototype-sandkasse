@@ -35,7 +35,8 @@ export const initialKort: AktivitetsKort[] = [
     kolonne: "planlegger",
     type: "Stilling",
     title: "Lærer",
-    dateRange: "15. aug – 15. aug 2026",
+    dateRange: "20. sep 2026",
+    startDato: "2026-09-20",
     tags: ["sendt-soknad"],
   },
   {
@@ -52,6 +53,8 @@ export const initialKort: AktivitetsKort[] = [
     type: "Tiltak gjennom Nav",
     title: "Pedagogikk og barneutvikling",
     dateRange: "1. sep – 30. nov 2026",
+    startDato: "2026-09-01",
+    sluttDato: "2026-11-30",
     tags: ["fatt-plass", "avtalt-med-nav"],
   },
   {
@@ -59,7 +62,8 @@ export const initialKort: AktivitetsKort[] = [
     kolonne: "gjennomforer",
     type: "Stilling",
     title: "Bartender",
-    dateRange: "10. jul – 10. jul 2026",
+    dateRange: "4. sep 2026",
+    startDato: "2026-09-04",
     tags: ["skal-pa-intervju"],
   },
   {

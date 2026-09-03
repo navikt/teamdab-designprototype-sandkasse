@@ -67,4 +67,9 @@ export interface AktivitetsKort {
   tags: TagVariant[];
   hasBlueDot?: boolean;
   samtalereferatData?: SamtalereferatData;
+  // Strukturerte datoer (ISO, YYYY-MM-DD) brukt av bruker-flatens sortering/kalendervisning.
+  startDato?: string;
+  sluttDato?: string;
+  // Uten fast dato/klokkeslett, f.eks. løpende jobbsøking. Regnes som løpende også når startDato mangler.
+  lopende?: boolean;
 }

@@ -84,6 +84,7 @@ export function Visittkort({ navn, fnr, status, statusVariant, merkelapper, onOp
         </Button>
         <Dropdown.Menu placement="bottom-end">
           <Dropdown.Menu.List>
+            <Dropdown.Menu.List.Item onClick={() => router.push("/minaktivitetsplan?somVeileder=1")}>Se som bruker</Dropdown.Menu.List.Item>
             <Dropdown.Menu.List.Item onClick={() => {}}>Arbeidssøkerregisteret</Dropdown.Menu.List.Item>
             <Dropdown.Menu.List.Item onClick={() => {}}>Tildel veileder</Dropdown.Menu.List.Item>
             <Dropdown.Menu.List.Item onClick={() => {}}>Send varsel</Dropdown.Menu.List.Item>
