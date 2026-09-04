@@ -29,11 +29,10 @@ export const initialKort: AktivitetsKort[] = [
   {
     id: "3",
     kolonne: "planlegger",
-    type: "Jobbsøking",
-    title: "Søke elektrikerstillinger",
-    dateRange: "21. jun – 27. jun 2026",
-    extraLine: "Antall søknader i uken: 5",
-    tags: ["sendt-soknad"],
+    type: "Jobbrettet egenaktivitet",
+    title: "Kartlegge aktuelle arbeidsgivere innen elektrofaget",
+    tags: [],
+    beskrivelse: "Undersøke hvilke bedrifter som er aktuelle å søke jobb hos når du er klar for det.",
   },
   // --- Gjennomfører ---
   {

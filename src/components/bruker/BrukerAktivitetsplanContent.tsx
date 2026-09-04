@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowRightIcon, ArrowsCirclepathIcon, TrashIcon, WrenchIcon } from "@navikt/aksel-icons";
+import { ArrowRightIcon, ArrowsCirclepathIcon, PlusIcon, TrashIcon, WrenchIcon } from "@navikt/aksel-icons";
 import { ActionMenu, Button, Heading, Link, ToggleGroup } from "@navikt/ds-react";
 import { DekoratorHeader } from "../dekorator-lookalike/DekoratorHeader";
 import { DekoratorFooter } from "../dekorator-lookalike/DekoratorFooter";
@@ -12,6 +12,7 @@ import { ForslagSeksjon } from "./ForslagSeksjon";
 import { MineAktiviteterListe } from "./MineAktiviteterListe";
 import { MineAktiviteterKalender } from "./MineAktiviteterKalender";
 import { AvtaleModal } from "./AvtaleModal";
+import { NyAktivitetModal, NyAktivitetType } from "./NyAktivitetModal";
 import { SamtalereferatModal } from "../aktivitetsplan/samtalereferat/SamtalereferatModal";
 import { AktivitetDetaljerModal } from "../aktivitetsplan/visning/AktivitetDetaljerModal";
 import { initialKort } from "../aktivitetsplan/initialData";
@@ -32,6 +33,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   const [visning, setVisning] = useState<Visning>("liste");
   const [aktivtKort, setAktivtKort] = useState<AktivitetsKort | null>(null);
   const [avtaleModalApen, setAvtaleModalApen] = useState(false);
+  const [nyAktivitetType, setNyAktivitetType] = useState<NyAktivitetType | null>(null);
   const {
     hovedmal,
     setHovedmal,
@@ -122,6 +124,27 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <Heading size="medium" level="2">Mine aktiviteter</Heading>
+                <ActionMenu>
+                  <ActionMenu.Trigger>
+                    <Button variant="primary" size="small" icon={<PlusIcon aria-hidden />}>
+                      Legg til aktivitet
+                    </Button>
+                  </ActionMenu.Trigger>
+                  <ActionMenu.Content>
+                    <ActionMenu.Item onSelect={() => setNyAktivitetType("Stilling")}>
+                      En jobb jeg vil søke på
+                    </ActionMenu.Item>
+                    <ActionMenu.Item onSelect={() => setNyAktivitetType("Jobb jeg har nå")}>
+                      En jobb jeg har nå
+                    </ActionMenu.Item>
+                    <ActionMenu.Item onSelect={() => setNyAktivitetType("Jobbrettet egenaktivitet")}>
+                      Jobbrettet egenaktivitet
+                    </ActionMenu.Item>
+                    <ActionMenu.Item onSelect={() => setNyAktivitetType("Behandling")}>
+                      Medisinsk behandling
+                    </ActionMenu.Item>
+                  </ActionMenu.Content>
+                </ActionMenu>
                 <Button
                   variant="secondary"
                   size="small"
@@ -185,6 +208,16 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
         />
       )}
       <AvtaleModal open={avtaleModalApen} onClose={() => setAvtaleModalApen(false)} />
+      {nyAktivitetType && (
+        <NyAktivitetModal
+          type={nyAktivitetType}
+          onOpprett={(kort, gjorTilDelmal) => {
+            setKort((prev) => [...prev, kort]);
+            if (gjorTilDelmal) leggTilDelmalFraAktivitet(kort.id);
+          }}
+          onClose={() => setNyAktivitetType(null)}
+        />
+      )}
 
       <DekoratorFooter />
 
