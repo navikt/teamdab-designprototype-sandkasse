@@ -80,7 +80,7 @@ export function MalLinje({
         <button
           type="button"
           onClick={() => setApen((v) => !v)}
-          className="flex items-center gap-2 flex-1 min-w-0 text-left"
+          className="flex items-center gap-2 flex-1 min-w-0 text-left rounded px-2 py-1 -mx-2 -my-1 hover:bg-ax-bg-neutral-soft transition-colors"
           aria-expanded={apen}
         >
           <CompassIcon aria-hidden fontSize="1.25rem" className="shrink-0 text-ax-text-neutral" />
@@ -101,7 +101,7 @@ export function MalLinje({
           onClick={() => setApen((v) => !v)}
           aria-expanded={apen}
           aria-label={apen ? "Skjul delmål" : "Vis delmål"}
-          className="shrink-0"
+          className="shrink-0 rounded p-1 hover:bg-ax-bg-neutral-soft transition-colors"
         >
           {apen ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
         </button>
