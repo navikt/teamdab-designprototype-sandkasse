@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowRightIcon } from "@navikt/aksel-icons";
-import { Button, Heading, Link, ToggleGroup } from "@navikt/ds-react";
+import { ArrowRightIcon, ArrowsCirclepathIcon, TrashIcon, WrenchIcon } from "@navikt/aksel-icons";
+import { ActionMenu, Button, Heading, Link, ToggleGroup } from "@navikt/ds-react";
 import { DekoratorHeader } from "../dekorator-lookalike/DekoratorHeader";
 import { DekoratorFooter } from "../dekorator-lookalike/DekoratorFooter";
 import { MalLinje } from "./MalLinje";
@@ -43,7 +43,18 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
     settFritekstOppnadd,
     fjernDelmal,
     flyttDelmal,
+    nullstillMal,
   } = useMal(kort);
+
+  const nullstillPrototype = () => {
+    setKort(initialKort);
+    nullstillMal();
+  };
+
+  const visTomAktivitetsplan = () => {
+    setKort([]);
+    nullstillMal();
+  };
 
   useEffect(() => {
     const lagret = window.localStorage.getItem(VISNING_STORAGE_KEY);
@@ -176,6 +187,26 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
       <AvtaleModal open={avtaleModalApen} onClose={() => setAvtaleModalApen(false)} />
 
       <DekoratorFooter />
+
+      <div className="fixed bottom-4 right-4 z-50">
+        <ActionMenu>
+          <ActionMenu.Trigger>
+            <Button
+              variant="tertiary-neutral"
+              size="small"
+              icon={<WrenchIcon aria-hidden title="Prototype-verktøy" />}
+            />
+          </ActionMenu.Trigger>
+          <ActionMenu.Content>
+            <ActionMenu.Item icon={<ArrowsCirclepathIcon aria-hidden />} onSelect={nullstillPrototype}>
+              Nullstill til standardtilstand
+            </ActionMenu.Item>
+            <ActionMenu.Item icon={<TrashIcon aria-hidden />} onSelect={visTomAktivitetsplan}>
+              Vis tom aktivitetsplan
+            </ActionMenu.Item>
+          </ActionMenu.Content>
+        </ActionMenu>
+      </div>
     </div>
   );
 }

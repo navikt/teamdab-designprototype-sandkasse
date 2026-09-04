@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { AktivitetsKort, Delmal } from "../../aktivitetsplan/types";
 
 const MAL_STORAGE_KEY = "minaktivitetsplan-mal";
-const DEFAULT_HOVEDMAL = "Jeg ønsker å jobbe som elektriker.";
+const DEFAULT_HOVEDMAL = "Komme tilbake i jobb som elektriker";
 
 interface LagretMal {
   hovedmal: string;
@@ -83,6 +83,11 @@ export function useMal(kort: AktivitetsKort[]) {
     setDelmal((prev) => prev.filter((d) => d.id !== id));
   };
 
+  const nullstillMal = (nyttHovedmal: string = DEFAULT_HOVEDMAL) => {
+    setHovedmalState(nyttHovedmal);
+    setDelmal([]);
+  };
+
   const flyttDelmal = (id: string, retning: "opp" | "ned") => {
     setDelmal((prev) => {
       const index = prev.findIndex((d) => d.id === id);
@@ -121,5 +126,6 @@ export function useMal(kort: AktivitetsKort[]) {
     settFritekstOppnadd,
     fjernDelmal,
     flyttDelmal,
+    nullstillMal,
   };
 }

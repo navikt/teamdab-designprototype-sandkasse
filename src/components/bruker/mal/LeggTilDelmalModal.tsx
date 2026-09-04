@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { Button, Modal, UNSAFE_Combobox } from "@navikt/ds-react";
-import { AktivitetsKort, DELMAL_KOLONNER } from "../../aktivitetsplan/types";
+import { AktivitetsKort } from "../../aktivitetsplan/types";
+import { MINE_AKTIVITETER_KOLONNER } from "../sortering";
 
 interface LeggTilDelmalModalProps {
   aktiviteter: AktivitetsKort[];
@@ -22,8 +23,9 @@ export function LeggTilDelmalModal({
   const [valgt, setValgt] = useState("");
   const [feilmelding, setFeilmelding] = useState<string | undefined>(undefined);
 
+  // Kun aktive aktiviteter kan foresl\u00e5s som delm\u00e5l, ikke arkiverte (fullf\u00f8rt/avbrutt).
   const kandidater = aktiviteter.filter(
-    (k) => DELMAL_KOLONNER.includes(k.kolonne) && !erAktivitetDelmal(k.id)
+    (k) => MINE_AKTIVITETER_KOLONNER.includes(k.kolonne) && !erAktivitetDelmal(k.id)
   );
   const options = kandidater.map((k) => k.title);
 
