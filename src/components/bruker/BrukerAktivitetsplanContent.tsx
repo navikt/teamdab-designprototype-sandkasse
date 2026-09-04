@@ -62,7 +62,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
       )}
       <main className="flex-1 w-full bg-ax-bg-default">
         <div className="max-w-4xl mx-auto px-6 pt-6 pb-[25px] flex items-start gap-4">
-          <Image src="/Hero_pictogram.png" alt="" width={160} height={160} />
+          <Image src="/Hero_pictogram.png" alt="" width={160} height={103} loading="eager" style={{ width: "160px", height: "103px" }} />
           <div className="flex flex-col gap-4 flex-1">
             <Heading size="large" level="1">Aktivitetsplan</Heading>
 
