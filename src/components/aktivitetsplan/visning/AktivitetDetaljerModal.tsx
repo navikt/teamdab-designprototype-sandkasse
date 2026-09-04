@@ -1,12 +1,16 @@
 "use client";
 
-import { BodyLong, Heading, Link, Modal } from "@navikt/ds-react";
-import { AktivitetsKort } from "../types";
+import { BodyLong, Checkbox, Heading, Link, Modal, Select } from "@navikt/ds-react";
+import { AktivitetsKort, AktivitetStatus, DELMAL_KOLONNER } from "../types";
 import { DetaljFelt } from "../shared/DetaljFelt";
 
 interface Props {
   kort: AktivitetsKort;
   onClose: () => void;
+  erDelmal?: boolean;
+  onEndreDelmal?: (erDelmal: boolean) => void;
+  status?: AktivitetStatus;
+  onEndreStatus?: (status: AktivitetStatus) => void;
 }
 
 const SOKNADSSTATUS_LABEL: Record<string, string> = {
@@ -16,7 +20,7 @@ const SOKNADSSTATUS_LABEL: Record<string, string> = {
   "ikke-fatt-jobben": "Ikke fått jobben",
 };
 
-export function AktivitetDetaljerModal({ kort, onClose }: Props) {
+export function AktivitetDetaljerModal({ kort, onClose, erDelmal, onEndreDelmal, status, onEndreStatus }: Props) {
   return (
     <Modal open onClose={onClose} closeOnBackdropClick aria-labelledby="aktivitet-detaljer-heading" className="lg:w-120">
       <Modal.Header closeButton>
@@ -28,6 +32,17 @@ export function AktivitetDetaljerModal({ kort, onClose }: Props) {
 
       <Modal.Body>
         <div className="flex flex-col gap-6">
+          {onEndreStatus && status && (
+            <Select
+              label="Status"
+              value={status}
+              onChange={(e) => onEndreStatus(e.target.value as AktivitetStatus)}
+            >
+              <option value="aktiv">Aktiv</option>
+              <option value="fullfort">Fullført</option>
+              <option value="avbrutt">Avbrutt</option>
+            </Select>
+          )}
           <div className="flex flex-row flex-wrap gap-y-4">
             {kort.dateRange && <DetaljFelt tittel="Dato">{kort.dateRange}</DetaljFelt>}
             {kort.frist && <DetaljFelt tittel="Frist">{kort.frist}</DetaljFelt>}
@@ -68,6 +83,12 @@ export function AktivitetDetaljerModal({ kort, onClose }: Props) {
             <Link href={kort.lenke} target="_blank" rel="noopener noreferrer">
               Les mer
             </Link>
+          )}
+
+          {onEndreDelmal && DELMAL_KOLONNER.includes(kort.kolonne) && (
+            <Checkbox checked={erDelmal ?? false} onChange={(e) => onEndreDelmal(e.target.checked)}>
+              Gjør dette til et delmål
+            </Checkbox>
           )}
         </div>
       </Modal.Body>

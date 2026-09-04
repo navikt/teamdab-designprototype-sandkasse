@@ -15,8 +15,9 @@ import { AvtaleModal } from "./AvtaleModal";
 import { SamtalereferatModal } from "../aktivitetsplan/samtalereferat/SamtalereferatModal";
 import { AktivitetDetaljerModal } from "../aktivitetsplan/visning/AktivitetDetaljerModal";
 import { initialKort } from "../aktivitetsplan/initialData";
-import { AktivitetsKort } from "../aktivitetsplan/types";
+import { AktivitetsKort, AktivitetStatus } from "../aktivitetsplan/types";
 import { MINE_AKTIVITETER_KOLONNER } from "./sortering";
+import { useMal } from "./mal/useMal";
 
 const VISNING_STORAGE_KEY = "minaktivitetsplan-visning";
 type Visning = "liste" | "kalender";
@@ -31,6 +32,18 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   const [visning, setVisning] = useState<Visning>("liste");
   const [aktivtKort, setAktivtKort] = useState<AktivitetsKort | null>(null);
   const [avtaleModalApen, setAvtaleModalApen] = useState(false);
+  const {
+    hovedmal,
+    setHovedmal,
+    delmal,
+    erAktivitetDelmal,
+    leggTilDelmalFraAktivitet,
+    fjernDelmalForAktivitet,
+    leggTilFritekstDelmal,
+    settFritekstOppnadd,
+    fjernDelmal,
+    flyttDelmal,
+  } = useMal(kort);
 
   useEffect(() => {
     const lagret = window.localStorage.getItem(VISNING_STORAGE_KEY);
@@ -53,6 +66,16 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
     setAktivtKort(k);
   };
 
+  const kortTilStatus = (k: AktivitetsKort): AktivitetStatus =>
+    k.kolonne === "fullfort" ? "fullfort" : k.kolonne === "avbrutt" ? "avbrutt" : "aktiv";
+
+  const endreAktivitetStatus = (id: string, status: AktivitetStatus) => {
+    const nyKolonne: AktivitetsKort["kolonne"] = status === "aktiv" ? "gjennomforer" : status;
+    oppdaterKolonne(id, nyKolonne);
+    if (status === "avbrutt") fjernDelmalForAktivitet(id);
+    setAktivtKort(null);
+  };
+
   return (
     <div className="flex flex-col min-h-screen overflow-x-hidden">
       <DekoratorHeader />
@@ -67,7 +90,18 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
           <div className="flex flex-col gap-4 flex-1">
             <Heading size="large" level="1">Aktivitetsplan</Heading>
 
-            <MalLinje mal="Jeg ønsker å jobbe som elektriker." />
+            <MalLinje
+              hovedmal={hovedmal}
+              onSettHovedmal={setHovedmal}
+              delmal={delmal}
+              aktiviteter={kort}
+              erAktivitetDelmal={erAktivitetDelmal}
+              onLeggTilDelmalFraAktivitet={leggTilDelmalFraAktivitet}
+              onLeggTilFritekstDelmal={leggTilFritekstDelmal}
+              onSettFritekstOppnadd={settFritekstOppnadd}
+              onFjernDelmal={fjernDelmal}
+              onFlyttDelmal={flyttDelmal}
+            />
           </div>
         </div>
 
@@ -124,7 +158,20 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
         <SamtalereferatModal kort={aktivtKort} perspektiv="bruker" onClose={() => setAktivtKort(null)} />
       )}
       {aktivtKort && !aktivtKort.samtalereferatData && aktivtKort.type !== "Jobbsøking" && (
-        <AktivitetDetaljerModal kort={aktivtKort} onClose={() => setAktivtKort(null)} />
+        <AktivitetDetaljerModal
+          kort={aktivtKort}
+          onClose={() => setAktivtKort(null)}
+          erDelmal={erAktivitetDelmal(aktivtKort.id)}
+          onEndreDelmal={(erDelmal) =>
+            erDelmal ? leggTilDelmalFraAktivitet(aktivtKort.id) : fjernDelmalForAktivitet(aktivtKort.id)
+          }
+          status={aktivtKort.kolonne === "forslag" ? undefined : kortTilStatus(aktivtKort)}
+          onEndreStatus={
+            aktivtKort.kolonne === "forslag"
+              ? undefined
+              : (status) => endreAktivitetStatus(aktivtKort.id, status)
+          }
+        />
       )}
       <AvtaleModal open={avtaleModalApen} onClose={() => setAvtaleModalApen(false)} />
 

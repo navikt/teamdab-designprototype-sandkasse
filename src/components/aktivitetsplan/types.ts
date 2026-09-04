@@ -57,6 +57,22 @@ export interface SamtalereferatData {
   erReferatPublisert: boolean;
 }
 
+// Kolonner en aktivitet må være i for å kunne gjøres til et delmål (aktiv eller gjennomført).
+export const DELMAL_KOLONNER: KolonneId[] = ["planlegger", "gjennomforer", "fullfort"];
+
+// Forenklet status vist i AktivitetDetaljerModal. "aktiv" dekker både planlegger og gjennomfører.
+export type AktivitetStatus = "aktiv" | "fullfort" | "avbrutt";
+
+export interface Delmal {
+  id: string;
+  // "aktivitet": tittel/status følger den koblede aktiviteten. "fritekst": frittstående delmål brukeren har skrevet inn selv.
+  kilde: "aktivitet" | "fritekst";
+  aktivitetId?: string;
+  // Kun brukt for kilde "fritekst" (tittel/status for "aktivitet" hentes fra selve aktiviteten).
+  tekst?: string;
+  oppnadd?: boolean;
+}
+
 export interface AktivitetsKort {
   id: string;
   kolonne: KolonneId;
