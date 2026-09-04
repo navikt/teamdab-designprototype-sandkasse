@@ -81,7 +81,7 @@ interface Props {
 }
 
 export function AktivitetsKortCard({ kort, onDragStart, onKlikk, visSnart, onAvtaltKlikk, visning = "kompakt" }: Props) {
-  const erKlikkbar = !!kort.samtalereferatData;
+  const erKlikkbar = true;
   const erRomslig = visning === "romslig";
   const Ikon = TYPE_IKON[kort.type] ?? ClipboardIcon;
   const pictogram = TYPE_PICTOGRAM[kort.type];

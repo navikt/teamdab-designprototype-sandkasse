@@ -72,4 +72,29 @@ export interface AktivitetsKort {
   sluttDato?: string;
   // Uten fast dato/klokkeslett, f.eks. løpende jobbsøking. Regnes som løpende også når startDato mangler.
   lopende?: boolean;
+
+  // Mock-detaljer vist i AktivitetDetaljerModal, felter varierer etter type (se prod-repoets aktivitetsdetaljer).
+  beskrivelse?: string;
+  lenke?: string;
+  arbeidsgiver?: string;
+  arbeidssted?: string;
+  kontaktperson?: string;
+  frist?: string;
+  stillingsandel?: string;
+  ansettelsesforhold?: string;
+  mal?: string;
+  huskeliste?: string;
+  soknadsstatus?: TagVariant;
+  moteform?: MoteForm;
+  varighet?: string;
+  hensikt?: string;
+  forberedelser?: string;
+  arrangor?: string;
+  deltakelseProsent?: string;
+  dagerPerUke?: string;
+  behandlingstype?: string;
+  behandlingssted?: string;
+  oppfolgingFraNav?: string;
+  // Generiske rader, brukt av leseorienterte typer som Arbeidstrening.
+  detaljRader?: { label: string; verdi: string }[];
 }

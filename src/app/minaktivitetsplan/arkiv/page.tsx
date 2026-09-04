@@ -9,6 +9,7 @@ import { DekoratorFooter } from "@/components/dekorator-lookalike/DekoratorFoote
 import { ArkivFane } from "@/components/bruker/ArkivFane";
 import { ARKIV_KOLONNER } from "@/components/bruker/sortering";
 import { SamtalereferatModal } from "@/components/aktivitetsplan/samtalereferat/SamtalereferatModal";
+import { AktivitetDetaljerModal } from "@/components/aktivitetsplan/visning/AktivitetDetaljerModal";
 import { initialKort } from "@/components/aktivitetsplan/initialData";
 import { AktivitetsKort } from "@/components/aktivitetsplan/types";
 
@@ -33,14 +34,15 @@ export default function ArkivPage() {
         <Heading size="large" level="1">Arkiv</Heading>
         <ArkivFane
           kort={arkiv}
-          onKortKlikk={(k) => {
-            if (k.samtalereferatData) setAktivtKort(k);
-          }}
+          onKortKlikk={(k) => setAktivtKort(k)}
         />
       </main>
 
       {aktivtKort?.samtalereferatData && (
         <SamtalereferatModal kort={aktivtKort} perspektiv="bruker" onClose={() => setAktivtKort(null)} />
+      )}
+      {aktivtKort && !aktivtKort.samtalereferatData && aktivtKort.type !== "Jobbsøking" && (
+        <AktivitetDetaljerModal kort={aktivtKort} onClose={() => setAktivtKort(null)} />
       )}
       <DekoratorFooter />
     </div>

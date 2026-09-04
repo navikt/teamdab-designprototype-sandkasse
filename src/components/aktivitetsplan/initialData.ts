@@ -10,6 +10,9 @@ export const initialKort: AktivitetsKort[] = [
     dateRange: "1. aug – 1. aug 2026",
     tags: ["ulest", "avtalt-med-nav"],
     hasBlueDot: true,
+    arbeidsgiver: "Barnehage",
+    arbeidssted: "Oslo",
+    soknadsstatus: "venter-pa-kontakt",
   },
   {
     id: "2",
@@ -19,6 +22,10 @@ export const initialKort: AktivitetsKort[] = [
     dateRange: "15. jul – 15. jul 2026",
     tags: ["ulest"],
     hasBlueDot: true,
+    moteform: "Oppmøte",
+    varighet: "30 minutter",
+    hensikt: "Snakke om videre oppfølging og aktuelle aktiviteter.",
+    forberedelser: "Tenk gjennom hva du ønsker hjelp til fremover.",
   },
   // --- Planlegger ---
   {
@@ -38,6 +45,10 @@ export const initialKort: AktivitetsKort[] = [
     dateRange: "20. sep 2026",
     startDato: "2026-09-20",
     tags: ["sendt-soknad"],
+    frist: "20. sep 2026",
+    arbeidsgiver: "Skole",
+    arbeidssted: "Bergen",
+    beskrivelse: "Søknad sendt for stilling som lærer på mellomtrinnet.",
   },
   {
     id: "5",
@@ -45,6 +56,9 @@ export const initialKort: AktivitetsKort[] = [
     type: "Jobbrettet egenaktivitet",
     title: "Oppdatere CV og LinkedIn-profil",
     tags: [],
+    mal: "Ha en oppdatert CV klar til bruk i søknader.",
+    huskeliste: "Legg til siste arbeidsforhold, sjekk kontaktinfo.",
+    beskrivelse: "Sette av tid til å gå gjennom og oppdatere CV og profil.",
   },
   // --- Gjennomfører ---
   {
@@ -56,6 +70,10 @@ export const initialKort: AktivitetsKort[] = [
     startDato: "2026-09-01",
     sluttDato: "2026-11-30",
     tags: ["fatt-plass", "avtalt-med-nav"],
+    arrangor: "Kursholder",
+    deltakelseProsent: "100 %",
+    dagerPerUke: "5",
+    beskrivelse: "Kurs i pedagogikk og barneutvikling for deltakere som ønsker å jobbe i barnehage.",
   },
   {
     id: "7",
@@ -65,6 +83,10 @@ export const initialKort: AktivitetsKort[] = [
     dateRange: "4. sep 2026",
     startDato: "2026-09-04",
     tags: ["skal-pa-intervju"],
+    arbeidsgiver: "Utested",
+    arbeidssted: "Trondheim",
+    kontaktperson: "Balanse, Skarp",
+    beskrivelse: "Søkte på deltidsstilling som bartender i helgene.",
   },
   {
     id: "8",
@@ -73,6 +95,10 @@ export const initialKort: AktivitetsKort[] = [
     title: "Oppfølging hos behandler",
     dateRange: "5. jul – 5. aug 2026",
     tags: ["venter-pa-kontakt"],
+    behandlingstype: "Fysioterapi",
+    behandlingssted: "Behandler",
+    mal: "Redusere smerter og bedre bevegelighet.",
+    oppfolgingFraNav: "Nav følger opp etter endt behandling.",
   },
   {
     id: "9",
@@ -81,6 +107,10 @@ export const initialKort: AktivitetsKort[] = [
     title: "Renholder",
     extraLine: "Heltid, fast stilling",
     tags: ["avtalt-med-nav"],
+    stillingsandel: "100 %",
+    arbeidsgiver: "Renholdsfirma",
+    ansettelsesforhold: "Fast",
+    beskrivelse: "Jobber som renholder i faste vakter på dagtid.",
   },
   // --- Fullført ---
   {
@@ -90,6 +120,9 @@ export const initialKort: AktivitetsKort[] = [
     title: "Assistent på SFO",
     dateRange: "1. mar – 1. mar 2026",
     tags: ["fatt-jobben"],
+    arbeidsgiver: "Skole",
+    arbeidssted: "Stavanger",
+    beskrivelse: "Fikk tilbud om stilling som assistent på SFO.",
   },
   {
     id: "11",
@@ -137,6 +170,9 @@ export const initialKort: AktivitetsKort[] = [
     title: "Avklaringssamtale",
     dateRange: "20. mai – 20. mai 2026",
     tags: [],
+    moteform: "Telefonmøte",
+    varighet: "15 minutter",
+    hensikt: "Avklare videre oppfølging.",
   },
   {
     id: "14",
@@ -145,5 +181,10 @@ export const initialKort: AktivitetsKort[] = [
     title: "Arbeidstrening",
     dateRange: "1. apr – 30. apr 2026",
     tags: [],
+    beskrivelse: "Arbeidstrening hos ekstern arbeidsgiver.",
+    detaljRader: [
+      { label: "Arrangør", verdi: "Tiltaksarrangør" },
+      { label: "Stillingsprosent", verdi: "50 %" },
+    ],
   },
 ];

@@ -13,6 +13,7 @@ import { MineAktiviteterListe } from "./MineAktiviteterListe";
 import { MineAktiviteterKalender } from "./MineAktiviteterKalender";
 import { AvtaleModal } from "./AvtaleModal";
 import { SamtalereferatModal } from "../aktivitetsplan/samtalereferat/SamtalereferatModal";
+import { AktivitetDetaljerModal } from "../aktivitetsplan/visning/AktivitetDetaljerModal";
 import { initialKort } from "../aktivitetsplan/initialData";
 import { AktivitetsKort } from "../aktivitetsplan/types";
 import { MINE_AKTIVITETER_KOLONNER } from "./sortering";
@@ -49,7 +50,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   };
 
   const handleKortKlikk = (k: AktivitetsKort) => {
-    if (k.samtalereferatData) setAktivtKort(k);
+    setAktivtKort(k);
   };
 
   return (
@@ -121,6 +122,9 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
 
       {aktivtKort?.samtalereferatData && (
         <SamtalereferatModal kort={aktivtKort} perspektiv="bruker" onClose={() => setAktivtKort(null)} />
+      )}
+      {aktivtKort && !aktivtKort.samtalereferatData && aktivtKort.type !== "Jobbsøking" && (
+        <AktivitetDetaljerModal kort={aktivtKort} onClose={() => setAktivtKort(null)} />
       )}
       <AvtaleModal open={avtaleModalApen} onClose={() => setAvtaleModalApen(false)} />
 
