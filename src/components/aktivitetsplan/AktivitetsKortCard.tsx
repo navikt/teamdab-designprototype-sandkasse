@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import Image from "next/image";
 import {
+  BellIcon,
   BriefcaseIcon,
   Buildings2Icon,
   ClipboardIcon,
@@ -88,8 +89,8 @@ export function AktivitetsKortCard({ kort, onDragStart, onKlikk, visSnart, onAvt
 
   const innhold = (
     <>
-      {/* Type label + blue dot */}
-      <div className="flex items-baseline gap-1.5">
+      {/* Type label + blue dot + Snart */}
+      <div className="flex items-center gap-1.5">
         {kort.hasBlueDot && (
           <span
             className="inline-block w-2 h-2 rounded-full bg-ax-bg-accent-strong shrink-0 self-center"
@@ -99,6 +100,11 @@ export function AktivitetsKortCard({ kort, onDragStart, onKlikk, visSnart, onAvt
         <Detail as="p" className="uppercase text-ax-text-neutral">
           {kort.type}
         </Detail>
+        {visSnart && (
+          <Tag variant="warning" size="small" icon={<BellIcon aria-hidden />} className="self-center">
+            Starter snart
+          </Tag>
+        )}
       </div>
 
       {/* Title */}
@@ -117,11 +123,8 @@ export function AktivitetsKortCard({ kort, onDragStart, onKlikk, visSnart, onAvt
       )}
 
       {/* Tags */}
-      {(kort.tags.length > 0 || visSnart) && (
+      {kort.tags.length > 0 && (
         <div className="flex flex-wrap gap-1 pt-1">
-          {visSnart && (
-            <Tag variant="warning" size="small">Snart</Tag>
-          )}
           {kort.tags.map((t) => {
             const cfg = TAG_CONFIG[t];
             if (t === "avtalt-med-nav" && onAvtaltKlikk) {
@@ -159,6 +162,7 @@ export function AktivitetsKortCard({ kort, onDragStart, onKlikk, visSnart, onAvt
       className={classNames(
         "bg-ax-bg-default select-none",
         erRomslig ? "rounded-xl p-6 shadow-sm" : "rounded-md p-3 pb-4 flex flex-col gap-1 border border-ax-border-neutral",
+        visSnart && "border-l-4 border-l-[var(--ax-border-warning)]",
         onDragStart && "cursor-grab active:cursor-grabbing active:opacity-60",
         erRomslig
           ? "hover:shadow-[var(--ax-shadow-dialog)] transition-shadow"
