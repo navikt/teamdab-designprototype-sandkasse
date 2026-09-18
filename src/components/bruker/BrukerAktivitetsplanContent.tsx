@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowRightIcon, ArrowsCirclepathIcon, PlusIcon, TrashIcon, WrenchIcon } from "@navikt/aksel-icons";
+import { ArrowRightIcon, ArrowsCirclepathIcon, CompassIcon, PlusIcon, TrashIcon, WrenchIcon } from "@navikt/aksel-icons";
 import { ActionMenu, Button, Heading, Link, ToggleGroup } from "@navikt/ds-react";
 import { DekoratorHeader } from "../dekorator-lookalike/DekoratorHeader";
 import { DekoratorFooter } from "../dekorator-lookalike/DekoratorFooter";
@@ -19,8 +19,11 @@ import { initialKort } from "../aktivitetsplan/initialData";
 import { AktivitetsKort, AktivitetStatus } from "../aktivitetsplan/types";
 import { MINE_AKTIVITETER_KOLONNER } from "./sortering";
 import { useMal } from "./mal/useMal";
+import { OnboardingFlow } from "./onboarding/OnboardingFlow";
+import { OnboardingResultat } from "./onboarding/types";
 
 const VISNING_STORAGE_KEY = "minaktivitetsplan-visning";
+const ONBOARDING_STORAGE_KEY = "minaktivitetsplan-vis-onboarding";
 type Visning = "liste" | "kalender";
 
 interface BrukerAktivitetsplanContentProps {
@@ -34,6 +37,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   const [aktivtKort, setAktivtKort] = useState<AktivitetsKort | null>(null);
   const [avtaleModalApen, setAvtaleModalApen] = useState(false);
   const [nyAktivitetType, setNyAktivitetType] = useState<NyAktivitetType | null>(null);
+  const [visOnboarding, setVisOnboarding] = useState(false);
   const {
     hovedmal,
     setHovedmal,
@@ -51,16 +55,39 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   const nullstillPrototype = () => {
     setKort(initialKort);
     nullstillMal();
+    setVisOnboarding(false);
+    window.localStorage.removeItem(ONBOARDING_STORAGE_KEY);
   };
 
   const visTomAktivitetsplan = () => {
     setKort([]);
     nullstillMal();
+    setVisOnboarding(true);
+    window.localStorage.setItem(ONBOARDING_STORAGE_KEY, "1");
+  };
+
+  const fullforOnboarding = (resultat: OnboardingResultat) => {
+    setHovedmal(resultat.malTekst);
+    if (resultat.aktivitetTittel) {
+      setKort((prev) => [
+        ...prev,
+        {
+          id: crypto.randomUUID(),
+          kolonne: "planlegger",
+          type: "Jobbrettet egenaktivitet",
+          title: resultat.aktivitetTittel!,
+          tags: [],
+        },
+      ]);
+    }
+    setVisOnboarding(false);
+    window.localStorage.removeItem(ONBOARDING_STORAGE_KEY);
   };
 
   useEffect(() => {
     const lagret = window.localStorage.getItem(VISNING_STORAGE_KEY);
     if (lagret === "liste" || lagret === "kalender") setVisning(lagret);
+    if (window.localStorage.getItem(ONBOARDING_STORAGE_KEY) === "1") setVisOnboarding(true);
   }, []);
 
   const byttVisning = (v: Visning) => {
@@ -98,6 +125,10 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
         </div>
       )}
       <main className="flex-1 w-full bg-ax-bg-default">
+        {visOnboarding ? (
+          <OnboardingFlow onFullfor={fullforOnboarding} />
+        ) : (
+        <>
         <div className="max-w-4xl mx-auto px-6 pt-6 pb-[25px] flex items-start gap-4">
           <Image src="/Hero_pictogram.png" alt="" width={160} height={103} loading="eager" style={{ width: "160px", height: "103px" }} />
           <div className="flex flex-col gap-4 flex-1">
@@ -186,6 +217,8 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
             </Link>
           </div>
         </div>
+        </>
+        )}
       </main>
 
       {aktivtKort?.samtalereferatData && (
@@ -236,6 +269,9 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
             </ActionMenu.Item>
             <ActionMenu.Item icon={<TrashIcon aria-hidden />} onSelect={visTomAktivitetsplan}>
               Vis tom aktivitetsplan
+            </ActionMenu.Item>
+            <ActionMenu.Item icon={<CompassIcon aria-hidden />} onSelect={() => router.push("/minaktivitetsplan/onboarding-oversikt")}>
+              Vis onboarding-flyt (oversikt)
             </ActionMenu.Item>
           </ActionMenu.Content>
         </ActionMenu>
