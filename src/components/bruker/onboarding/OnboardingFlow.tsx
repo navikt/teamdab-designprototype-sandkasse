@@ -1,26 +1,28 @@
 "use client";
 
 import { useState } from "react";
-import { BodyLong, Button, Heading, Radio, RadioGroup, TextField, VStack } from "@navikt/ds-react";
+import Image from "next/image";
+import { BodyLong, Button, Checkbox, CheckboxGroup, Heading, Radio, RadioGroup, Stepper, TextField, VStack } from "@navikt/ds-react";
 import {
   AKTIVITETER_PER_SPOR,
-  BEHOLD_OMFANG_ALTERNATIVER,
-  BEHOLD_USIKKERHET_ALTERNATIVER,
   ERFARING_ALTERNATIVER,
   IKKE_KLAR_FOKUS_ALTERNATIVER,
-  OMFANG_ALTERNATIVER,
-  OMFANG_USIKKERHET_ALTERNATIVER,
+  INTERESSE_ALTERNATIVER,
   RETNING_ALTERNATIVER,
   SITUASJON_ALTERNATIVER,
-  TILBAKE_RETNING_ALTERNATIVER,
-  USIKKER_EKSISTERENDE_VALG_ALTERNATIVER,
   USIKKER_FOKUS_ALTERNATIVER,
 } from "./data";
 import { beregnMal, beregnSpor } from "./logic";
 import { OnboardingResultat, Svar } from "./types";
 
+// Opplæringsvideo om aktivitetsplanen, hentet fra nav.no.
+// 720p brukt i stedet for 144p — lydsporet i 144p-proxyen er nærmest hørbart tomt.
+const OPPLAERINGSVIDEO_SRC =
+  "https://8ddea47b592f7070a4d71e706ef5ec37-httpcache0-15227-cachedown99.dna.contentdelivery.net/15227-cachedown99/assets/2023-09-21/fb0502e7-2ed9-4f27-a6d5-3a40a68975d2/fb0502e7-2ed9-4f27-a6d5-3a40a68975d2_720p.mp4";
+
 interface OnboardingFlowProps {
   onFullfor: (resultat: OnboardingResultat) => void;
+  onHopp: () => void;
 }
 
 type Steg =
@@ -29,14 +31,9 @@ type Steg =
   | "finnjobb-retning"
   | "finnjobb-yrke"
   | "finnjobb-erfaring"
-  | "finnjobb-omfang"
-  | "finnjobb-omfang-usikkerhet"
-  | "behold-omfang"
-  | "behold-usikkerhet"
-  | "tilbake-retning"
+  | "finnjobb-avklaring"
   | "ikkeklar-fokus"
   | "usikker-fokus"
-  | "usikker-eksisterende-valg"
   | "bekreft"
   | "aktivitet"
   | "oppsummering";
@@ -51,38 +48,24 @@ function nesteSteg(steg: Steg, svar: Svar): Steg {
         case "finn-jobb":
           return "finnjobb-retning";
         case "behold-jobb":
-          return "behold-omfang";
-        case "tilbake-jobb":
-          return "tilbake-retning";
+          return "bekreft";
         case "ikke-klar":
           return "ikkeklar-fokus";
         default:
           return "usikker-fokus";
       }
     case "finnjobb-retning":
-      if (svar.retningId === "vet") return "finnjobb-yrke";
-      if (svar.retningId === "trenger-hjelp") return "usikker-fokus";
-      return "finnjobb-erfaring";
+      return svar.retningId === "vet" ? "finnjobb-yrke" : "finnjobb-avklaring";
     case "finnjobb-yrke":
       return "finnjobb-erfaring";
     case "finnjobb-erfaring":
-      return "finnjobb-omfang";
-    case "finnjobb-omfang":
-      return svar.omfangId === "usikker" ? "finnjobb-omfang-usikkerhet" : "bekreft";
-    case "finnjobb-omfang-usikkerhet":
       return "bekreft";
-    case "behold-omfang":
-      return svar.beholdOmfangId === "usikker" ? "behold-usikkerhet" : "bekreft";
-    case "behold-usikkerhet":
-      return "bekreft";
-    case "tilbake-retning":
+    case "finnjobb-avklaring":
       return "bekreft";
     case "ikkeklar-fokus":
       return "bekreft";
     case "usikker-fokus":
-      return svar.usikkerFokusId === "eksisterende-jobb" ? "usikker-eksisterende-valg" : "bekreft";
-    case "usikker-eksisterende-valg":
-      return svar.usikkerEksisterendeValgId === "behold" ? "behold-omfang" : "tilbake-retning";
+      return "bekreft";
     case "bekreft":
       return "aktivitet";
     case "aktivitet":
@@ -92,11 +75,37 @@ function nesteSteg(steg: Steg, svar: Svar): Steg {
   }
 }
 
-export function OnboardingFlow({ onFullfor }: OnboardingFlowProps) {
+// Sørger for at et eksklusivt alternativ (f.eks. "vet ikke") ikke kan velges sammen med andre.
+function medEksklusiv(forrige: string[] | undefined, nye: string[], eksklusivId: string): string[] {
+  const eksklusivNyligLagtTil = nye.includes(eksklusivId) && !(forrige ?? []).includes(eksklusivId);
+  if (eksklusivNyligLagtTil) return [eksklusivId];
+  return nye.filter((id) => id !== eksklusivId);
+}
+
+const FASE_NAVN = ["Innledning", "Din situasjon", "Forslag til mål", "Din første aktivitet", "Oppsummering"];
+
+// Slår sammen de mange dynamiske situasjonsstegene til ett stepper-punkt.
+function stegTilFase(steg: Steg): number {
+  switch (steg) {
+    case "intro":
+      return 1;
+    case "bekreft":
+      return 3;
+    case "aktivitet":
+      return 4;
+    case "oppsummering":
+      return 5;
+    default:
+      return 2;
+  }
+}
+
+export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
   const [steg, setSteg] = useState<Steg>("intro");
   const [historikk, setHistorikk] = useState<Steg[]>([]);
   const [svar, setSvar] = useState<Svar>({});
   const [egetMal, setEgetMal] = useState<string | undefined>(undefined);
+  const [introLukkes, setIntroLukkes] = useState(false);
 
   const oppdaterSvar = (delvis: Partial<Svar>) => setSvar((prev) => ({ ...prev, ...delvis }));
 
@@ -111,9 +120,18 @@ export function OnboardingFlow({ onFullfor }: OnboardingFlowProps) {
     setHistorikk((prev) => {
       const kopi = [...prev];
       const forrige = kopi.pop();
-      if (forrige) setSteg(forrige);
+      if (forrige) {
+        setSteg(forrige);
+        if (forrige === "intro") setIntroLukkes(false);
+      }
       return kopi;
     });
+  };
+
+  // Lar headerseksjonen (bilde + overskrift) kollapse før vi faktisk bytter steg.
+  const startOnboarding = () => {
+    setIntroLukkes(true);
+    setTimeout(() => gaVidere(), 300);
   };
 
   const spor = beregnSpor(svar);
@@ -143,20 +161,76 @@ export function OnboardingFlow({ onFullfor }: OnboardingFlowProps) {
       </Button>
     ) : null;
 
+  const HoppKnapp = () => (
+    <Button variant="tertiary" onClick={onHopp}>
+      Hopp rett til aktivitetsplanen
+    </Button>
+  );
+
   return (
-    <div className="max-w-[600px] mx-auto py-12 px-4">
-      <VStack gap="space-24">
+    <>
+      {steg === "intro" && (
+        <div
+          className={`max-w-4xl mx-auto px-4 md:px-6 flex items-start gap-4 overflow-hidden transition-all duration-300 ease-in-out ${
+            introLukkes ? "max-h-0 opacity-0 pt-0 pb-0" : "max-h-[400px] opacity-100 pt-6 pb-[25px]"
+          }`}
+        >
+          <Image
+            src="/Hero_pictogram.png"
+            alt=""
+            width={160}
+            height={103}
+            loading="eager"
+            style={{ width: "160px", height: "103px" }}
+            className="hidden md:block shrink-0"
+          />
+          <div className="flex flex-col gap-4 flex-1">
+            <Heading size="large" level="1">
+              Velkommen til din aktivitetsplan
+            </Heading>
+            <BodyLong>
+              I aktivitetsplanen holder du oversikt over det du gjør for å komme i jobb eller en annen
+              aktivitet. Både du og Nav-veilederen din kan se og endre i aktivitetsplanen.
+            </BodyLong>
+          </div>
+        </div>
+      )}
+
+      <div className="w-screen relative left-1/2 -translate-x-1/2 bg-[var(--ax-bg-accent-soft)]">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 py-6">
+          <div className="flex gap-6 md:gap-12 items-start">
+            {steg !== "intro" && (
+              <Stepper
+                orientation="vertical"
+                activeStep={stegTilFase(steg)}
+                data-color="accent"
+                className="onboarding-stepper shrink-0 hidden md:block"
+              >
+                {FASE_NAVN.map((navn) => (
+                  // as="div" hindrer navigasjon ved klikk, men beholder blå aksentfarge (krever data-interactive="true").
+                  <Stepper.Step key={navn} as="div">
+                    {navn}
+                  </Stepper.Step>
+                ))}
+              </Stepper>
+            )}
+
+      <VStack gap="space-24" className="flex-1 w-full min-w-0 bg-ax-bg-default rounded-2xl p-4 md:p-8">
         {steg === "intro" && (
           <>
-            <Heading level="1" size="medium">
+            <video controls preload="metadata" className="w-full rounded-md" src={OPPLAERINGSVIDEO_SRC}>
+              Nettleseren din støtter ikke videoavspilling.
+            </video>
+            <Heading level="2" size="medium">
               La oss gjøre planen relevant for deg
             </Heading>
             <BodyLong>
-              Svar på noen få spørsmål om situasjonen din. Da kan vi hjelpe deg med å sette en retning og
-              komme i gang med et første steg.
+              Denne veiviseren hjelper deg med å komme i gang med aktivitetsplanen. Du kan endre svarene
+              dine på et senere tidspunkt.
             </BodyLong>
-            <div>
-              <Button onClick={() => gaVidere()}>Kom i gang</Button>
+            <div className="flex gap-3">
+              <Button onClick={startOnboarding}>Kom i gang</Button>
+              <HoppKnapp />
             </div>
           </>
         )}
@@ -164,7 +238,7 @@ export function OnboardingFlow({ onFullfor }: OnboardingFlowProps) {
         {steg === "situasjon" && (
           <>
             <Heading level="1" size="medium">
-              Hva passer best for deg akkurat nå?
+              Hva beskriver din situasjon best?
             </Heading>
             <RadioGroup legend="Velg det som passer best" hideLegend value={svar.situasjonId ?? null} onChange={(v) => oppdaterSvar({ situasjonId: v as string })}>
               <VStack gap="space-12">
@@ -180,6 +254,7 @@ export function OnboardingFlow({ onFullfor }: OnboardingFlowProps) {
               <Button onClick={() => gaVidere()} disabled={!svar.situasjonId}>
                 Neste
               </Button>
+              <HoppKnapp />
             </div>
           </>
         )}
@@ -187,7 +262,7 @@ export function OnboardingFlow({ onFullfor }: OnboardingFlowProps) {
         {steg === "finnjobb-retning" && (
           <>
             <Heading level="1" size="medium">
-              Hva slags jobb ser du etter?
+              Vet du hvilken type jobb du ser etter?
             </Heading>
             <RadioGroup legend="Velg det som passer best" hideLegend value={svar.retningId ?? null} onChange={(v) => oppdaterSvar({ retningId: v as string })}>
               <VStack gap="space-12">
@@ -203,6 +278,7 @@ export function OnboardingFlow({ onFullfor }: OnboardingFlowProps) {
               <Button onClick={() => gaVidere()} disabled={!svar.retningId}>
                 Neste
               </Button>
+              <HoppKnapp />
             </div>
           </>
         )}
@@ -220,6 +296,7 @@ export function OnboardingFlow({ onFullfor }: OnboardingFlowProps) {
             <div className="flex gap-3">
               <TilbakeKnapp />
               <Button onClick={() => gaVidere()}>Neste</Button>
+              <HoppKnapp />
             </div>
           </>
         )}
@@ -243,121 +320,41 @@ export function OnboardingFlow({ onFullfor }: OnboardingFlowProps) {
               <Button onClick={() => gaVidere()} disabled={!svar.erfaringId}>
                 Neste
               </Button>
+              <HoppKnapp />
             </div>
           </>
         )}
 
-        {steg === "finnjobb-omfang" && (
+        {steg === "finnjobb-avklaring" && (
           <>
             <Heading level="1" size="medium">
-              Hvor mye ønsker du å jobbe?
+              Litt mer om deg
             </Heading>
-            <RadioGroup legend="Velg omfang" hideLegend value={svar.omfangId ?? null} onChange={(v) => oppdaterSvar({ omfangId: v as string })}>
+            <BodyLong>
+              Dette hjelper veilederen din med å komme raskere i gang med å finne jobber som kan passe for
+              deg.
+            </BodyLong>
+            <CheckboxGroup
+              legend="Hva slags oppgaver liker du å jobbe med?"
+              value={svar.interesseIder ?? []}
+              onChange={(v) =>
+                oppdaterSvar({ interesseIder: medEksklusiv(svar.interesseIder, v as string[], "vet-ikke") })
+              }
+            >
               <VStack gap="space-12">
-                {OMFANG_ALTERNATIVER.map((a) => (
-                  <Radio key={a.id} value={a.id}>
+                {INTERESSE_ALTERNATIVER.map((a) => (
+                  <Checkbox key={a.id} value={a.id}>
                     {a.tekst}
-                  </Radio>
+                  </Checkbox>
                 ))}
               </VStack>
-            </RadioGroup>
+            </CheckboxGroup>
             <div className="flex gap-3">
               <TilbakeKnapp />
-              <Button onClick={() => gaVidere()} disabled={!svar.omfangId}>
+              <Button onClick={() => gaVidere()} disabled={!svar.interesseIder?.length}>
                 Neste
               </Button>
-            </div>
-          </>
-        )}
-
-        {steg === "finnjobb-omfang-usikkerhet" && (
-          <>
-            <Heading level="1" size="medium">
-              Hva handler usikkerheten mest om?
-            </Heading>
-            <RadioGroup legend="Velg det som passer best" hideLegend value={svar.omfangUsikkerhetId ?? null} onChange={(v) => oppdaterSvar({ omfangUsikkerhetId: v as string })}>
-              <VStack gap="space-12">
-                {OMFANG_USIKKERHET_ALTERNATIVER.map((a) => (
-                  <Radio key={a.id} value={a.id}>
-                    {a.tekst}
-                  </Radio>
-                ))}
-              </VStack>
-            </RadioGroup>
-            <div className="flex gap-3">
-              <TilbakeKnapp />
-              <Button onClick={() => gaVidere()} disabled={!svar.omfangUsikkerhetId}>
-                Neste
-              </Button>
-            </div>
-          </>
-        )}
-
-        {steg === "behold-omfang" && (
-          <>
-            <Heading level="1" size="medium">
-              Hvor mye ønsker du å jobbe?
-            </Heading>
-            <RadioGroup legend="Velg omfang" hideLegend value={svar.beholdOmfangId ?? null} onChange={(v) => oppdaterSvar({ beholdOmfangId: v as string })}>
-              <VStack gap="space-12">
-                {BEHOLD_OMFANG_ALTERNATIVER.map((a) => (
-                  <Radio key={a.id} value={a.id}>
-                    {a.tekst}
-                  </Radio>
-                ))}
-              </VStack>
-            </RadioGroup>
-            <div className="flex gap-3">
-              <TilbakeKnapp />
-              <Button onClick={() => gaVidere()} disabled={!svar.beholdOmfangId}>
-                Neste
-              </Button>
-            </div>
-          </>
-        )}
-
-        {steg === "behold-usikkerhet" && (
-          <>
-            <Heading level="1" size="medium">
-              Hva handler usikkerheten mest om?
-            </Heading>
-            <RadioGroup legend="Velg det som passer best" hideLegend value={svar.beholdUsikkerhetId ?? null} onChange={(v) => oppdaterSvar({ beholdUsikkerhetId: v as string })}>
-              <VStack gap="space-12">
-                {BEHOLD_USIKKERHET_ALTERNATIVER.map((a) => (
-                  <Radio key={a.id} value={a.id}>
-                    {a.tekst}
-                  </Radio>
-                ))}
-              </VStack>
-            </RadioGroup>
-            <div className="flex gap-3">
-              <TilbakeKnapp />
-              <Button onClick={() => gaVidere()} disabled={!svar.beholdUsikkerhetId}>
-                Neste
-              </Button>
-            </div>
-          </>
-        )}
-
-        {steg === "tilbake-retning" && (
-          <>
-            <Heading level="1" size="medium">
-              Hva passer best for deg?
-            </Heading>
-            <RadioGroup legend="Velg det som passer best" hideLegend value={svar.tilbakeRetningId ?? null} onChange={(v) => oppdaterSvar({ tilbakeRetningId: v as string })}>
-              <VStack gap="space-12">
-                {TILBAKE_RETNING_ALTERNATIVER.map((a) => (
-                  <Radio key={a.id} value={a.id}>
-                    {a.tekst}
-                  </Radio>
-                ))}
-              </VStack>
-            </RadioGroup>
-            <div className="flex gap-3">
-              <TilbakeKnapp />
-              <Button onClick={() => gaVidere()} disabled={!svar.tilbakeRetningId}>
-                Neste
-              </Button>
+              <HoppKnapp />
             </div>
           </>
         )}
@@ -381,6 +378,7 @@ export function OnboardingFlow({ onFullfor }: OnboardingFlowProps) {
               <Button onClick={() => gaVidere()} disabled={!svar.ikkeKlarFokusId}>
                 Neste
               </Button>
+              <HoppKnapp />
             </div>
           </>
         )}
@@ -404,29 +402,7 @@ export function OnboardingFlow({ onFullfor }: OnboardingFlowProps) {
               <Button onClick={() => gaVidere()} disabled={!svar.usikkerFokusId}>
                 Neste
               </Button>
-            </div>
-          </>
-        )}
-
-        {steg === "usikker-eksisterende-valg" && (
-          <>
-            <Heading level="1" size="medium">
-              Hva passer best for deg?
-            </Heading>
-            <RadioGroup legend="Velg det som passer best" hideLegend value={svar.usikkerEksisterendeValgId ?? null} onChange={(v) => oppdaterSvar({ usikkerEksisterendeValgId: v as string })}>
-              <VStack gap="space-12">
-                {USIKKER_EKSISTERENDE_VALG_ALTERNATIVER.map((a) => (
-                  <Radio key={a.id} value={a.id}>
-                    {a.tekst}
-                  </Radio>
-                ))}
-              </VStack>
-            </RadioGroup>
-            <div className="flex gap-3">
-              <TilbakeKnapp />
-              <Button onClick={() => gaVidere()} disabled={!svar.usikkerEksisterendeValgId}>
-                Neste
-              </Button>
+              <HoppKnapp />
             </div>
           </>
         )}
@@ -447,6 +423,7 @@ export function OnboardingFlow({ onFullfor }: OnboardingFlowProps) {
               <Button onClick={() => gaVidere({ malTekst })} disabled={!malTekst.trim()}>
                 Dette passer
               </Button>
+              <HoppKnapp />
             </div>
           </>
         )}
@@ -497,6 +474,7 @@ export function OnboardingFlow({ onFullfor }: OnboardingFlowProps) {
               >
                 Neste
               </Button>
+              <HoppKnapp />
             </div>
           </>
         )}
@@ -527,6 +505,9 @@ export function OnboardingFlow({ onFullfor }: OnboardingFlowProps) {
           </>
         )}
       </VStack>
-    </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

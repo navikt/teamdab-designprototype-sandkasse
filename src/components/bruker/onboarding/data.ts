@@ -3,15 +3,13 @@ import { Alternativ, SporId } from "./types";
 export const SITUASJON_ALTERNATIVER: Alternativ[] = [
   { id: "finn-jobb", tekst: "Jeg vil finne meg en jobb" },
   { id: "behold-jobb", tekst: "Jeg har jobb, men trenger hjelp til å bli værende i den" },
-  { id: "tilbake-jobb", tekst: "Jeg har en jobb, men er borte fra den og ønsker å komme tilbake" },
   { id: "ikke-klar", tekst: "Jeg er ikke klar for jobb akkurat nå" },
   { id: "usikker", tekst: "Jeg er usikker på hva som passer" },
 ];
 
 export const RETNING_ALTERNATIVER: Alternativ[] = [
-  { id: "vet", tekst: "Jeg vet hvilken type jobb eller bransje jeg vil jobbe i" },
-  { id: "vurderer", tekst: "Jeg vurderer noen forskjellige typer jobber" },
-  { id: "trenger-hjelp", tekst: "Jeg trenger hjelp til å finne ut hvilke jobber som kan passe" },
+  { id: "vet", tekst: "Ja" },
+  { id: "trenger-hjelp", tekst: "Nei" },
 ];
 
 export const ERFARING_ALTERNATIVER: Alternativ[] = [
@@ -19,37 +17,6 @@ export const ERFARING_ALTERNATIVER: Alternativ[] = [
   { id: "noe", tekst: "Jeg har noe erfaring eller kompetanse som kan brukes" },
   { id: "mangler", tekst: "Jeg mangler erfaring eller kvalifikasjoner" },
   { id: "vet-ikke", tekst: "Jeg vet ikke hva som kreves" },
-];
-
-export const OMFANG_ALTERNATIVER: Alternativ[] = [
-  { id: "heltid", tekst: "Heltid" },
-  { id: "deltid", tekst: "Deltid" },
-  { id: "begge", tekst: "Jeg er åpen for begge deler" },
-  { id: "usikker", tekst: "Jeg er usikker på hvor mye jeg kan jobbe" },
-];
-
-export const OMFANG_USIKKERHET_ALTERNATIVER: Alternativ[] = [
-  { id: "realistisk", tekst: "Jeg trenger hjelp til å finne ut hvor mye det er realistisk for meg å jobbe" },
-  { id: "hvilke-stillinger", tekst: "Jeg vet hvor mye jeg kan jobbe, men er usikker på hvilke stillinger som finnes" },
-];
-
-export const BEHOLD_OMFANG_ALTERNATIVER: Alternativ[] = [
-  { id: "heltid", tekst: "Jobbe heltid" },
-  { id: "deltid", tekst: "Jobbe deltid" },
-  { id: "usikker", tekst: "Jeg er usikker på hvor mye jeg kan jobbe" },
-];
-
-export const BEHOLD_USIKKERHET_ALTERNATIVER: Alternativ[] = [
-  { id: "realistisk", tekst: "Jeg trenger hjelp til å finne ut hvor mye det er realistisk for meg å jobbe" },
-  { id: "faa-det-til", tekst: "Jeg vet hvor mye jeg ønsker å jobbe, men trenger hjelp til å få det til i nåværende jobb" },
-];
-
-export const TILBAKE_RETNING_ALTERNATIVER: Alternativ[] = [
-  { id: "like-mye", tekst: "Jeg vil tilbake og jobbe like mye som før" },
-  { id: "heltid", tekst: "Jeg vil tilbake i jobb på heltid" },
-  { id: "deltid", tekst: "Jeg vil tilbake i jobb på deltid" },
-  { id: "usikker-omfang", tekst: "Jeg er usikker på hvor mye jeg kan jobbe" },
-  { id: "usikker-realistisk", tekst: "Jeg er usikker på om det er realistisk å komme tilbake til jobben" },
 ];
 
 export const IKKE_KLAR_FOKUS_ALTERNATIVER: Alternativ[] = [
@@ -64,13 +31,16 @@ export const USIKKER_FOKUS_ALTERNATIVER: Alternativ[] = [
   { id: "erfaring-kompetanse", tekst: "Om jeg har erfaringen eller kompetansen jeg trenger" },
   { id: "klar-na", tekst: "Om jeg er klar for å jobbe nå" },
   { id: "hvor-mye", tekst: "Hvor mye jeg kan jobbe" },
-  { id: "eksisterende-jobb", tekst: "Hvordan jeg kan beholde eller komme tilbake til en jobb jeg har" },
   { id: "vet-ikke", tekst: "Jeg vet ikke ennå" },
 ];
 
-export const USIKKER_EKSISTERENDE_VALG_ALTERNATIVER: Alternativ[] = [
-  { id: "behold", tekst: "Jeg vil beholde jobben jeg har" },
-  { id: "tilbake", tekst: "Jeg vil komme tilbake til jobben jeg har" },
+export const INTERESSE_ALTERNATIVER: Alternativ[] = [
+  { id: "mennesker", tekst: "Jobbe med mennesker" },
+  { id: "praktisk", tekst: "Jobbe praktisk eller med hendene" },
+  { id: "data-tall", tekst: "Jobbe med data, tall eller systemer" },
+  { id: "utendors", tekst: "Jobbe utendørs eller fysisk aktivt" },
+  { id: "skape", tekst: "Skape eller lage noe" },
+  { id: "vet-ikke", tekst: "Vet ikke ennå" },
 ];
 
 export const AKTIVITETER_PER_SPOR: Record<SporId, Alternativ[]> = {
@@ -90,8 +60,5 @@ export const AKTIVITETER_PER_SPOR: Record<SporId, Alternativ[]> = {
   ],
   eksisterende_jobb_beholde: [
     { id: "snakk-arbeidsgiver", tekst: "Snakke med arbeidsgiver om tilrettelegging" },
-  ],
-  eksisterende_jobb_tilbake: [
-    { id: "plan-retur", tekst: "Lage en plan for gradvis retur med arbeidsgiver" },
   ],
 };

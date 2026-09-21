@@ -84,6 +84,11 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
     window.localStorage.removeItem(ONBOARDING_STORAGE_KEY);
   };
 
+  const hoppOverOnboarding = () => {
+    setVisOnboarding(false);
+    window.localStorage.removeItem(ONBOARDING_STORAGE_KEY);
+  };
+
   useEffect(() => {
     const lagret = window.localStorage.getItem(VISNING_STORAGE_KEY);
     if (lagret === "liste" || lagret === "kalender") setVisning(lagret);
@@ -126,7 +131,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
       )}
       <main className="flex-1 w-full bg-ax-bg-default">
         {visOnboarding ? (
-          <OnboardingFlow onFullfor={fullforOnboarding} />
+          <OnboardingFlow onFullfor={fullforOnboarding} onHopp={hoppOverOnboarding} />
         ) : (
         <>
         <div className="max-w-4xl mx-auto px-6 pt-6 pb-[25px] flex items-start gap-4">
