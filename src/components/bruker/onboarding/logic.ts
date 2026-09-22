@@ -3,9 +3,9 @@ import { IKKE_KLAR_FOKUS_ALTERNATIVER, INTERESSE_ALTERNATIVER } from "./data";
 
 // Måltekster for "behold-jobb"-oppfølgingen skiller seg fra alternativ-teksten (som er formulert som et tema, ikke et mål).
 const BEHOLD_JOBB_MAL: Record<string, string> = {
-  tilrettelegging: "Få på plass bedre tilrettelegging i jobben min",
-  helse: "Håndtere helseutfordringen min slik at jeg kan bli i jobb",
-  "dialog-arbeidsgiver": "Få en bedre dialog med arbeidsgiveren min om situasjonen min",
+  tilrettelegging: "Få jobben tilpasset slik at jeg kan stå i den",
+  helse: "Få helsa til å fungere bedre sammen med jobben",
+  "dialog-arbeidsgiver": "Snakke bedre med sjefen min om hvordan det går",
   veileder: "Sette et relevant mål sammen med veilederen min",
 };
 
