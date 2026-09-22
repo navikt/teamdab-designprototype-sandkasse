@@ -5,6 +5,7 @@ import Image from "next/image";
 import { BodyLong, Button, Checkbox, CheckboxGroup, FormProgress, Heading, Radio, RadioGroup, TextField, VStack } from "@navikt/ds-react";
 import {
   AKTIVITETER_PER_SPOR,
+  BEHOLD_JOBB_FOKUS_ALTERNATIVER,
   ERFARING_ALTERNATIVER,
   IKKE_KLAR_FOKUS_ALTERNATIVER,
   INTERESSE_ALTERNATIVER,
@@ -32,6 +33,7 @@ type Steg =
   | "finnjobb-yrke"
   | "finnjobb-erfaring"
   | "finnjobb-avklaring"
+  | "behold-jobb-fokus"
   | "ikkeklar-fokus"
   | "usikker-fokus"
   | "bekreft"
@@ -48,7 +50,7 @@ function nesteSteg(steg: Steg, svar: Svar): Steg {
         case "finn-jobb":
           return "finnjobb-retning";
         case "behold-jobb":
-          return "bekreft";
+          return "behold-jobb-fokus";
         case "ikke-klar":
           return "ikkeklar-fokus";
         default:
@@ -61,6 +63,8 @@ function nesteSteg(steg: Steg, svar: Svar): Steg {
     case "finnjobb-erfaring":
       return "bekreft";
     case "finnjobb-avklaring":
+      return "bekreft";
+    case "behold-jobb-fokus":
       return "bekreft";
     case "ikkeklar-fokus":
       return "bekreft";
@@ -377,10 +381,62 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
           </>
         )}
 
+        {steg === "behold-jobb-fokus" && (
+          <>
+            <Heading level="1" size="medium">
+              Hva tror du kan hjelpe deg til å bli i jobben?
+            </Heading>
+            <BodyLong>
+              Svaret hjelper deg og veilederen din med å finne ut hva dere bør fokusere på først.
+            </BodyLong>
+            <RadioGroup
+              legend="Velg det som passer best"
+              hideLegend
+              value={svar.beholdJobbFokusId ?? null}
+              onChange={(v) => oppdaterSvar({ beholdJobbFokusId: v as string })}
+              error={visFeil && !svar.beholdJobbFokusId ? "Du må velge et alternativ." : undefined}
+            >
+              <VStack gap="space-12">
+                {BEHOLD_JOBB_FOKUS_ALTERNATIVER.map((a) => (
+                  <Radio key={a.id} value={a.id}>
+                    {a.tekst}
+                  </Radio>
+                ))}
+              </VStack>
+            </RadioGroup>
+            {svar.beholdJobbFokusId === "annet" && (
+              <TextField
+                label="Beskriv med egne ord"
+                value={svar.beholdJobbAnnetTekst ?? ""}
+                onChange={(e) => oppdaterSvar({ beholdJobbAnnetTekst: e.target.value })}
+                error={
+                  visFeil && !svar.beholdJobbAnnetTekst?.trim() ? "Du må beskrive hva det gjelder." : undefined
+                }
+              />
+            )}
+            <div className="flex gap-3">
+              <TilbakeKnapp />
+              <Button
+                onClick={() =>
+                  forsokGaVidere(
+                    Boolean(
+                      svar.beholdJobbFokusId &&
+                        (svar.beholdJobbFokusId !== "annet" || svar.beholdJobbAnnetTekst?.trim())
+                    )
+                  )
+                }
+              >
+                Neste
+              </Button>
+              <HoppKnapp />
+            </div>
+          </>
+        )}
+
         {steg === "ikkeklar-fokus" && (
           <>
             <Heading level="1" size="medium">
-              Hva tenker du kan være et realistisk første steg mot jobb?
+              Hva tror du kan hjelpe deg videre mot jobb?
             </Heading>
             <BodyLong>
               Svaret hjelper deg og veilederen din med å finne ut hva dere bør fokusere på først.

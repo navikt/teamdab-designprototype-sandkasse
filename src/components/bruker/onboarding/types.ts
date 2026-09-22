@@ -18,6 +18,8 @@ export interface Svar {
   erfaringId?: string;
   ikkeKlarFokusId?: string;
   ikkeKlarAnnetTekst?: string;
+  beholdJobbFokusId?: string;
+  beholdJobbAnnetTekst?: string;
   usikkerFokusId?: string;
   interesseIder?: string[];
   malTekst?: string;

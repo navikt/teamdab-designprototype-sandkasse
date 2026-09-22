@@ -13,7 +13,7 @@ flowchart TD
   situasjon{"Hva beskriver din situasjon best?"}
 
   situasjon -->|"Jeg vil finne meg en jobb"| finnjobbRetning
-  situasjon -->|"Trenger hjelp til å bli værende i jobben"| bekreft
+  situasjon -->|"Trenger hjelp til å bli værende i jobben"| beholdJobbFokus
   situasjon -->|"Ikke klar for jobb akkurat nå"| ikkeKlarFokus
   situasjon -->|"Usikker på hva som passer"| usikkerFokus
 
@@ -26,6 +26,14 @@ flowchart TD
   finnjobbErfaring -->|"Mangler erfaring/vet ikke → Spor B"| bekreft
 
   finnjobbAvklaring -->|"Fast: Spor B"| bekreft
+
+  beholdJobbFokus{"Hva tenker du kan være et realistisk<br/>første steg for å bli værende i jobben?"}
+  beholdJobbFokus -->|"Få bedre tilrettelegging på arbeidsplassen"| bekreft
+  beholdJobbFokus -->|"Håndtere en helseutfordring som påvirker jobben"| bekreft
+  beholdJobbFokus -->|"Bedre dialog eller avklaring med arbeidsgiveren min"| bekreft
+  beholdJobbFokus -->|"Noe annet enn dette"| beholdJobbAnnet["Beskriv med egne ord (fritekst)"]
+  beholdJobbFokus -->|"Vet ikke ennå – sammen med veileder"| bekreft
+  beholdJobbAnnet --> bekreft
 
   ikkeKlarFokus{"Hva tenker du kan være et realistisk<br/>første steg mot jobb?"}
   ikkeKlarFokus -->|"Mestre en vanskelig livssituasjon bedre"| bekreft

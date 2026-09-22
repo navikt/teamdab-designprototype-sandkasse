@@ -1,6 +1,14 @@
 import { SporId, Svar, Alternativ } from "./types";
 import { IKKE_KLAR_FOKUS_ALTERNATIVER, INTERESSE_ALTERNATIVER } from "./data";
 
+// Måltekster for "behold-jobb"-oppfølgingen skiller seg fra alternativ-teksten (som er formulert som et tema, ikke et mål).
+const BEHOLD_JOBB_MAL: Record<string, string> = {
+  tilrettelegging: "Få på plass bedre tilrettelegging i jobben min",
+  helse: "Håndtere helseutfordringen min slik at jeg kan bli i jobb",
+  "dialog-arbeidsgiver": "Få en bedre dialog med arbeidsgiveren min om situasjonen min",
+  veileder: "Sette et relevant mål sammen med veilederen min",
+};
+
 // Delt logikk for spørsmålet "Hva er du mest usikker på?", som både brukes når
 // brukeren starter i "usikker"-situasjonen og når "finn-jobb" ikke gir en jobbretning.
 function sporFraUsikkerFokus(svar: Svar): SporId | undefined {
@@ -72,8 +80,12 @@ export function beregnMal(svar: Svar, spor: SporId): string {
       }
       return "Finne ut hva som er realistisk for meg";
     }
-    case "eksisterende_jobb_beholde":
-      return "Beholde jobben jeg har";
+    case "eksisterende_jobb_beholde": {
+      if (svar.beholdJobbFokusId === "annet" && svar.beholdJobbAnnetTekst?.trim()) {
+        return svar.beholdJobbAnnetTekst.trim();
+      }
+      return BEHOLD_JOBB_MAL[svar.beholdJobbFokusId ?? ""] ?? "Beholde jobben jeg har";
+    }
     default:
       return "";
   }

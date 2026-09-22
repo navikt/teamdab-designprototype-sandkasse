@@ -21,9 +21,17 @@ export const ERFARING_ALTERNATIVER: Alternativ[] = [
 
 export const IKKE_KLAR_FOKUS_ALTERNATIVER: Alternativ[] = [
   { id: "livssituasjon", tekst: "Mestre en vanskelig livssituasjon bedre" },
-  { id: "helse", tekst: "Styrke helsen og funksjonsevnen min" },
+  { id: "helse", tekst: "Bli sterkere fysisk eller psykisk" },
   { id: "kunnskap", tekst: "Bygge mer kunnskap og erfaring" },
   { id: "utforske", tekst: "Utforske hvilken type arbeid som kan passe for meg" },
+  { id: "annet", tekst: "Noe annet enn dette" },
+  { id: "veileder", tekst: "Jeg vet ikke ennå – vil finne ut av dette sammen med veilederen min" },
+];
+
+export const BEHOLD_JOBB_FOKUS_ALTERNATIVER: Alternativ[] = [
+  { id: "tilrettelegging", tekst: "Få jobben tilpasset, for eksempel arbeidstid, oppgaver eller utstyr" },
+  { id: "helse", tekst: "Få helsa til å fungere bedre sammen med jobben" },
+  { id: "dialog-arbeidsgiver", tekst: "Snakke bedre med sjefen min om hvordan det går" },
   { id: "annet", tekst: "Noe annet enn dette" },
   { id: "veileder", tekst: "Jeg vet ikke ennå – vil finne ut av dette sammen med veilederen min" },
 ];
