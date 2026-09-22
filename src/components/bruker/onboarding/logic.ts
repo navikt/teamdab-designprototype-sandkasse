@@ -1,5 +1,5 @@
 import { SporId, Svar, Alternativ } from "./types";
-import { INTERESSE_ALTERNATIVER } from "./data";
+import { IKKE_KLAR_FOKUS_ALTERNATIVER, INTERESSE_ALTERNATIVER } from "./data";
 
 // Delt logikk for spørsmålet "Hva er du mest usikker på?", som både brukes når
 // brukeren starter i "usikker"-situasjonen og når "finn-jobb" ikke gir en jobbretning.
@@ -64,16 +64,11 @@ export function beregnMal(svar: Svar, spor: SporId): string {
       if (svar.usikkerFokusId === "vet-ikke") return "Sette et relevant mål sammen med veilederen min";
       if (svar.usikkerFokusId === "klar-na") return "Finne ut hva som skal til for at jobb kan bli mulig";
       if (svar.situasjonId === "ikke-klar") {
-        switch (svar.ikkeKlarFokusId) {
-          case "hva-skal-til":
-            return "Finne ut hva som skal til for at jobb kan bli mulig";
-          case "hva-arbeid":
-            return "Finne ut hva slags arbeid som kan være realistisk for meg";
-          case "hvor-mye":
-            return "Finne ut hvor mye det kan være realistisk for meg å jobbe";
-          case "veileder":
-            return "Sette et relevant mål sammen med veilederen min";
+        if (svar.ikkeKlarFokusId === "annet" && svar.ikkeKlarAnnetTekst?.trim()) {
+          return svar.ikkeKlarAnnetTekst.trim();
         }
+        const valgt = IKKE_KLAR_FOKUS_ALTERNATIVER.find((a) => a.id === svar.ikkeKlarFokusId);
+        if (valgt) return valgt.tekst;
       }
       return "Finne ut hva som er realistisk for meg";
     }

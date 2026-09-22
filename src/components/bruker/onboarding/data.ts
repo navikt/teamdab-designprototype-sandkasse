@@ -20,10 +20,12 @@ export const ERFARING_ALTERNATIVER: Alternativ[] = [
 ];
 
 export const IKKE_KLAR_FOKUS_ALTERNATIVER: Alternativ[] = [
-  { id: "hva-skal-til", tekst: "Hva som skal til for at jobb kan bli mulig" },
-  { id: "hva-arbeid", tekst: "Hva slags arbeid som kan være realistisk for meg" },
-  { id: "hvor-mye", tekst: "Hvor mye det kan være realistisk for meg å jobbe" },
-  { id: "veileder", tekst: "Jeg trenger hjelp fra en veileder før jeg kan sette et mål" },
+  { id: "livssituasjon", tekst: "Mestre en vanskelig livssituasjon bedre" },
+  { id: "helse", tekst: "Styrke helsen og funksjonsevnen min" },
+  { id: "kunnskap", tekst: "Bygge mer kunnskap og erfaring" },
+  { id: "utforske", tekst: "Utforske hvilken type arbeid som kan passe for meg" },
+  { id: "annet", tekst: "Noe annet enn dette" },
+  { id: "veileder", tekst: "Jeg vet ikke ennå – vil finne ut av dette sammen med veilederen min" },
 ];
 
 export const USIKKER_FOKUS_ALTERNATIVER: Alternativ[] = [

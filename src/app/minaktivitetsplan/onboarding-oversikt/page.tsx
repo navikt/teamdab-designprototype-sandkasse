@@ -8,9 +8,9 @@ import { MermaidDiagram } from "@/components/MermaidDiagram";
 // Hold denne i sync manuelt når stegmaskinen endres.
 const FLYT_DIAGRAM = `
 flowchart TD
-  intro["La oss gjøre planen relevant for deg<br/>«Kom i gang»"] --> situasjon
+  intro["Velkommen til din aktivitetsplan<br/>«Kom i gang»"] --> situasjon
 
-  situasjon{"Hva passer best for deg akkurat nå?"}
+  situasjon{"Hva beskriver din situasjon best?"}
 
   situasjon -->|"Jeg vil finne meg en jobb"| finnjobbRetning
   situasjon -->|"Trenger hjelp til å bli værende i jobben"| bekreft
@@ -27,7 +27,14 @@ flowchart TD
 
   finnjobbAvklaring -->|"Fast: Spor B"| bekreft
 
-  ikkeKlarFokus["Hva trenger du først og fremst<br/>å finne ut av?"] -->|"Fast: Spor C"| bekreft
+  ikkeKlarFokus{"Hva tenker du kan være et realistisk<br/>første steg mot jobb?"}
+  ikkeKlarFokus -->|"Mestre en vanskelig livssituasjon bedre"| bekreft
+  ikkeKlarFokus -->|"Styrke helsen og funksjonsevnen min"| bekreft
+  ikkeKlarFokus -->|"Bygge mer kunnskap og erfaring"| bekreft
+  ikkeKlarFokus -->|"Utforske hvilken type arbeid som kan passe for meg"| bekreft
+  ikkeKlarFokus -->|"Noe annet enn dette"| ikkeKlarAnnet["Beskriv med egne ord (fritekst)"]
+  ikkeKlarFokus -->|"Vet ikke ennå – sammen med veileder"| bekreft
+  ikkeKlarAnnet --> bekreft
 
   usikkerFokus{"Hva er du mest usikker på?"}
   usikkerFokus -->|"Hvilke jobber som kan passe / Erfaring og kompetanse → Spor B"| bekreft

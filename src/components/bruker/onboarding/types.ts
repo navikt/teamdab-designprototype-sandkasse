@@ -17,6 +17,7 @@ export interface Svar {
   yrke?: string;
   erfaringId?: string;
   ikkeKlarFokusId?: string;
+  ikkeKlarAnnetTekst?: string;
   usikkerFokusId?: string;
   interesseIder?: string[];
   malTekst?: string;

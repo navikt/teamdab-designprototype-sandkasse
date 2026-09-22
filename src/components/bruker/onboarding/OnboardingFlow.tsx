@@ -105,21 +105,40 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
   const [historikk, setHistorikk] = useState<Steg[]>([]);
   const [svar, setSvar] = useState<Svar>({});
   const [egetMal, setEgetMal] = useState<string | undefined>(undefined);
+  const [visFeil, setVisFeil] = useState(false);
 
-  const oppdaterSvar = (delvis: Partial<Svar>) => setSvar((prev) => ({ ...prev, ...delvis }));
+  // Aksel anbefaler å aldri deaktivere submit-knappen, men heller validere ved klikk
+  // og vise feilmelding på feltet (se "Mønster for skjemavalidering").
+  const oppdaterSvar = (delvis: Partial<Svar>) => {
+    setVisFeil(false);
+    setSvar((prev) => ({ ...prev, ...delvis }));
+  };
 
   const gaVidere = (delvis?: Partial<Svar>) => {
     const nyttSvar = delvis ? { ...svar, ...delvis } : svar;
     if (delvis) setSvar(nyttSvar);
+    setVisFeil(false);
     setHistorikk((prev) => [...prev, steg]);
     setSteg(nesteSteg(steg, nyttSvar));
+  };
+
+  // Valider først når brukeren prøver å gå videre, i stedet for å deaktivere knappen.
+  const forsokGaVidere = (erGyldig: boolean, delvis?: Partial<Svar>) => {
+    if (!erGyldig) {
+      setVisFeil(true);
+      return;
+    }
+    gaVidere(delvis);
   };
 
   const gaTilbake = () => {
     setHistorikk((prev) => {
       const kopi = [...prev];
       const forrige = kopi.pop();
-      if (forrige) setSteg(forrige);
+      if (forrige) {
+        setSteg(forrige);
+        setVisFeil(false);
+      }
       return kopi;
     });
   };
@@ -228,7 +247,13 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
             <Heading level="1" size="medium">
               Hva beskriver din situasjon best?
             </Heading>
-            <RadioGroup legend="Velg det som passer best" hideLegend value={svar.situasjonId ?? null} onChange={(v) => oppdaterSvar({ situasjonId: v as string })}>
+            <RadioGroup
+              legend="Velg det som passer best"
+              hideLegend
+              value={svar.situasjonId ?? null}
+              onChange={(v) => oppdaterSvar({ situasjonId: v as string })}
+              error={visFeil && !svar.situasjonId ? "Du må velge et alternativ." : undefined}
+            >
               <VStack gap="space-12">
                 {SITUASJON_ALTERNATIVER.map((a) => (
                   <Radio key={a.id} value={a.id}>
@@ -239,9 +264,7 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
             </RadioGroup>
             <div className="flex gap-3">
               <TilbakeKnapp />
-              <Button onClick={() => gaVidere()} disabled={!svar.situasjonId}>
-                Neste
-              </Button>
+              <Button onClick={() => forsokGaVidere(Boolean(svar.situasjonId))}>Neste</Button>
               <HoppKnapp />
             </div>
           </>
@@ -252,7 +275,13 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
             <Heading level="1" size="medium">
               Vet du hvilken type jobb du ser etter?
             </Heading>
-            <RadioGroup legend="Velg det som passer best" hideLegend value={svar.retningId ?? null} onChange={(v) => oppdaterSvar({ retningId: v as string })}>
+            <RadioGroup
+              legend="Velg det som passer best"
+              hideLegend
+              value={svar.retningId ?? null}
+              onChange={(v) => oppdaterSvar({ retningId: v as string })}
+              error={visFeil && !svar.retningId ? "Du må velge et alternativ." : undefined}
+            >
               <VStack gap="space-12">
                 {RETNING_ALTERNATIVER.map((a) => (
                   <Radio key={a.id} value={a.id}>
@@ -263,9 +292,7 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
             </RadioGroup>
             <div className="flex gap-3">
               <TilbakeKnapp />
-              <Button onClick={() => gaVidere()} disabled={!svar.retningId}>
-                Neste
-              </Button>
+              <Button onClick={() => forsokGaVidere(Boolean(svar.retningId))}>Neste</Button>
               <HoppKnapp />
             </div>
           </>
@@ -294,7 +321,13 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
             <Heading level="1" size="medium">
               Hva slags erfaring har du med jobbene du ser etter?
             </Heading>
-            <RadioGroup legend="Velg det som passer best" hideLegend value={svar.erfaringId ?? null} onChange={(v) => oppdaterSvar({ erfaringId: v as string })}>
+            <RadioGroup
+              legend="Velg det som passer best"
+              hideLegend
+              value={svar.erfaringId ?? null}
+              onChange={(v) => oppdaterSvar({ erfaringId: v as string })}
+              error={visFeil && !svar.erfaringId ? "Du må velge et alternativ." : undefined}
+            >
               <VStack gap="space-12">
                 {ERFARING_ALTERNATIVER.map((a) => (
                   <Radio key={a.id} value={a.id}>
@@ -305,9 +338,7 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
             </RadioGroup>
             <div className="flex gap-3">
               <TilbakeKnapp />
-              <Button onClick={() => gaVidere()} disabled={!svar.erfaringId}>
-                Neste
-              </Button>
+              <Button onClick={() => forsokGaVidere(Boolean(svar.erfaringId))}>Neste</Button>
               <HoppKnapp />
             </div>
           </>
@@ -328,6 +359,7 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
               onChange={(v) =>
                 oppdaterSvar({ interesseIder: medEksklusiv(svar.interesseIder, v as string[], "vet-ikke") })
               }
+              error={visFeil && !svar.interesseIder?.length ? "Du må velge minst ett alternativ." : undefined}
             >
               <VStack gap="space-12">
                 {INTERESSE_ALTERNATIVER.map((a) => (
@@ -339,9 +371,7 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
             </CheckboxGroup>
             <div className="flex gap-3">
               <TilbakeKnapp />
-              <Button onClick={() => gaVidere()} disabled={!svar.interesseIder?.length}>
-                Neste
-              </Button>
+              <Button onClick={() => forsokGaVidere(Boolean(svar.interesseIder?.length))}>Neste</Button>
               <HoppKnapp />
             </div>
           </>
@@ -350,9 +380,18 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
         {steg === "ikkeklar-fokus" && (
           <>
             <Heading level="1" size="medium">
-              Hva trenger du først og fremst å finne ut av?
+              Hva tenker du kan være et realistisk første steg mot jobb?
             </Heading>
-            <RadioGroup legend="Velg det som passer best" hideLegend value={svar.ikkeKlarFokusId ?? null} onChange={(v) => oppdaterSvar({ ikkeKlarFokusId: v as string })}>
+            <BodyLong>
+              Svaret hjelper deg og veilederen din med å finne ut hva dere bør fokusere på først.
+            </BodyLong>
+            <RadioGroup
+              legend="Velg det som passer best"
+              hideLegend
+              value={svar.ikkeKlarFokusId ?? null}
+              onChange={(v) => oppdaterSvar({ ikkeKlarFokusId: v as string })}
+              error={visFeil && !svar.ikkeKlarFokusId ? "Du må velge et alternativ." : undefined}
+            >
               <VStack gap="space-12">
                 {IKKE_KLAR_FOKUS_ALTERNATIVER.map((a) => (
                   <Radio key={a.id} value={a.id}>
@@ -361,9 +400,28 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
                 ))}
               </VStack>
             </RadioGroup>
+            {svar.ikkeKlarFokusId === "annet" && (
+              <TextField
+                label="Beskriv med egne ord"
+                value={svar.ikkeKlarAnnetTekst ?? ""}
+                onChange={(e) => oppdaterSvar({ ikkeKlarAnnetTekst: e.target.value })}
+                error={
+                  visFeil && !svar.ikkeKlarAnnetTekst?.trim() ? "Du må beskrive hva det gjelder." : undefined
+                }
+              />
+            )}
             <div className="flex gap-3">
               <TilbakeKnapp />
-              <Button onClick={() => gaVidere()} disabled={!svar.ikkeKlarFokusId}>
+              <Button
+                onClick={() =>
+                  forsokGaVidere(
+                    Boolean(
+                      svar.ikkeKlarFokusId &&
+                        (svar.ikkeKlarFokusId !== "annet" || svar.ikkeKlarAnnetTekst?.trim())
+                    )
+                  )
+                }
+              >
                 Neste
               </Button>
               <HoppKnapp />
@@ -376,7 +434,13 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
             <Heading level="1" size="medium">
               Hva er du mest usikker på?
             </Heading>
-            <RadioGroup legend="Velg det som passer best" hideLegend value={svar.usikkerFokusId ?? null} onChange={(v) => oppdaterSvar({ usikkerFokusId: v as string })}>
+            <RadioGroup
+              legend="Velg det som passer best"
+              hideLegend
+              value={svar.usikkerFokusId ?? null}
+              onChange={(v) => oppdaterSvar({ usikkerFokusId: v as string })}
+              error={visFeil && !svar.usikkerFokusId ? "Du må velge et alternativ." : undefined}
+            >
               <VStack gap="space-12">
                 {USIKKER_FOKUS_ALTERNATIVER.map((a) => (
                   <Radio key={a.id} value={a.id}>
@@ -387,9 +451,7 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
             </RadioGroup>
             <div className="flex gap-3">
               <TilbakeKnapp />
-              <Button onClick={() => gaVidere()} disabled={!svar.usikkerFokusId}>
-                Neste
-              </Button>
+              <Button onClick={() => forsokGaVidere(Boolean(svar.usikkerFokusId))}>Neste</Button>
               <HoppKnapp />
             </div>
           </>
@@ -403,14 +465,16 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
             <TextField
               label="Mål"
               value={malTekst}
-              onChange={(e) => setEgetMal(e.target.value)}
+              onChange={(e) => {
+                setEgetMal(e.target.value);
+                setVisFeil(false);
+              }}
+              error={visFeil && !malTekst.trim() ? "Du må skrive inn et mål." : undefined}
             />
             {svar.yrke && <BodyLong>Yrke eller bransje: {svar.yrke}</BodyLong>}
             <div className="flex gap-3">
               <TilbakeKnapp />
-              <Button onClick={() => gaVidere({ malTekst })} disabled={!malTekst.trim()}>
-                Dette passer
-              </Button>
+              <Button onClick={() => forsokGaVidere(Boolean(malTekst.trim()), { malTekst })}>Dette passer</Button>
               <HoppKnapp />
             </div>
           </>
@@ -433,6 +497,7 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
                   oppdaterSvar({ velgMedVeileder: false, aktivitetId: v as string });
                 }
               }}
+              error={visFeil && !svar.velgMedVeileder && !svar.aktivitetId ? "Du må velge et alternativ." : undefined}
             >
               <VStack gap="space-12">
                 {aktiviteter.map((a) => (
@@ -449,15 +514,21 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
                 label="Aktivitet"
                 value={svar.egenAktivitetTekst ?? ""}
                 onChange={(e) => oppdaterSvar({ egenAktivitetTekst: e.target.value })}
+                error={
+                  visFeil && !svar.egenAktivitetTekst?.trim() ? "Du må skrive inn en aktivitet." : undefined
+                }
               />
             )}
             <div className="flex gap-3">
               <TilbakeKnapp />
               <Button
-                onClick={() => gaVidere()}
-                disabled={
-                  !svar.velgMedVeileder &&
-                  (!svar.aktivitetId || (svar.aktivitetId === "eget" && !svar.egenAktivitetTekst?.trim()))
+                onClick={() =>
+                  forsokGaVidere(
+                    Boolean(
+                      svar.velgMedVeileder ||
+                        (svar.aktivitetId && (svar.aktivitetId !== "eget" || svar.egenAktivitetTekst?.trim()))
+                    )
+                  )
                 }
               >
                 Neste
