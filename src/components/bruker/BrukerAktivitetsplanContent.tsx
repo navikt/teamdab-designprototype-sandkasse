@@ -134,8 +134,16 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
           <OnboardingFlow onFullfor={fullforOnboarding} onHopp={hoppOverOnboarding} />
         ) : (
         <>
-        <div className="max-w-4xl mx-auto px-6 pt-6 pb-[25px] flex items-start gap-4">
-          <Image src="/Hero_pictogram.png" alt="" width={160} height={103} loading="eager" style={{ width: "160px", height: "103px" }} />
+        <div className="max-w-4xl mx-auto px-6 pt-6 pb-[25px] flex flex-col gap-4 relative">
+          <Image
+            src="/Trenger-hjelp-til-a-komme-i-jobb.png"
+            alt=""
+            width={80}
+            height={80}
+            loading="eager"
+            style={{ width: "80px", height: "80px" }}
+            className="hidden lg:block absolute right-full top-8 mr-8 shrink-0"
+          />
           <div className="flex flex-col gap-4 flex-1">
             <Heading size="large" level="1">Aktivitetsplan</Heading>
 
@@ -159,7 +167,6 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
           <div className="max-w-4xl mx-auto px-6 py-6 flex flex-col gap-3">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <Heading size="medium" level="2">Mine aktiviteter</Heading>
                 <ActionMenu>
                   <ActionMenu.Trigger>
                     <Button variant="primary" size="small" icon={<PlusIcon aria-hidden />}>

@@ -18,16 +18,6 @@
   background-color: var(--ax-bg-neutral-strong);
 }
 
-/* Onboarding-stepperen bruker data-interactive="true" for å få aksentfargen, men
-   stegene er ikke klikkbare (as="div") — fjern lenke-utseendet dette medfører. */
-.onboarding-stepper .aksel-stepper__step {
-  cursor: default;
-}
-
-.onboarding-stepper .aksel-stepper__content {
-  text-decoration: none !important;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

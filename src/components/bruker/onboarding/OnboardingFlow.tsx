@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { BodyLong, Button, Checkbox, CheckboxGroup, Heading, Radio, RadioGroup, Stepper, TextField, VStack } from "@navikt/ds-react";
+import { BodyLong, Button, Checkbox, CheckboxGroup, FormProgress, Heading, Radio, RadioGroup, TextField, VStack } from "@navikt/ds-react";
 import {
   AKTIVITETER_PER_SPOR,
   ERFARING_ALTERNATIVER,
@@ -105,7 +105,6 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
   const [historikk, setHistorikk] = useState<Steg[]>([]);
   const [svar, setSvar] = useState<Svar>({});
   const [egetMal, setEgetMal] = useState<string | undefined>(undefined);
-  const [introLukkes, setIntroLukkes] = useState(false);
 
   const oppdaterSvar = (delvis: Partial<Svar>) => setSvar((prev) => ({ ...prev, ...delvis }));
 
@@ -120,18 +119,20 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
     setHistorikk((prev) => {
       const kopi = [...prev];
       const forrige = kopi.pop();
-      if (forrige) {
-        setSteg(forrige);
-        if (forrige === "intro") setIntroLukkes(false);
-      }
+      if (forrige) setSteg(forrige);
       return kopi;
     });
   };
 
-  // Lar headerseksjonen (bilde + overskrift) kollapse før vi faktisk bytter steg.
-  const startOnboarding = () => {
-    setIntroLukkes(true);
-    setTimeout(() => gaVidere(), 300);
+  // Lar brukeren klikke seg tilbake til et tidligere faseoverskrift i FormProgress, men ikke fremover.
+  const hoppTilFase = (fase: number) => {
+    const naavarendeFase = stegTilFase(steg);
+    if (fase >= naavarendeFase) return;
+    const alleSteg = [...historikk, steg];
+    const idx = alleSteg.map(stegTilFase).lastIndexOf(fase);
+    if (idx === -1) return;
+    setHistorikk(alleSteg.slice(0, idx));
+    setSteg(alleSteg[idx]);
   };
 
   const spor = beregnSpor(svar);
@@ -169,53 +170,40 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
 
   return (
     <>
-      {steg === "intro" && (
-        <div
-          className={`max-w-4xl mx-auto px-4 md:px-6 flex items-start gap-4 overflow-hidden transition-all duration-300 ease-in-out ${
-            introLukkes ? "max-h-0 opacity-0 pt-0 pb-0" : "max-h-[400px] opacity-100 pt-6 pb-[25px]"
-          }`}
-        >
-          <Image
-            src="/Hero_pictogram.png"
-            alt=""
-            width={160}
-            height={103}
-            loading="eager"
-            style={{ width: "160px", height: "103px" }}
-            className="hidden md:block shrink-0"
-          />
-          <div className="flex flex-col gap-4 flex-1">
-            <Heading size="large" level="1">
-              Velkommen til din aktivitetsplan
-            </Heading>
-            <BodyLong>
-              I aktivitetsplanen holder du oversikt over det du gjør for å komme i jobb eller en annen
-              aktivitet. Både du og Nav-veilederen din kan se og endre i aktivitetsplanen.
-            </BodyLong>
-          </div>
+      <div className="max-w-4xl mx-auto px-4 md:px-6 flex flex-col gap-4 pt-6 pb-[25px] relative">
+        <Image
+          src="/Trenger-hjelp-til-a-komme-i-jobb.png"
+          alt=""
+          width={80}
+          height={80}
+          loading="eager"
+          style={{ width: "80px", height: "80px" }}
+          className="hidden lg:block absolute right-full top-8 mr-8 shrink-0"
+        />
+        <div className="flex flex-col gap-4 flex-1">
+          <Heading size="large" level="1">
+            Velkommen til din aktivitetsplan
+          </Heading>
+          <BodyLong>
+            I aktivitetsplanen holder du oversikt over det du gjør for å komme i jobb eller en annen
+            aktivitet. Både du og Nav-veilederen din kan se og endre i aktivitetsplanen.
+          </BodyLong>
         </div>
-      )}
+        <FormProgress totalSteps={FASE_NAVN.length} activeStep={stegTilFase(steg)} onStepChange={hoppTilFase}>
+          {FASE_NAVN.map((navn, i) => {
+            const fase = i + 1;
+            return (
+              <FormProgress.Step key={navn} interactive={fase <= stegTilFase(steg)} completed={fase < stegTilFase(steg)}>
+                {navn}
+              </FormProgress.Step>
+            );
+          })}
+        </FormProgress>
+      </div>
 
       <div className="w-screen relative left-1/2 -translate-x-1/2 bg-[var(--ax-bg-accent-soft)]">
         <div className="max-w-4xl mx-auto px-4 md:px-6 py-6">
-          <div className="flex gap-6 md:gap-12 items-start">
-            {steg !== "intro" && (
-              <Stepper
-                orientation="vertical"
-                activeStep={stegTilFase(steg)}
-                data-color="accent"
-                className="onboarding-stepper shrink-0 hidden md:block"
-              >
-                {FASE_NAVN.map((navn) => (
-                  // as="div" hindrer navigasjon ved klikk, men beholder blå aksentfarge (krever data-interactive="true").
-                  <Stepper.Step key={navn} as="div">
-                    {navn}
-                  </Stepper.Step>
-                ))}
-              </Stepper>
-            )}
-
-      <VStack gap="space-24" className="flex-1 w-full min-w-0 bg-ax-bg-default rounded-2xl p-4 md:p-8">
+      <VStack gap="space-24" className="w-full min-w-0 bg-ax-bg-default rounded-2xl p-4 md:p-8">
         {steg === "intro" && (
           <>
             <video controls preload="metadata" className="w-full rounded-md" src={OPPLAERINGSVIDEO_SRC}>
@@ -229,7 +217,7 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
               dine på et senere tidspunkt.
             </BodyLong>
             <div className="flex gap-3">
-              <Button onClick={startOnboarding}>Kom i gang</Button>
+              <Button onClick={() => gaVidere()}>Kom i gang</Button>
               <HoppKnapp />
             </div>
           </>
@@ -505,7 +493,6 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
           </>
         )}
       </VStack>
-          </div>
         </div>
       </div>
     </>
