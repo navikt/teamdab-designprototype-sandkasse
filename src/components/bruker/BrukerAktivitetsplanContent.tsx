@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowRightIcon, ArrowsCirclepathIcon, CompassIcon, PlusIcon, TrashIcon, WrenchIcon } from "@navikt/aksel-icons";
+import { ArrowsCirclepathIcon, CompassIcon, MenuHamburgerIcon, PlusIcon, TrashIcon, WrenchIcon } from "@navikt/aksel-icons";
 import { ActionMenu, Button, Heading, Link, ToggleGroup } from "@navikt/ds-react";
 import { DekoratorHeader } from "../dekorator-lookalike/DekoratorHeader";
 import { DekoratorFooter } from "../dekorator-lookalike/DekoratorFooter";
@@ -177,7 +177,33 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
             className="hidden lg:block absolute right-full top-8 mr-8 shrink-0"
           />
           <div className="flex flex-col gap-4 flex-1">
-            <Heading size="large" level="1">Aktivitetsplan</Heading>
+            <div className="flex items-center justify-between gap-4">
+              <Heading size="large" level="1">Aktivitetsplan</Heading>
+              <ActionMenu>
+                <ActionMenu.Trigger>
+                  <Button variant="secondary" size="small" icon={<MenuHamburgerIcon aria-hidden />} iconPosition="left">
+                    Meny
+                  </Button>
+                </ActionMenu.Trigger>
+                <ActionMenu.Content>
+                  <ActionMenu.Item onSelect={() => router.push("/minaktivitetsplan/arkiv")}>
+                    Arkiv
+                  </ActionMenu.Item>
+                  <ActionMenu.Item as="a" href="#">
+                    Min side
+                  </ActionMenu.Item>
+                  <ActionMenu.Item as="a" href="#">
+                    Min dialog med veileder
+                  </ActionMenu.Item>
+                  <ActionMenu.Item as="a" href="#">
+                    Hva er aktivitetsplanen?
+                  </ActionMenu.Item>
+                  <ActionMenu.Item onSelect={() => window.print()}>
+                    Skriv ut
+                  </ActionMenu.Item>
+                </ActionMenu.Content>
+              </ActionMenu>
+            </div>
 
             <MalLinje
               hovedmal={hovedmal}
@@ -220,15 +246,6 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
                     </ActionMenu.Item>
                   </ActionMenu.Content>
                 </ActionMenu>
-                <Button
-                  variant="secondary"
-                  size="small"
-                  icon={<ArrowRightIcon aria-hidden />}
-                  iconPosition="right"
-                  onClick={() => router.push("/minaktivitetsplan/arkiv")}
-                >
-                  Gå til Arkiv
-                </Button>
               </div>
               <ToggleGroup
                 value={visning}
