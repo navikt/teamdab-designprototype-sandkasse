@@ -5,15 +5,21 @@ export const initialKort: AktivitetsKort[] = [
   {
     id: "1",
     kolonne: "forslag",
-    type: "Møte med Nav",
-    title: "Oppfølgingsmøte om yrkesvalg",
-    dateRange: "15. jul – 15. jul 2026",
+    type: "Jobbrettet egenaktivitet",
+    title: "Oppdatere CV og søknadstekst",
     tags: ["ulest"],
     hasBlueDot: true,
-    moteform: "Oppmøte",
-    varighet: "30 minutter",
-    hensikt: "Snakke om veien tilbake til jobb som elektriker.",
-    forberedelser: "Tenk gjennom hva du trenger av bistand for å komme i gang igjen.",
+    beskrivelse: "Sett av tid til å oppdatere CV og søknadstekst før du søker jobb.",
+  },
+  {
+    id: "forslag-2",
+    kolonne: "forslag",
+    type: "Stilling",
+    title: "Søke på stilling som elektriker",
+    tags: ["ulest"],
+    hasBlueDot: true,
+    arbeidsgiver: "Arbeidsgiver",
+    beskrivelse: "Søk på en aktuell stilling som elektriker.",
   },
   // --- Planlegger ---
   {

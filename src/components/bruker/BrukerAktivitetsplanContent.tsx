@@ -8,7 +8,7 @@ import { ActionMenu, Button, Heading, Link, ToggleGroup } from "@navikt/ds-react
 import { DekoratorHeader } from "../dekorator-lookalike/DekoratorHeader";
 import { DekoratorFooter } from "../dekorator-lookalike/DekoratorFooter";
 import { MalLinje } from "./MalLinje";
-import { ForslagSeksjon } from "./ForslagSeksjon";
+import { ForslagSeksjon, ForslagVisning } from "./ForslagSeksjon";
 import { MineAktiviteterListe } from "./MineAktiviteterListe";
 import { MineAktiviteterKalender } from "./MineAktiviteterKalender";
 import { AvtaleModal } from "./AvtaleModal";
@@ -23,6 +23,7 @@ import { OnboardingFlow } from "./onboarding/OnboardingFlow";
 import { OnboardingResultat } from "./onboarding/types";
 
 const VISNING_STORAGE_KEY = "minaktivitetsplan-visning";
+const FORSLAG_VISNING_STORAGE_KEY = "minaktivitetsplan-forslag-visning";
 const ONBOARDING_STORAGE_KEY = "minaktivitetsplan-vis-onboarding";
 const KORT_STORAGE_KEY = "minaktivitetsplan-kort";
 type Visning = "liste" | "kalender";
@@ -35,6 +36,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   const router = useRouter();
   const [kort, setKort] = useState<AktivitetsKort[]>(initialKort);
   const [visning, setVisning] = useState<Visning>("liste");
+  const [forslagVisning, setForslagVisning] = useState<ForslagVisning>("varsel");
   const [aktivtKort, setAktivtKort] = useState<AktivitetsKort | null>(null);
   const [avtaleModalApen, setAvtaleModalApen] = useState(false);
   const [nyAktivitetType, setNyAktivitetType] = useState<NyAktivitetType | null>(null);
@@ -58,7 +60,9 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
     setKort(initialKort);
     nullstillMal();
     setVisOnboarding(false);
+    setForslagVisning("varsel");
     window.localStorage.removeItem(ONBOARDING_STORAGE_KEY);
+    window.localStorage.removeItem(FORSLAG_VISNING_STORAGE_KEY);
   };
 
   const visTomAktivitetsplan = () => {
@@ -94,6 +98,8 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   useEffect(() => {
     const lagret = window.localStorage.getItem(VISNING_STORAGE_KEY);
     if (lagret === "liste" || lagret === "kalender") setVisning(lagret);
+    const lagretForslagVisning = window.localStorage.getItem(FORSLAG_VISNING_STORAGE_KEY);
+    if (lagretForslagVisning === "varsel" || lagretForslagVisning === "liste") setForslagVisning(lagretForslagVisning);
     if (window.localStorage.getItem(ONBOARDING_STORAGE_KEY) === "1") setVisOnboarding(true);
     const lagretKort = window.localStorage.getItem(KORT_STORAGE_KEY);
     if (lagretKort) {
@@ -118,6 +124,12 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   const byttVisning = (v: Visning) => {
     setVisning(v);
     window.localStorage.setItem(VISNING_STORAGE_KEY, v);
+  };
+
+  const byttForslagVisning = () => {
+    const nyVisning: ForslagVisning = forslagVisning === "varsel" ? "liste" : "varsel";
+    setForslagVisning(nyVisning);
+    window.localStorage.setItem(FORSLAG_VISNING_STORAGE_KEY, nyVisning);
   };
 
   const forslag = kort.filter((k) => k.kolonne === "forslag");
@@ -231,6 +243,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
             </div>
             <ForslagSeksjon
               forslag={forslag}
+              visning={forslagVisning}
               onGodta={(id) => oppdaterKolonne(id, "planlegger")}
               onAvsla={(id) => oppdaterKolonne(id, "avbrutt")}
             />
@@ -301,6 +314,9 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
             </ActionMenu.Item>
             <ActionMenu.Item icon={<TrashIcon aria-hidden />} onSelect={visTomAktivitetsplan}>
               Vis tom aktivitetsplan
+            </ActionMenu.Item>
+            <ActionMenu.Item onSelect={byttForslagVisning}>
+              {forslagVisning === "varsel" ? "Vis forslag øverst i aktivitetslisten" : "Vis forslag som varsel"}
             </ActionMenu.Item>
             <ActionMenu.Item icon={<CompassIcon aria-hidden />} onSelect={() => router.push("/minaktivitetsplan/onboarding-oversikt")}>
               Vis onboarding-flyt (oversikt)
