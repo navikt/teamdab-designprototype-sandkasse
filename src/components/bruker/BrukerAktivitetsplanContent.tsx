@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { ArrowRightIcon, ArrowsCirclepathIcon, CompassIcon, PlusIcon, TrashIcon, WrenchIcon } from "@navikt/aksel-icons";
@@ -24,6 +24,7 @@ import { OnboardingResultat } from "./onboarding/types";
 
 const VISNING_STORAGE_KEY = "minaktivitetsplan-visning";
 const ONBOARDING_STORAGE_KEY = "minaktivitetsplan-vis-onboarding";
+const KORT_STORAGE_KEY = "minaktivitetsplan-kort";
 type Visning = "liste" | "kalender";
 
 interface BrukerAktivitetsplanContentProps {
@@ -38,6 +39,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   const [avtaleModalApen, setAvtaleModalApen] = useState(false);
   const [nyAktivitetType, setNyAktivitetType] = useState<NyAktivitetType | null>(null);
   const [visOnboarding, setVisOnboarding] = useState(false);
+  const erForstePersistering = useRef(true);
   const {
     hovedmal,
     setHovedmal,
@@ -93,7 +95,25 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
     const lagret = window.localStorage.getItem(VISNING_STORAGE_KEY);
     if (lagret === "liste" || lagret === "kalender") setVisning(lagret);
     if (window.localStorage.getItem(ONBOARDING_STORAGE_KEY) === "1") setVisOnboarding(true);
+    const lagretKort = window.localStorage.getItem(KORT_STORAGE_KEY);
+    if (lagretKort) {
+      try {
+        setKort(JSON.parse(lagretKort));
+      } catch {
+        // ignorer korrupt lagret data, behold demo-kortene
+      }
+    }
   }, []);
+
+  // Persisterer kortene slik at en refresh midt i onboardingen ikke faller tilbake til demo-utvalget.
+  // Hopper over selve mount-skrivingen for å unngå å overskrive lagret data med demo-verdien før den er lastet inn.
+  useEffect(() => {
+    if (erForstePersistering.current) {
+      erForstePersistering.current = false;
+      return;
+    }
+    window.localStorage.setItem(KORT_STORAGE_KEY, JSON.stringify(kort));
+  }, [kort]);
 
   const byttVisning = (v: Visning) => {
     setVisning(v);

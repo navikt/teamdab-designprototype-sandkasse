@@ -12,20 +12,20 @@ flowchart TD
 
   situasjon{"Hva beskriver din situasjon best?"}
 
-  situasjon -->|"Jeg vil finne meg en jobb"| finnjobbRetning
+  situasjon -->|"Jeg vil finne meg en jobb"| finnjobbFokus
   situasjon -->|"Trenger hjelp til å bli værende i jobben"| beholdJobbFokus
   situasjon -->|"Ikke klar for jobb akkurat nå"| ikkeKlarFokus
   situasjon -->|"Usikker på hva som passer"| usikkerFokus
 
-  finnjobbRetning{"Vet du hvilken type jobb du ser etter?"}
-  finnjobbRetning -->|"Ja"| finnjobbYrke["Søk etter yrke, stilling eller bransje"]
-  finnjobbRetning -->|"Nei"| finnjobbAvklaring["Litt mer om deg<br/>(oppgavetyper, flervalg)"]
-
-  finnjobbYrke --> finnjobbErfaring{"Hva slags erfaring har du<br/>med jobbene du ser etter?"}
-  finnjobbErfaring -->|"Relevant erfaring/utdanning → Spor A"| bekreft
-  finnjobbErfaring -->|"Mangler erfaring/vet ikke → Spor B"| bekreft
-
-  finnjobbAvklaring -->|"Fast: Spor B"| bekreft
+  finnjobbFokus{"Hva trenger du mest hjelp til<br/>i jobbsøket akkurat nå?"}
+  finnjobbFokus -->|"Søke på en bestemt type jobb"| finnjobbYrke["Yrke, stilling eller bransje (valgfritt)"]
+  finnjobbFokus -->|"Usikker på retning eller bransje"| finnjobbInteresser["Hva slags oppgaver liker du å jobbe med? (valgfritt)"]
+  finnjobbFokus -->|"Mangler erfaring eller kvalifikasjoner"| bekreft
+  finnjobbFokus -->|"Noe annet enn dette"| finnjobbAnnet["Beskriv med egne ord (fritekst)"]
+  finnjobbFokus -->|"Vet ikke ennå – sammen med veileder"| bekreft
+  finnjobbYrke --> bekreft
+  finnjobbInteresser --> bekreft
+  finnjobbAnnet --> bekreft
 
   beholdJobbFokus{"Hva tenker du kan være et realistisk<br/>første steg for å bli værende i jobben?"}
   beholdJobbFokus -->|"Få bedre tilrettelegging på arbeidsplassen"| bekreft
@@ -45,10 +45,13 @@ flowchart TD
   ikkeKlarAnnet --> bekreft
 
   usikkerFokus{"Hva er du mest usikker på?"}
-  usikkerFokus -->|"Hvilke jobber som kan passe / Erfaring og kompetanse → Spor B"| bekreft
-  usikkerFokus -->|"Klar for å jobbe nå / Hvor mye jeg kan jobbe / Vet ikke ennå → Spor C"| bekreft
+  usikkerFokus -->|"Hvilke jobber som kan passe for meg"| bekreft
+  usikkerFokus -->|"Om jeg har erfaringen eller kompetansen jeg trenger"| bekreft
+  usikkerFokus -->|"Om jeg er klar for å jobbe nå"| bekreft
+  usikkerFokus -->|"Hvor mye jeg kan jobbe"| bekreft
+  usikkerFokus -->|"Jeg vet ikke ennå"| bekreft
 
-  bekreft["Dette kan være en god retning for deg<br/>(mål vises, kan redigeres)"] -->|"Dette passer"| aktivitet
+  bekreft["Passer denne retningen for deg?<br/>(mål vises, kan redigeres)"] -->|"Dette passer"| aktivitet
   bekreft -->|"Endre"| bekreft
 
   aktivitet["Hva vil du starte med?<br/>(forslag / egen aktivitet / sammen med veileder)"] --> oppsummering
