@@ -8,7 +8,7 @@ import { MermaidDiagram } from "@/components/MermaidDiagram";
 // Hold denne i sync manuelt når stegmaskinen endres.
 const FLYT_DIAGRAM = `
 flowchart TD
-  intro["Velkommen til din aktivitetsplan<br/>«Kom i gang»"] --> situasjon
+  intro["La oss gjøre planen relevant for deg<br/>«Kom i gang»"] --> situasjon
 
   situasjon{"Hva beskriver din situasjon best?"}
 
@@ -19,29 +19,29 @@ flowchart TD
 
   finnjobbFokus{"Hva trenger du mest hjelp til<br/>i jobbsøket akkurat nå?"}
   finnjobbFokus -->|"Søke på en bestemt type jobb"| finnjobbYrke["Yrke, stilling eller bransje (valgfritt)"]
-  finnjobbFokus -->|"Usikker på retning eller bransje"| finnjobbInteresser["Hva slags oppgaver liker du å jobbe med? (valgfritt)"]
-  finnjobbFokus -->|"Mangler erfaring eller kvalifikasjoner"| bekreft
+  finnjobbFokus -->|"Jeg er usikker på hvilken retning<br/>eller bransje som passer for meg"| finnjobbInteresser["Hva slags oppgaver liker du å jobbe med? (valgfritt)"]
+  finnjobbFokus -->|"Jeg mangler erfaring eller kvalifikasjoner<br/>for jobbene jeg vil ha"| bekreft
   finnjobbFokus -->|"Noe annet enn dette"| finnjobbAnnet["Beskriv med egne ord (fritekst)"]
-  finnjobbFokus -->|"Vet ikke ennå – sammen med veileder"| bekreft
+  finnjobbFokus -->|"Jeg vet ikke ennå – vil finne ut<br/>av dette sammen med veilederen min"| bekreft
   finnjobbYrke --> bekreft
   finnjobbInteresser --> bekreft
   finnjobbAnnet --> bekreft
 
-  beholdJobbFokus{"Hva tenker du kan være et realistisk<br/>første steg for å bli værende i jobben?"}
-  beholdJobbFokus -->|"Få bedre tilrettelegging på arbeidsplassen"| bekreft
-  beholdJobbFokus -->|"Håndtere en helseutfordring som påvirker jobben"| bekreft
-  beholdJobbFokus -->|"Bedre dialog eller avklaring med arbeidsgiveren min"| bekreft
+  beholdJobbFokus{"Hva tror du kan hjelpe deg<br/>til å bli i jobben?"}
+  beholdJobbFokus -->|"Få jobben tilpasset, for eksempel<br/>arbeidstid, oppgaver eller utstyr"| bekreft
+  beholdJobbFokus -->|"Få helsa til å fungere bedre sammen med jobben"| bekreft
+  beholdJobbFokus -->|"Snakke bedre med sjefen min<br/>om hvordan det går"| bekreft
   beholdJobbFokus -->|"Noe annet enn dette"| beholdJobbAnnet["Beskriv med egne ord (fritekst)"]
-  beholdJobbFokus -->|"Vet ikke ennå – sammen med veileder"| bekreft
+  beholdJobbFokus -->|"Jeg vet ikke ennå – vil finne ut<br/>av dette sammen med veilederen min"| bekreft
   beholdJobbAnnet --> bekreft
 
-  ikkeKlarFokus{"Hva tenker du kan være et realistisk<br/>første steg mot jobb?"}
+  ikkeKlarFokus{"Hva tror du kan hjelpe<br/>deg videre mot jobb?"}
   ikkeKlarFokus -->|"Mestre en vanskelig livssituasjon bedre"| bekreft
-  ikkeKlarFokus -->|"Styrke helsen og funksjonsevnen min"| bekreft
+  ikkeKlarFokus -->|"Bli sterkere fysisk eller psykisk"| bekreft
   ikkeKlarFokus -->|"Bygge mer kunnskap og erfaring"| bekreft
   ikkeKlarFokus -->|"Utforske hvilken type arbeid som kan passe for meg"| bekreft
   ikkeKlarFokus -->|"Noe annet enn dette"| ikkeKlarAnnet["Beskriv med egne ord (fritekst)"]
-  ikkeKlarFokus -->|"Vet ikke ennå – sammen med veileder"| bekreft
+  ikkeKlarFokus -->|"Jeg vet ikke ennå – vil finne ut<br/>av dette sammen med veilederen min"| bekreft
   ikkeKlarAnnet --> bekreft
 
   usikkerFokus{"Hva er du mest usikker på?"}
@@ -51,12 +51,13 @@ flowchart TD
   usikkerFokus -->|"Hvor mye jeg kan jobbe"| bekreft
   usikkerFokus -->|"Jeg vet ikke ennå"| bekreft
 
-  bekreft["Passer denne retningen for deg?<br/>(mål vises, kan redigeres)"] -->|"Dette passer"| aktivitet
-  bekreft -->|"Endre"| bekreft
+  bekreft["Passer denne retningen for deg?<br/>(forslag til mål, direkte redigerbart felt)"] -->|"Dette passer"| aktivitet
 
   aktivitet["Hva vil du starte med?<br/>(forslag / egen aktivitet / sammen med veileder)"] --> oppsummering
 
   oppsummering["Du er klar til å komme i gang<br/>(mål + første aktivitet)"] --> ferdig(["Gå til aktivitetsplanen"])
+
+  intro -.->|"Hopp rett til aktivitetsplanen<br/>(tilgjengelig på alle steg)"| ferdig
 `;
 
 
