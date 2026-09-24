@@ -31,19 +31,19 @@ function leggTilDager(dato: Date, dager: number): Date {
 export function Timeplan({ aktiviteter, ukeStart, onAktivitetKlikk }: TimeplanProps) {
   const ukedagDatoer = UKEDAGER.map((_, i) => leggTilDager(ukeStart, i));
   return (
-    <div className="overflow-x-auto rounded-md border border-ax-border-neutral-subtle">
+    <div className="snap-x snap-proximity overflow-x-auto rounded-md border border-ax-border-neutral-subtle">
       <div
         className="grid min-w-[640px]"
         style={{
-          gridTemplateColumns: "4rem repeat(5, 1fr)",
+          gridTemplateColumns: "4rem repeat(5, minmax(6.5rem, 1fr))",
           gridTemplateRows: `3.5rem repeat(${TIMER.length}, 5rem)`,
         }}
       >
-        <div className="border-b border-r border-ax-border-neutral-subtle bg-ax-bg-neutral-soft" style={{ gridColumn: 1, gridRow: 1 }} />
+        <div className="sticky left-0 z-10 border-b border-r border-ax-border-neutral-subtle bg-ax-bg-neutral-soft" style={{ gridColumn: 1, gridRow: 1 }} />
         {UKEDAGER.map((dag, i) => (
           <div
             key={dag}
-            className="flex flex-col items-center justify-center gap-0.5 border-b border-ax-border-neutral-subtle bg-ax-bg-neutral-soft py-1 text-sm font-semibold text-ax-text-neutral"
+            className="flex snap-start flex-col items-center justify-center gap-0.5 border-b border-ax-border-neutral-subtle bg-ax-bg-neutral-soft py-1 text-sm font-semibold text-ax-text-neutral"
             style={{ gridColumn: i + 2, gridRow: 1 }}
           >
             <span>{dag}</span>
@@ -56,7 +56,7 @@ export function Timeplan({ aktiviteter, ukeStart, onAktivitetKlikk }: TimeplanPr
         {TIMER.map((time, i) => (
           <Fragment key={time}>
             <div
-              className="flex items-center justify-end border-r border-ax-border-neutral-subtle pr-2 text-sm text-ax-text-subtle"
+              className="sticky left-0 z-10 flex items-center justify-end border-r border-ax-border-neutral-subtle bg-ax-bg-default pr-2 text-sm text-ax-text-subtle"
               style={{ gridColumn: 1, gridRow: i + 2 }}
             >
               {time}:00

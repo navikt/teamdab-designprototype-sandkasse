@@ -28,26 +28,28 @@ export function MineAktiviteterKalender() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <Button
           variant="tertiary"
-          size="small"
+          size="xsmall"
           icon={<ChevronLeftIcon aria-hidden />}
           onClick={() => setUkeStart((u) => leggTilDager(u, -7))}
+          aria-label="Forrige uke"
         >
-          Forrige uke
+          <span className="hidden sm:inline">Forrige uke</span>
         </Button>
-        <BodyShort weight="semibold">
+        <BodyShort weight="semibold" className="text-xs sm:text-base">
           Uke {ukeStart.toLocaleDateString("nb-NO", { day: "2-digit", month: "2-digit" })} – {ukeSlutt.toLocaleDateString("nb-NO", { day: "2-digit", month: "2-digit" })}
         </BodyShort>
         <Button
           variant="tertiary"
-          size="small"
+          size="xsmall"
           icon={<ChevronRightIcon aria-hidden />}
           iconPosition="right"
           onClick={() => setUkeStart((u) => leggTilDager(u, 7))}
+          aria-label="Neste uke"
         >
-          Neste uke
+          <span className="hidden sm:inline">Neste uke</span>
         </Button>
       </div>
 

@@ -40,16 +40,6 @@ export const testdataUngeTimeplan: TimeplanAktivitet[] = [
     farge: "meta-purple",
   },
   {
-    id: "up-3",
-    tittel: "Lunsj",
-    beskrivelse: "Felles lunsjpause hver dag.",
-    ukedagFra: 1,
-    ukedagTil: 5,
-    timeFra: 12,
-    timeTil: 13,
-    farge: "meta-lime",
-  },
-  {
     id: "up-4",
     tittel: "Verksted og praktisk arbeid",
     sted: "Verkstedhall",

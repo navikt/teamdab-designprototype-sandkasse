@@ -231,7 +231,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
                 <ActionMenu>
                   <ActionMenu.Trigger>
                     <Button variant="primary" size="small" icon={<PlusIcon aria-hidden />}>
-                      Legg til aktivitet
+                      Ny aktivitet
                     </Button>
                   </ActionMenu.Trigger>
                   <ActionMenu.Content>
@@ -266,6 +266,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
               visning={forslagVisning}
               onGodta={(id) => oppdaterKolonne(id, "planlegger")}
               onAvsla={(id) => oppdaterKolonne(id, "avbrutt")}
+              onKortKlikk={handleKortKlikk}
             />
             {visning === "liste" ? (
               <MineAktiviteterListe

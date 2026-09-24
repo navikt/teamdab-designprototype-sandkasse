@@ -90,7 +90,7 @@ export function AktivitetsKortCard({ kort, onDragStart, onKlikk, visSnart, onAvt
   const innhold = (
     <>
       {/* Type label + blue dot + Snart */}
-      <div className="flex items-center gap-1.5">
+      <div className="flex flex-wrap items-center gap-1.5">
         {kort.hasBlueDot && (
           <span
             className="inline-block w-2 h-2 rounded-full bg-ax-bg-accent-strong shrink-0 self-center"
@@ -108,7 +108,7 @@ export function AktivitetsKortCard({ kort, onDragStart, onKlikk, visSnart, onAvt
       </div>
 
       {/* Title */}
-      <Heading level="3" size="small">
+      <Heading level="3" size="small" className="hyphens-auto">
         {kort.title}
       </Heading>
 
@@ -160,7 +160,7 @@ export function AktivitetsKortCard({ kort, onDragStart, onKlikk, visSnart, onAvt
       onDragStart={onDragStart ? (e) => onDragStart(e, kort.id) : undefined}
       onClick={erKlikkbar ? () => onKlikk(kort) : undefined}
       className={classNames(
-        "bg-ax-bg-default select-none",
+        "bg-ax-bg-default select-none break-words",
         erRomslig ? "rounded-xl p-6 shadow-sm" : "rounded-md p-3 pb-4 flex flex-col gap-1 border border-ax-border-neutral",
         visSnart && "border-l-4 border-l-[var(--ax-border-warning)]",
         onDragStart && "cursor-grab active:cursor-grabbing active:opacity-60",
