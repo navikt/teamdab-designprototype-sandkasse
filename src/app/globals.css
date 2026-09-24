@@ -31,11 +31,25 @@
   --color-ax-bg-accent-moderate-hover: var(--ax-bg-accent-moderate-hover);
   --color-ax-bg-accent-strong: var(--ax-bg-accent-strong);
   --color-ax-bg-success-moderate: var(--ax-bg-success-moderate);
+  --color-ax-bg-info-moderate: var(--ax-bg-info-moderate);
+  --color-ax-bg-warning-moderate: var(--ax-bg-warning-moderate);
+  --color-ax-bg-danger-moderate: var(--ax-bg-danger-moderate);
+  --color-ax-bg-meta-purple-moderate: var(--ax-bg-meta-purple-moderate);
+  --color-ax-bg-meta-lime-moderate: var(--ax-bg-meta-lime-moderate);
+  --color-ax-bg-brand-magenta-moderate: var(--ax-bg-brand-magenta-moderate);
+  --color-ax-border-info-subtle: var(--ax-border-info-subtle);
+  --color-ax-border-success-subtle: var(--ax-border-success-subtle);
+  --color-ax-border-warning-subtle: var(--ax-border-warning-subtle);
+  --color-ax-border-danger-subtle: var(--ax-border-danger-subtle);
+  --color-ax-border-meta-purple-subtle: var(--ax-border-meta-purple-subtle);
+  --color-ax-border-meta-lime-subtle: var(--ax-border-meta-lime-subtle);
+  --color-ax-border-brand-magenta-subtle: var(--ax-border-brand-magenta-subtle);
   --color-ax-border-neutral: var(--ax-border-neutral);
   --color-ax-border-neutral-subtle: var(--ax-border-neutral-subtle);
   --color-ax-border-accent: var(--ax-border-accent);
   --color-ax-border-default: var(--ax-border-default);
   --color-ax-text-neutral: var(--ax-text-neutral);
+  --color-ax-text-neutral-subtle: var(--ax-text-neutral-subtle);
   --color-ax-text-info: var(--ax-text-info);
 }
 

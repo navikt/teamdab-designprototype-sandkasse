@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { ArrowsCirclepathIcon, CompassIcon, MenuHamburgerIcon, PlusIcon, TrashIcon, WrenchIcon } from "@navikt/aksel-icons";
-import { ActionMenu, Button, Heading, Link, ToggleGroup } from "@navikt/ds-react";
+import { ActionMenu, Button, Heading, ToggleGroup } from "@navikt/ds-react";
 import { DekoratorHeader } from "../dekorator-lookalike/DekoratorHeader";
 import { DekoratorFooter } from "../dekorator-lookalike/DekoratorFooter";
 import { MalLinje } from "./MalLinje";
@@ -198,6 +198,9 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
                   <ActionMenu.Item as="a" href="#">
                     Hva er aktivitetsplanen?
                   </ActionMenu.Item>
+                  <ActionMenu.Item onSelect={() => setAvtaleModalApen(true)}>
+                    Om avtalen om å søke jobber
+                  </ActionMenu.Item>
                   <ActionMenu.Item onSelect={() => window.print()}>
                     Skriv ut
                   </ActionMenu.Item>
@@ -271,12 +274,8 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
                 onAvtaltKlikk={() => setAvtaleModalApen(true)}
               />
             ) : (
-              <MineAktiviteterKalender kort={mineAktiviteter} onKortKlikk={handleKortKlikk} />
+              <MineAktiviteterKalender />
             )}
-
-            <Link href="#" onClick={(e) => { e.preventDefault(); setAvtaleModalApen(true); }} className="text-sm">
-              Om avtalen om å søke jobber
-            </Link>
           </div>
         </div>
         </>
