@@ -12,6 +12,7 @@ import {
 } from "@navikt/aksel-icons";
 import { Tag, Detail, Heading, BodyShort } from "@navikt/ds-react";
 import { AktivitetsKort, TagVariant } from "./types";
+import { getDatoTekst } from "./datoVisning";
 
 interface TagConfig {
   label: string;
@@ -112,9 +113,9 @@ export function AktivitetsKortCard({ kort, onDragStart, onKlikk, visSnart, onAvt
         {kort.title}
       </Heading>
 
-      {/* Date range */}
-      {kort.dateRange && (
-        <BodyShort>{kort.dateRange}</BodyShort>
+      {/* Fra/Til, Dato+Kl. eller Frist — se datoVisning.ts */}
+      {getDatoTekst(kort) && (
+        <BodyShort>{getDatoTekst(kort)}</BodyShort>
       )}
 
       {/* Extra line */}

@@ -4,14 +4,16 @@ import { useState } from "react";
 import Image from "next/image";
 import { BodyLong, Button, Checkbox, CheckboxGroup, FormProgress, Heading, Radio, RadioGroup, TextField, VStack } from "@navikt/ds-react";
 import {
+  AKTIVITETER_PER_SPOR,
   BEHOLD_JOBB_FOKUS_ALTERNATIVER,
-  FINN_JOBB_FOKUS_ALTERNATIVER,
+  ERFARING_ALTERNATIVER,
   IKKE_KLAR_FOKUS_ALTERNATIVER,
   INTERESSE_ALTERNATIVER,
+  RETNING_ALTERNATIVER,
   SITUASJON_ALTERNATIVER,
   USIKKER_FOKUS_ALTERNATIVER,
 } from "./data";
-import { beregnAktiviteter, beregnMal } from "./logic";
+import { beregnMal, beregnSpor } from "./logic";
 import { OnboardingResultat, Svar } from "./types";
 
 // Opplæringsvideo om aktivitetsplanen, hentet fra nav.no.
@@ -27,7 +29,10 @@ interface OnboardingFlowProps {
 type Steg =
   | "intro"
   | "situasjon"
-  | "finnjobb-fokus"
+  | "finnjobb-retning"
+  | "finnjobb-yrke"
+  | "finnjobb-erfaring"
+  | "finnjobb-avklaring"
   | "behold-jobb-fokus"
   | "ikkeklar-fokus"
   | "usikker-fokus"
@@ -43,7 +48,7 @@ function nesteSteg(steg: Steg, svar: Svar): Steg {
     case "situasjon":
       switch (svar.situasjonId) {
         case "finn-jobb":
-          return "finnjobb-fokus";
+          return "finnjobb-retning";
         case "behold-jobb":
           return "behold-jobb-fokus";
         case "ikke-klar":
@@ -51,7 +56,13 @@ function nesteSteg(steg: Steg, svar: Svar): Steg {
         default:
           return "usikker-fokus";
       }
-    case "finnjobb-fokus":
+    case "finnjobb-retning":
+      return svar.retningId === "vet" ? "finnjobb-yrke" : "finnjobb-avklaring";
+    case "finnjobb-yrke":
+      return "finnjobb-erfaring";
+    case "finnjobb-erfaring":
+      return "bekreft";
+    case "finnjobb-avklaring":
       return "bekreft";
     case "behold-jobb-fokus":
       return "bekreft";
@@ -107,13 +118,6 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
     setSvar((prev) => ({ ...prev, ...delvis }));
   };
 
-  // Bytter man situasjon, hører ingen av de tidligere svarene (yrke, fokus-valg, mål osv.) lenger til — nullstill alt unntatt selve valget.
-  const settSituasjon = (situasjonId: string) => {
-    setVisFeil(false);
-    setEgetMal(undefined);
-    setSvar({ situasjonId });
-  };
-
   const gaVidere = (delvis?: Partial<Svar>) => {
     const nyttSvar = delvis ? { ...svar, ...delvis } : svar;
     if (delvis) setSvar(nyttSvar);
@@ -154,16 +158,19 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
     setSteg(alleSteg[idx]);
   };
 
-  const foreslattMal = beregnMal(svar);
+  const spor = beregnSpor(svar);
+  const foreslattMal = spor ? beregnMal(svar, spor) : "";
   const malTekst = egetMal ?? svar.malTekst ?? foreslattMal;
-  const aktiviteter = beregnAktiviteter(svar);
+  const aktiviteter = spor ? AKTIVITETER_PER_SPOR[spor] : [];
   const aktivitetTittel =
     svar.aktivitetId === "eget"
       ? svar.egenAktivitetTekst?.trim()
       : aktiviteter.find((a) => a.id === svar.aktivitetId)?.tekst;
 
   const fullfor = () => {
+    if (!spor) return;
     onFullfor({
+      spor,
       svar: { ...svar, malTekst },
       malTekst,
       aktivitetTittel: svar.velgMedVeileder ? undefined : aktivitetTittel,
@@ -248,7 +255,7 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
               legend="Velg det som passer best"
               hideLegend
               value={svar.situasjonId ?? null}
-              onChange={(v) => settSituasjon(v as string)}
+              onChange={(v) => oppdaterSvar({ situasjonId: v as string })}
               error={visFeil && !svar.situasjonId ? "Du må velge et alternativ." : undefined}
             >
               <VStack gap="space-12">
@@ -267,82 +274,108 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
           </>
         )}
 
-        {steg === "finnjobb-fokus" && (
+        {steg === "finnjobb-retning" && (
           <>
             <Heading level="1" size="medium">
-              Hva trenger du mest hjelp til i jobbsøket akkurat nå?
+              Vet du hvilken type jobb du ser etter?
             </Heading>
-            <BodyLong>
-              Svaret hjelper deg og veilederen din med å finne ut hva dere bør fokusere på først.
-            </BodyLong>
             <RadioGroup
               legend="Velg det som passer best"
               hideLegend
-              value={svar.finnJobbFokusId ?? null}
-              onChange={(v) =>
-                oppdaterSvar({
-                  finnJobbFokusId: v as string,
-                  yrke: undefined,
-                  interesseIder: undefined,
-                  finnJobbAnnetTekst: undefined,
-                })
-              }
-              error={visFeil && !svar.finnJobbFokusId ? "Du må velge et alternativ." : undefined}
+              value={svar.retningId ?? null}
+              onChange={(v) => oppdaterSvar({ retningId: v as string })}
+              error={visFeil && !svar.retningId ? "Du må velge et alternativ." : undefined}
             >
               <VStack gap="space-12">
-                {FINN_JOBB_FOKUS_ALTERNATIVER.map((a) => (
+                {RETNING_ALTERNATIVER.map((a) => (
                   <Radio key={a.id} value={a.id}>
                     {a.tekst}
                   </Radio>
                 ))}
               </VStack>
             </RadioGroup>
-            {svar.finnJobbFokusId === "vet-hva" && (
-              <TextField
-                label="Yrke, stilling eller bransje"
-                value={svar.yrke ?? ""}
-                onChange={(e) => oppdaterSvar({ yrke: e.target.value })}
-              />
-            )}
-            {svar.finnJobbFokusId === "usikker-retning" && (
-              <CheckboxGroup
-                legend="Hva slags oppgaver liker du å jobbe med?"
-                value={svar.interesseIder ?? []}
-                onChange={(v) =>
-                  oppdaterSvar({ interesseIder: medEksklusiv(svar.interesseIder, v as string[], "vet-ikke") })
-                }
-              >
-                <VStack gap="space-12">
-                  {INTERESSE_ALTERNATIVER.map((a) => (
-                    <Checkbox key={a.id} value={a.id}>
-                      {a.tekst}
-                    </Checkbox>
-                  ))}
-                </VStack>
-              </CheckboxGroup>
-            )}
-            {svar.finnJobbFokusId === "annet" && (
-              <TextField
-                label="Beskriv med egne ord"
-                value={svar.finnJobbAnnetTekst ?? ""}
-                onChange={(e) => oppdaterSvar({ finnJobbAnnetTekst: e.target.value })}
-                error={visFeil && !svar.finnJobbAnnetTekst?.trim() ? "Du må beskrive hva det gjelder." : undefined}
-              />
-            )}
             <div className="flex gap-3">
               <TilbakeKnapp />
-              <Button
-                onClick={() =>
-                  forsokGaVidere(
-                    Boolean(
-                      svar.finnJobbFokusId &&
-                        (svar.finnJobbFokusId !== "annet" || svar.finnJobbAnnetTekst?.trim())
-                    )
-                  )
-                }
-              >
-                Neste
-              </Button>
+              <Button onClick={() => forsokGaVidere(Boolean(svar.retningId))}>Neste</Button>
+              <HoppKnapp />
+            </div>
+          </>
+        )}
+
+        {steg === "finnjobb-yrke" && (
+          <>
+            <Heading level="1" size="medium">
+              Søk etter yrke, stilling eller bransje
+            </Heading>
+            <TextField
+              label="Yrke, stilling eller bransje"
+              value={svar.yrke ?? ""}
+              onChange={(e) => oppdaterSvar({ yrke: e.target.value })}
+            />
+            <div className="flex gap-3">
+              <TilbakeKnapp />
+              <Button onClick={() => gaVidere()}>Neste</Button>
+              <HoppKnapp />
+            </div>
+          </>
+        )}
+
+        {steg === "finnjobb-erfaring" && (
+          <>
+            <Heading level="1" size="medium">
+              Hva slags erfaring har du med jobbene du ser etter?
+            </Heading>
+            <RadioGroup
+              legend="Velg det som passer best"
+              hideLegend
+              value={svar.erfaringId ?? null}
+              onChange={(v) => oppdaterSvar({ erfaringId: v as string })}
+              error={visFeil && !svar.erfaringId ? "Du må velge et alternativ." : undefined}
+            >
+              <VStack gap="space-12">
+                {ERFARING_ALTERNATIVER.map((a) => (
+                  <Radio key={a.id} value={a.id}>
+                    {a.tekst}
+                  </Radio>
+                ))}
+              </VStack>
+            </RadioGroup>
+            <div className="flex gap-3">
+              <TilbakeKnapp />
+              <Button onClick={() => forsokGaVidere(Boolean(svar.erfaringId))}>Neste</Button>
+              <HoppKnapp />
+            </div>
+          </>
+        )}
+
+        {steg === "finnjobb-avklaring" && (
+          <>
+            <Heading level="1" size="medium">
+              Litt mer om deg
+            </Heading>
+            <BodyLong>
+              Dette hjelper veilederen din med å komme raskere i gang med å finne jobber som kan passe for
+              deg.
+            </BodyLong>
+            <CheckboxGroup
+              legend="Hva slags oppgaver liker du å jobbe med?"
+              value={svar.interesseIder ?? []}
+              onChange={(v) =>
+                oppdaterSvar({ interesseIder: medEksklusiv(svar.interesseIder, v as string[], "vet-ikke") })
+              }
+              error={visFeil && !svar.interesseIder?.length ? "Du må velge minst ett alternativ." : undefined}
+            >
+              <VStack gap="space-12">
+                {INTERESSE_ALTERNATIVER.map((a) => (
+                  <Checkbox key={a.id} value={a.id}>
+                    {a.tekst}
+                  </Checkbox>
+                ))}
+              </VStack>
+            </CheckboxGroup>
+            <div className="flex gap-3">
+              <TilbakeKnapp />
+              <Button onClick={() => forsokGaVidere(Boolean(svar.interesseIder?.length))}>Neste</Button>
               <HoppKnapp />
             </div>
           </>
@@ -360,7 +393,7 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
               legend="Velg det som passer best"
               hideLegend
               value={svar.beholdJobbFokusId ?? null}
-              onChange={(v) => oppdaterSvar({ beholdJobbFokusId: v as string, beholdJobbAnnetTekst: undefined })}
+              onChange={(v) => oppdaterSvar({ beholdJobbFokusId: v as string })}
               error={visFeil && !svar.beholdJobbFokusId ? "Du må velge et alternativ." : undefined}
             >
               <VStack gap="space-12">
@@ -412,7 +445,7 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
               legend="Velg det som passer best"
               hideLegend
               value={svar.ikkeKlarFokusId ?? null}
-              onChange={(v) => oppdaterSvar({ ikkeKlarFokusId: v as string, ikkeKlarAnnetTekst: undefined })}
+              onChange={(v) => oppdaterSvar({ ikkeKlarFokusId: v as string })}
               error={visFeil && !svar.ikkeKlarFokusId ? "Du må velge et alternativ." : undefined}
             >
               <VStack gap="space-12">
@@ -483,11 +516,10 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
         {steg === "bekreft" && (
           <>
             <Heading level="1" size="medium">
-              Passer denne retningen for deg?
+              Dette kan være en god retning for deg
             </Heading>
-            <BodyLong>Dette er bare et forslag. Du og veilederen din står fritt til å velge noe annet.</BodyLong>
             <TextField
-              label="Forslag til mål"
+              label="Mål"
               value={malTekst}
               onChange={(e) => {
                 setEgetMal(e.target.value);
@@ -495,6 +527,7 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
               }}
               error={visFeil && !malTekst.trim() ? "Du må skrive inn et mål." : undefined}
             />
+            {svar.yrke && <BodyLong>Yrke eller bransje: {svar.yrke}</BodyLong>}
             <div className="flex gap-3">
               <TilbakeKnapp />
               <Button onClick={() => forsokGaVidere(Boolean(malTekst.trim()), { malTekst })}>Dette passer</Button>
@@ -503,7 +536,7 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
           </>
         )}
 
-        {steg === "aktivitet" && (
+        {steg === "aktivitet" && spor && (
           <>
             <Heading level="1" size="medium">
               Hva vil du starte med?
@@ -515,13 +548,9 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
               value={svar.velgMedVeileder ? "veileder" : svar.aktivitetId ?? null}
               onChange={(v) => {
                 if (v === "veileder") {
-                  oppdaterSvar({ velgMedVeileder: true, aktivitetId: undefined, egenAktivitetTekst: undefined });
+                  oppdaterSvar({ velgMedVeileder: true, aktivitetId: undefined });
                 } else {
-                  oppdaterSvar({
-                    velgMedVeileder: false,
-                    aktivitetId: v as string,
-                    egenAktivitetTekst: v === "eget" ? svar.egenAktivitetTekst : undefined,
-                  });
+                  oppdaterSvar({ velgMedVeileder: false, aktivitetId: v as string });
                 }
               }}
               error={visFeil && !svar.velgMedVeileder && !svar.aktivitetId ? "Du må velge et alternativ." : undefined}

@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { ArrowsCirclepathIcon, CompassIcon, MenuHamburgerIcon, PlusIcon, TrashIcon, WrenchIcon } from "@navikt/aksel-icons";
-import { ActionMenu, Button, Heading, ToggleGroup } from "@navikt/ds-react";
+import { ArrowsCirclepathIcon, CompassIcon, PlusIcon, TrashIcon, WrenchIcon } from "@navikt/aksel-icons";
+import { ActionMenu, Button, Heading, Link, ToggleGroup } from "@navikt/ds-react";
 import { DekoratorHeader } from "../dekorator-lookalike/DekoratorHeader";
 import { DekoratorFooter } from "../dekorator-lookalike/DekoratorFooter";
 import { MalLinje } from "./MalLinje";
@@ -34,10 +34,11 @@ interface BrukerAktivitetsplanContentProps {
 
 export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktivitetsplanContentProps) {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [kort, setKort] = useState<AktivitetsKort[]>(initialKort);
   const [visning, setVisning] = useState<Visning>("liste");
   const [forslagVisning, setForslagVisning] = useState<ForslagVisning>("varsel");
-  const [aktivtKort, setAktivtKort] = useState<AktivitetsKort | null>(null);
   const [avtaleModalApen, setAvtaleModalApen] = useState(false);
   const [nyAktivitetType, setNyAktivitetType] = useState<NyAktivitetType | null>(null);
   const [visOnboarding, setVisOnboarding] = useState(false);
@@ -135,12 +136,33 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   const forslag = kort.filter((k) => k.kolonne === "forslag");
   const mineAktiviteter = kort.filter((k) => MINE_AKTIVITETER_KOLONNER.includes(k.kolonne));
 
+  // Routet modal (samme mønster som /aktivitet/vis/:id og /aktivitet/endre/:id i prod-appen):
+  // hvilken aktivitet som vises/redigeres ligger i URL-en, slik at nettleserens tilbakeknapp
+  // og delbare lenker fungerer som forventet, i stedet for kun client-side state.
+  const aktivitetId = searchParams.get("aktivitetId");
+  const redigerModus = searchParams.get("rediger") === "1";
+  const aktivtKort = kort.find((k) => k.id === aktivitetId) ?? null;
+
+  const navigerMedParams = (endringer: Record<string, string | null>) => {
+    const nyeParams = new URLSearchParams(searchParams.toString());
+    for (const [navn, verdi] of Object.entries(endringer)) {
+      if (verdi === null) nyeParams.delete(navn);
+      else nyeParams.set(navn, verdi);
+    }
+    const qs = nyeParams.toString();
+    router.push(qs ? `${pathname}?${qs}` : pathname);
+  };
+
+  const apneAktivitet = (id: string) => navigerMedParams({ aktivitetId: id, rediger: null });
+  const lukkAktivitet = () => navigerMedParams({ aktivitetId: null, rediger: null });
+  const settRedigerModus = (v: boolean) => navigerMedParams({ rediger: v ? "1" : null });
+
   const oppdaterKolonne = (id: string, kolonne: AktivitetsKort["kolonne"]) => {
     setKort((prev) => prev.map((k) => (k.id === id ? { ...k, kolonne } : k)));
   };
 
   const handleKortKlikk = (k: AktivitetsKort) => {
-    setAktivtKort(k);
+    apneAktivitet(k.id);
   };
 
   const kortTilStatus = (k: AktivitetsKort): AktivitetStatus =>
@@ -150,7 +172,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
     const nyKolonne: AktivitetsKort["kolonne"] = status === "aktiv" ? "gjennomforer" : status;
     oppdaterKolonne(id, nyKolonne);
     if (status === "avbrutt") fjernDelmalForAktivitet(id);
-    setAktivtKort(null);
+    lukkAktivitet();
   };
 
   return (
@@ -177,35 +199,18 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
             className="hidden lg:block absolute right-full top-8 mr-8 shrink-0"
           />
           <div className="flex flex-col gap-4 flex-1">
-            <div className="flex items-center justify-between gap-4">
-              <Heading size="large" level="1">Aktivitetsplan</Heading>
-              <ActionMenu>
-                <ActionMenu.Trigger>
-                  <Button variant="secondary" size="small" icon={<MenuHamburgerIcon aria-hidden />} iconPosition="left">
-                    Meny
-                  </Button>
-                </ActionMenu.Trigger>
-                <ActionMenu.Content>
-                  <ActionMenu.Item onSelect={() => router.push("/minaktivitetsplan/arkiv")}>
-                    Arkiv
-                  </ActionMenu.Item>
-                  <ActionMenu.Item as="a" href="#">
-                    Min side
-                  </ActionMenu.Item>
-                  <ActionMenu.Item as="a" href="#">
-                    Min dialog med veileder
-                  </ActionMenu.Item>
-                  <ActionMenu.Item as="a" href="#">
-                    Hva er aktivitetsplanen?
-                  </ActionMenu.Item>
-                  <ActionMenu.Item onSelect={() => setAvtaleModalApen(true)}>
-                    Om avtalen om å søke jobber
-                  </ActionMenu.Item>
-                  <ActionMenu.Item onSelect={() => window.print()}>
-                    Skriv ut
-                  </ActionMenu.Item>
-                </ActionMenu.Content>
-              </ActionMenu>
+            <Heading size="large" level="1">Aktivitetsplan</Heading>
+
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              <Link href="#" onClick={(e) => { e.preventDefault(); router.push("/minaktivitetsplan/arkiv"); }}>
+                Arkiv
+              </Link>
+              <Link href="#">
+                Dialog med veileder
+              </Link>
+              <Link href="#" onClick={(e) => { e.preventDefault(); setAvtaleModalApen(true); }}>
+                Avtale om å søke jobber
+              </Link>
             </div>
 
             <MalLinje
@@ -277,6 +282,15 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
             ) : (
               <MineAktiviteterKalender />
             )}
+
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              <Link href="#">
+                Hva er aktivitetsplanen?
+              </Link>
+              <Link href="#" onClick={(e) => { e.preventDefault(); window.print(); }}>
+                Skriv ut
+              </Link>
+            </div>
           </div>
         </div>
         </>
@@ -284,12 +298,12 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
       </main>
 
       {aktivtKort?.samtalereferatData && (
-        <SamtalereferatModal kort={aktivtKort} perspektiv="bruker" onClose={() => setAktivtKort(null)} />
+        <SamtalereferatModal kort={aktivtKort} perspektiv="bruker" onClose={lukkAktivitet} />
       )}
       {aktivtKort && !aktivtKort.samtalereferatData && aktivtKort.type !== "Jobbsøking" && (
         <AktivitetDetaljerModal
           kort={aktivtKort}
-          onClose={() => setAktivtKort(null)}
+          onClose={lukkAktivitet}
           erDelmal={erAktivitetDelmal(aktivtKort.id)}
           onEndreDelmal={(erDelmal) =>
             erDelmal ? leggTilDelmalFraAktivitet(aktivtKort.id) : fjernDelmalForAktivitet(aktivtKort.id)
@@ -300,6 +314,11 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
               ? undefined
               : (status) => endreAktivitetStatus(aktivtKort.id, status)
           }
+          onOppdater={(oppdatertKort) =>
+            setKort((prev) => prev.map((k) => (k.id === oppdatertKort.id ? oppdatertKort : k)))
+          }
+          redigerModus={redigerModus}
+          onEndreRedigerModus={settRedigerModus}
         />
       )}
       <AvtaleModal open={avtaleModalApen} onClose={() => setAvtaleModalApen(false)} />

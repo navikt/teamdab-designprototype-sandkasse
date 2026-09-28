@@ -1,8 +1,13 @@
 "use client";
 
-import { BodyLong, Checkbox, Heading, Link, Modal, Select } from "@navikt/ds-react";
+import { useState } from "react";
+import { ChatElipsisIcon, PencilIcon } from "@navikt/aksel-icons";
+import { Button, Checkbox, Heading, Link, Modal, Select } from "@navikt/ds-react";
 import { AktivitetsKort, AktivitetStatus, DELMAL_KOLONNER } from "../types";
+import { getDatoLinjer } from "../datoVisning";
 import { DetaljFelt } from "../shared/DetaljFelt";
+import { CustomBodyLong } from "../shared/CustomBodyLong";
+import { RedigerAktivitetModal } from "./RedigerAktivitetModal";
 
 interface Props {
   kort: AktivitetsKort;
@@ -11,6 +16,10 @@ interface Props {
   onEndreDelmal?: (erDelmal: boolean) => void;
   status?: AktivitetStatus;
   onEndreStatus?: (status: AktivitetStatus) => void;
+  onOppdater?: (oppdatertKort: AktivitetsKort) => void;
+  // Kontrollert utenfra (URL) når tilgjengelig, ellers styrt internt.
+  redigerModus?: boolean;
+  onEndreRedigerModus?: (redigerModus: boolean) => void;
 }
 
 const SOKNADSSTATUS_LABEL: Record<string, string> = {
@@ -20,7 +29,49 @@ const SOKNADSSTATUS_LABEL: Record<string, string> = {
   "ikke-fatt-jobben": "Ikke fått jobben",
 };
 
-export function AktivitetDetaljerModal({ kort, onClose, erDelmal, onEndreDelmal, status, onEndreStatus }: Props) {
+// Forkortet visningstekst for lenker, samme mønster som DetaljvisningLenke i aktivitetsplan-repoet.
+function kortLenketekst(lenke: string): string {
+  try {
+    const url = new URL(lenke.startsWith("http") ? lenke : `http://${lenke}`);
+    const segmenter = url.pathname.split("/").filter(Boolean);
+    return segmenter.length > 0 ? `${url.hostname}/${segmenter[0]}` : url.hostname;
+  } catch {
+    return lenke;
+  }
+}
+
+function fullLenke(lenke: string): string {
+  return lenke.startsWith("http") ? lenke : `http://${lenke}`;
+}
+
+export function AktivitetDetaljerModal({
+  kort,
+  onClose,
+  erDelmal,
+  onEndreDelmal,
+  status,
+  onEndreStatus,
+  onOppdater,
+  redigerModus: redigerModusProp,
+  onEndreRedigerModus,
+}: Props) {
+  const [redigerApenInternt, setRedigerApenInternt] = useState(false);
+  const redigerApen = redigerModusProp ?? redigerApenInternt;
+  const settRedigerApen = onEndreRedigerModus ?? setRedigerApenInternt;
+
+  if (redigerApen && onOppdater) {
+    return (
+      <RedigerAktivitetModal
+        kort={kort}
+        onLagre={(oppdatertKort) => {
+          onOppdater(oppdatertKort);
+          settRedigerApen(false);
+        }}
+        onClose={() => settRedigerApen(false)}
+      />
+    );
+  }
+
   return (
     <Modal open onClose={onClose} closeOnBackdropClick aria-labelledby="aktivitet-detaljer-heading" className="lg:w-120">
       <Modal.Header closeButton>
@@ -44,8 +95,12 @@ export function AktivitetDetaljerModal({ kort, onClose, erDelmal, onEndreDelmal,
             </Select>
           )}
           <div className="flex flex-row flex-wrap gap-y-4">
-            {kort.dateRange && <DetaljFelt tittel="Dato">{kort.dateRange}</DetaljFelt>}
-            {kort.frist && <DetaljFelt tittel="Frist">{kort.frist}</DetaljFelt>}
+            {getDatoLinjer(kort).map((linje) => (
+              <DetaljFelt key={linje.label} tittel={linje.label}>{linje.verdi}</DetaljFelt>
+            ))}
+            {kort.frist && kort.type !== "Stilling" && kort.type !== "Stilling fra Nav" && (
+              <DetaljFelt tittel="Frist">{kort.frist}</DetaljFelt>
+            )}
             {kort.arbeidsgiver && <DetaljFelt tittel="Arbeidsgiver">{kort.arbeidsgiver}</DetaljFelt>}
             {kort.arbeidssted && <DetaljFelt tittel="Arbeidssted">{kort.arbeidssted}</DetaljFelt>}
             {kort.kontaktperson && <DetaljFelt tittel="Kontaktperson">{kort.kontaktperson}</DetaljFelt>}
@@ -71,19 +126,30 @@ export function AktivitetDetaljerModal({ kort, onClose, erDelmal, onEndreDelmal,
             {kort.detaljRader?.map((rad) => (
               <DetaljFelt key={rad.label} tittel={rad.label}>{rad.verdi}</DetaljFelt>
             ))}
+            {kort.beskrivelse && (
+              <DetaljFelt tittel="Beskrivelse" fullbredde>
+                <CustomBodyLong formatLinks formatLinebreaks>{kort.beskrivelse}</CustomBodyLong>
+              </DetaljFelt>
+            )}
+            {kort.lenke && (
+              <DetaljFelt tittel="Lenke" fullbredde>
+                <Link target="_blank" href={fullLenke(kort.lenke)} className="block">
+                  {kortLenketekst(kort.lenke)} (åpnes i ny fane)
+                </Link>
+              </DetaljFelt>
+            )}
           </div>
 
-          {kort.beskrivelse && (
-            <DetaljFelt tittel="Beskrivelse" fullbredde>
-              <BodyLong>{kort.beskrivelse}</BodyLong>
-            </DetaljFelt>
-          )}
-
-          {kort.lenke && (
-            <Link href={kort.lenke} target="_blank" rel="noopener noreferrer">
-              Les mer
-            </Link>
-          )}
+          <div className="flex flex-wrap gap-4">
+            {onOppdater && (
+              <Button variant="secondary" icon={<PencilIcon aria-hidden />} onClick={() => settRedigerApen(true)}>
+                Endre på aktiviteten
+              </Button>
+            )}
+            <Button variant="secondary" icon={<ChatElipsisIcon aria-hidden />}>
+              Send en melding
+            </Button>
+          </div>
 
           {onEndreDelmal && DELMAL_KOLONNER.includes(kort.kolonne) && (
             <Checkbox checked={erDelmal ?? false} onChange={(e) => onEndreDelmal(e.target.checked)}>

@@ -102,6 +102,8 @@ export interface AktivitetsKort {
   huskeliste?: string;
   soknadsstatus?: TagVariant;
   moteform?: MoteForm;
+  // Klokkeslett (HH:MM), brukt for "Møte med Nav" som har én dato + ett tidspunkt i stedet for Fra/Til.
+  klokkeslett?: string;
   varighet?: string;
   hensikt?: string;
   forberedelser?: string;

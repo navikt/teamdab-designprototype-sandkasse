@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Alert, Button, Heading, Link, Modal, BodyShort, Detail } from "@navikt/ds-react";
 import { AktivitetsKort } from "../aktivitetsplan/types";
+import { getDatoTekst } from "../aktivitetsplan/datoVisning";
 
 export type ForslagVisning = "varsel" | "liste";
 
@@ -55,7 +56,7 @@ export function ForslagSeksjon({ forslag, visning, onGodta, onAvsla, onKortKlikk
             <div key={k.id} className="border border-ax-border-neutral-subtle rounded-md p-3 flex flex-col gap-2">
               <Detail className="uppercase text-ax-text-neutral">{k.type}</Detail>
               <Heading level="3" size="xsmall">{k.title}</Heading>
-              {k.dateRange && <BodyShort>{k.dateRange}</BodyShort>}
+              {getDatoTekst(k) && <BodyShort>{getDatoTekst(k)}</BodyShort>}
               <div className="flex gap-2 pt-1">
                 <Button variant="primary" size="small" onClick={() => onGodta(k.id)}>Godta</Button>
                 <Button variant="secondary" size="small" onClick={() => onAvsla(k.id)}>Avslå</Button>

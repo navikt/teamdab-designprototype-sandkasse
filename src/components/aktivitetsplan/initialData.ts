@@ -1,5 +1,19 @@
 import { AktivitetsKort } from "./types";
 
+// Datoene for planlegger-/gjennomfører-aktivitetene under regnes ut fra dagens dato,
+// slik at øverste kort i lista alltid trigger "Starter snart" (jf. SNART_TERSKEL_DAGER i sortering.ts)
+// og de andre ikke gjør det — uavhengig av når prototypen kjøres.
+function datoOmDager(dager: number): Date {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() + dager);
+  return d;
+}
+
+function isoDato(d: Date): string {
+  return d.toISOString().slice(0, 10);
+}
+
 export const initialKort: AktivitetsKort[] = [
   // --- Forslag ---
   {
@@ -7,8 +21,8 @@ export const initialKort: AktivitetsKort[] = [
     kolonne: "forslag",
     type: "Jobbrettet egenaktivitet",
     title: "Oppdatere CV og søknadstekst",
-    dateRange: "Innen 1. okt 2026",
     startDato: "2026-10-01",
+    sluttDato: "2026-10-14",
     tags: ["ulest"],
     hasBlueDot: true,
     beskrivelse: "Sett av tid til å oppdatere CV og søknadstekst før du søker jobb.",
@@ -18,6 +32,7 @@ export const initialKort: AktivitetsKort[] = [
     kolonne: "forslag",
     type: "Stilling",
     title: "Søke på stilling som elektriker",
+    startDato: isoDato(datoOmDager(0)),
     tags: ["ulest"],
     hasBlueDot: true,
     arbeidsgiver: "Arbeidsgiver",
@@ -30,22 +45,35 @@ export const initialKort: AktivitetsKort[] = [
     kolonne: "planlegger",
     type: "Jobbrettet egenaktivitet",
     title: "Oppdatere CV og LinkedIn-profil",
-    dateRange: "Innen 30. sep 2026",
-    startDato: "2026-09-30",
+    startDato: isoDato(datoOmDager(3)),
+    sluttDato: isoDato(datoOmDager(10)),
     tags: [],
     mal: "Ha en oppdatert CV klar til bruk i søknader som elektriker.",
     huskeliste: "Legg til fagbrev og relevant erfaring, sjekk kontaktinfo.",
     beskrivelse: "Sette av tid til å gå gjennom og oppdatere CV og profil rettet mot elektrikerbransjen.",
+    lenke: "www.nav.no/cv-og-jobbprofil",
   },
   {
     id: "3",
     kolonne: "planlegger",
     type: "Jobbrettet egenaktivitet",
     title: "Kartlegge aktuelle arbeidsgivere innen elektrofaget",
-    dateRange: "Innen 15. okt 2026",
-    startDato: "2026-10-15",
+    startDato: isoDato(datoOmDager(21)),
+    sluttDato: isoDato(datoOmDager(35)),
     tags: [],
     beskrivelse: "Undersøke hvilke bedrifter som er aktuelle å søke jobb hos når du er klar for det.",
+  },
+  {
+    id: "13",
+    kolonne: "planlegger",
+    type: "Møte med Nav",
+    title: "Avklaringssamtale",
+    startDato: isoDato(datoOmDager(4)),
+    klokkeslett: "13:00",
+    tags: [],
+    moteform: "Telefonmøte",
+    varighet: "15 minutter",
+    hensikt: "Avklare videre oppfølging.",
   },
   // --- Gjennomfører ---
   {
@@ -53,9 +81,8 @@ export const initialKort: AktivitetsKort[] = [
     kolonne: "gjennomforer",
     type: "Behandling",
     title: "Oppfølging hos behandler",
-    dateRange: "10. sep – 10. okt 2026",
-    startDato: "2026-09-10",
-    sluttDato: "2026-10-10",
+    startDato: isoDato(datoOmDager(10)),
+    sluttDato: isoDato(datoOmDager(40)),
     tags: ["venter-pa-kontakt"],
     behandlingstype: "Fysioterapi",
     behandlingssted: "Behandler",
@@ -67,9 +94,8 @@ export const initialKort: AktivitetsKort[] = [
     kolonne: "gjennomforer",
     type: "Tiltak gjennom Nav",
     title: "Oppdateringskurs for elektrikere og telekommunikasjonsmontører",
-    dateRange: "1. sep – 30. nov 2026",
-    startDato: "2026-09-01",
-    sluttDato: "2026-11-30",
+    startDato: isoDato(datoOmDager(14)),
+    sluttDato: isoDato(datoOmDager(90)),
     tags: ["fatt-plass", "avtalt-med-nav"],
     arrangor: "Kursholder",
     deltakelseProsent: "100 %",
@@ -82,7 +108,6 @@ export const initialKort: AktivitetsKort[] = [
     kolonne: "fullfort",
     type: "Stilling",
     title: "Assistent på SFO",
-    dateRange: "1. mar – 1. mar 2026",
     startDato: "2026-03-01",
     sluttDato: "2026-03-01",
     tags: ["fatt-jobben"],
@@ -95,7 +120,6 @@ export const initialKort: AktivitetsKort[] = [
     kolonne: "fullfort",
     type: "Jobbsøking",
     title: "Søke på 3 stillinger",
-    dateRange: "1. jun – 7. jun 2026",
     startDato: "2026-06-01",
     sluttDato: "2026-06-07",
     extraLine: "Antall søknader i uken: 3",
@@ -106,7 +130,6 @@ export const initialKort: AktivitetsKort[] = [
     kolonne: "fullfort",
     type: "Samtalereferat",
     title: "Oppfølgingssamtale",
-    dateRange: "10. jun 2026",
     startDato: "2026-06-10",
     sluttDato: "2026-06-10",
     tags: [],
@@ -120,24 +143,10 @@ export const initialKort: AktivitetsKort[] = [
   },
   // --- Avbrutt ---
   {
-    id: "13",
-    kolonne: "avbrutt",
-    type: "Møte med Nav",
-    title: "Avklaringssamtale",
-    dateRange: "20. mai – 20. mai 2026",
-    startDato: "2026-05-20",
-    sluttDato: "2026-05-20",
-    tags: [],
-    moteform: "Telefonmøte",
-    varighet: "15 minutter",
-    hensikt: "Avklare videre oppfølging.",
-  },
-  {
     id: "14",
     kolonne: "avbrutt",
     type: "Arbeidstrening",
     title: "Arbeidstrening",
-    dateRange: "1. apr – 30. apr 2026",
     startDato: "2026-04-01",
     sluttDato: "2026-04-30",
     tags: [],
