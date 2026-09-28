@@ -1,5 +1,13 @@
-import { SporId, Svar, Alternativ } from "./types";
-import { IKKE_KLAR_FOKUS_ALTERNATIVER, INTERESSE_ALTERNATIVER } from "./data";
+import { Svar, Alternativ } from "./types";
+import {
+  AKTIVITETER_BEHOLD_JOBB,
+  AKTIVITETER_FINN_JOBB,
+  AKTIVITETER_IKKE_KLAR,
+  AKTIVITETER_USIKKER,
+  AKTIVITET_VEILEDER_FALLBACK,
+  IKKE_KLAR_FOKUS_ALTERNATIVER,
+  INTERESSE_ALTERNATIVER,
+} from "./data";
 
 // Måltekster for "behold-jobb"-oppfølgingen skiller seg fra alternativ-teksten (som er formulert som et tema, ikke et mål).
 const BEHOLD_JOBB_MAL: Record<string, string> = {
@@ -9,39 +17,14 @@ const BEHOLD_JOBB_MAL: Record<string, string> = {
   veileder: "Sette et relevant mål sammen med veilederen min",
 };
 
-// Delt logikk for spørsmålet "Hva er du mest usikker på?", som både brukes når
-// brukeren starter i "usikker"-situasjonen og når "finn-jobb" ikke gir en jobbretning.
-function sporFraUsikkerFokus(svar: Svar): SporId | undefined {
-  switch (svar.usikkerFokusId) {
-    case "jobber-passer":
-    case "erfaring-kompetanse":
-      return "spor_b_styrke_jobbmuligheter";
-    default:
-      return "spor_c_naermere_realistisk_jobbmal";
-  }
-}
-
-export function beregnSpor(svar: Svar): SporId | undefined {
-  switch (svar.situasjonId) {
-    case "finn-jobb": {
-      // "Trenger hjelp til å finne ut hvilke jobber som kan passe" gir alltid spor B.
-      // Avklaringsspørsmålene her er kun til hjelp for mål/veileder, ikke sporvalg.
-      if (svar.retningId === "trenger-hjelp") return "spor_b_styrke_jobbmuligheter";
-      if (svar.erfaringId === "mangler" || svar.erfaringId === "vet-ikke") {
-        return "spor_b_styrke_jobbmuligheter";
-      }
-      return "spor_a_jobb_realistisk_na";
-    }
-    case "behold-jobb":
-      return "eksisterende_jobb_beholde";
-    case "ikke-klar":
-      return "spor_c_naermere_realistisk_jobbmal";
-    case "usikker":
-      return sporFraUsikkerFokus(svar);
-    default:
-      return undefined;
-  }
-}
+// Måltekster for "usikker"-oppfølgingen, formulert som mål i stedet for tema.
+const USIKKER_MAL: Record<string, string> = {
+  "jobber-passer": "Finne en jobbretning som passer kompetansen min",
+  "erfaring-kompetanse": "Finne ut hvilke jobber erfaringen min kan brukes i",
+  "klar-na": "Finne ut hva som skal til for at jobb kan bli mulig",
+  "hvor-mye": "Finne ut hvor mye det kan være realistisk for meg å jobbe",
+  "vet-ikke": "Sette et relevant mål sammen med veilederen min",
+};
 
 function tekstForValgte(ider: string[] | undefined, alternativer: Alternativ[], eksklusivId: string): string[] {
   if (!ider || ider.length === 0 || ider.includes(eksklusivId)) return [];
@@ -50,43 +33,65 @@ function tekstForValgte(ider: string[] | undefined, alternativer: Alternativ[], 
     .filter((tekst): tekst is string => Boolean(tekst));
 }
 
-export function beregnMal(svar: Svar, spor: SporId): string {
-  switch (spor) {
-    case "spor_a_jobb_realistisk_na": {
-      const retningTillegg = svar.yrke ? ` innen ${svar.yrke}` : "";
-      return `Finne en jobb${retningTillegg}`;
-    }
-    case "spor_b_styrke_jobbmuligheter": {
-      if (svar.retningId === "trenger-hjelp") {
-        const interesser = tekstForValgte(svar.interesseIder, INTERESSE_ALTERNATIVER, "vet-ikke");
-        const tillegg = interesser.length > 0 ? `, med utgangspunkt i ${interesser.join(" og ")}` : "";
-        return `Finne en jobbretning som passer meg${tillegg}`;
-      }
-      if (svar.usikkerFokusId === "jobber-passer") return "Finne en jobbretning som passer kompetansen min";
-      if (svar.usikkerFokusId === "erfaring-kompetanse") return "Finne ut hvilke jobber erfaringen min kan brukes i";
-      if (svar.yrke) return `Bli kvalifisert for jobb innen ${svar.yrke}`;
-      return "Skaffe relevant erfaring innen et valgt arbeidsområde";
-    }
-    case "spor_c_naermere_realistisk_jobbmal": {
-      if (svar.usikkerFokusId === "hvor-mye") return "Finne ut hvor mye det kan være realistisk for meg å jobbe";
-      if (svar.usikkerFokusId === "vet-ikke") return "Sette et relevant mål sammen med veilederen min";
-      if (svar.usikkerFokusId === "klar-na") return "Finne ut hva som skal til for at jobb kan bli mulig";
-      if (svar.situasjonId === "ikke-klar") {
-        if (svar.ikkeKlarFokusId === "annet" && svar.ikkeKlarAnnetTekst?.trim()) {
-          return svar.ikkeKlarAnnetTekst.trim();
+// Alle fire situasjonsgrener følger samme mønster: situasjon → ett fokusspørsmål → mål → aktivitet.
+// Måltekst og aktivitetsforslag slås opp direkte på fokus-svaret — ingen skjult "spor"-klassifisering.
+export function beregnMal(svar: Svar): string {
+  switch (svar.situasjonId) {
+    case "finn-jobb": {
+      // Parentes i stedet for å veve yrket inn i setningen — "innen {yrke}" blir dårlig
+      // norsk når svaret er et yrkessubstantiv ("snekker") i stedet for et fagfelt ("helse").
+      const yrkeTillegg = svar.yrke ? ` (${svar.yrke})` : "";
+      switch (svar.finnJobbFokusId) {
+        case "vet-hva":
+          return `Finne en jobb${yrkeTillegg}`;
+        case "usikker-retning": {
+          const interesser = tekstForValgte(svar.interesseIder, INTERESSE_ALTERNATIVER, "vet-ikke");
+          const tillegg = interesser.length > 0 ? `, med utgangspunkt i ${interesser.join(" og ")}` : "";
+          return `Finne en jobbretning som passer meg${tillegg}`;
         }
-        const valgt = IKKE_KLAR_FOKUS_ALTERNATIVER.find((a) => a.id === svar.ikkeKlarFokusId);
-        if (valgt) return valgt.tekst;
+        case "mangler-kvalifikasjoner":
+          return svar.yrke
+            ? `Bli kvalifisert for jobb${yrkeTillegg}`
+            : "Skaffe relevant erfaring innen et valgt arbeidsområde";
+        case "annet":
+          return svar.finnJobbAnnetTekst?.trim() || "Finne ut hva som er realistisk for meg";
+        case "veileder":
+          return "Sette et relevant mål sammen med veilederen min";
+        default:
+          return "Finne ut hva som er realistisk for meg";
       }
-      return "Finne ut hva som er realistisk for meg";
     }
-    case "eksisterende_jobb_beholde": {
+    case "behold-jobb": {
       if (svar.beholdJobbFokusId === "annet" && svar.beholdJobbAnnetTekst?.trim()) {
         return svar.beholdJobbAnnetTekst.trim();
       }
       return BEHOLD_JOBB_MAL[svar.beholdJobbFokusId ?? ""] ?? "Beholde jobben jeg har";
     }
+    case "ikke-klar": {
+      if (svar.ikkeKlarFokusId === "annet" && svar.ikkeKlarAnnetTekst?.trim()) {
+        return svar.ikkeKlarAnnetTekst.trim();
+      }
+      const valgt = IKKE_KLAR_FOKUS_ALTERNATIVER.find((a) => a.id === svar.ikkeKlarFokusId);
+      return valgt?.tekst ?? "Finne ut hva som er realistisk for meg";
+    }
+    case "usikker":
+      return USIKKER_MAL[svar.usikkerFokusId ?? ""] ?? "Finne ut hva som er realistisk for meg";
     default:
       return "";
+  }
+}
+
+export function beregnAktiviteter(svar: Svar): Alternativ[] {
+  switch (svar.situasjonId) {
+    case "finn-jobb":
+      return AKTIVITETER_FINN_JOBB[svar.finnJobbFokusId ?? ""] ?? AKTIVITET_VEILEDER_FALLBACK;
+    case "behold-jobb":
+      return AKTIVITETER_BEHOLD_JOBB[svar.beholdJobbFokusId ?? ""] ?? AKTIVITET_VEILEDER_FALLBACK;
+    case "ikke-klar":
+      return AKTIVITETER_IKKE_KLAR[svar.ikkeKlarFokusId ?? ""] ?? AKTIVITET_VEILEDER_FALLBACK;
+    case "usikker":
+      return AKTIVITETER_USIKKER[svar.usikkerFokusId ?? ""] ?? AKTIVITET_VEILEDER_FALLBACK;
+    default:
+      return [];
   }
 }

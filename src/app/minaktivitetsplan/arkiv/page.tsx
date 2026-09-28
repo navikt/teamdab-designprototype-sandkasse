@@ -10,13 +10,13 @@ import { ArkivFane } from "@/components/bruker/ArkivFane";
 import { ARKIV_KOLONNER } from "@/components/bruker/sortering";
 import { SamtalereferatModal } from "@/components/aktivitetsplan/samtalereferat/SamtalereferatModal";
 import { AktivitetDetaljerModal } from "@/components/aktivitetsplan/visning/AktivitetDetaljerModal";
-import { initialKort } from "@/components/aktivitetsplan/initialData";
+import { lagInitialKort } from "@/components/aktivitetsplan/initialData";
 import { AktivitetsKort } from "@/components/aktivitetsplan/types";
 
 export default function ArkivPage() {
   const router = useRouter();
   const [aktivtKort, setAktivtKort] = useState<AktivitetsKort | null>(null);
-  const arkiv = initialKort.filter((k) => ARKIV_KOLONNER.includes(k.kolonne));
+  const arkiv = lagInitialKort().filter((k) => ARKIV_KOLONNER.includes(k.kolonne));
 
   return (
     <div className="flex flex-col min-h-screen">

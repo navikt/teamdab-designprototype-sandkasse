@@ -15,7 +15,7 @@ import { AvtaleModal } from "./AvtaleModal";
 import { NyAktivitetModal, NyAktivitetType } from "./NyAktivitetModal";
 import { SamtalereferatModal } from "../aktivitetsplan/samtalereferat/SamtalereferatModal";
 import { AktivitetDetaljerModal } from "../aktivitetsplan/visning/AktivitetDetaljerModal";
-import { initialKort } from "../aktivitetsplan/initialData";
+import { lagInitialKort } from "../aktivitetsplan/initialData";
 import { AktivitetsKort, AktivitetStatus } from "../aktivitetsplan/types";
 import { MINE_AKTIVITETER_KOLONNER } from "./sortering";
 import { useMal } from "./mal/useMal";
@@ -36,7 +36,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [kort, setKort] = useState<AktivitetsKort[]>(initialKort);
+  const [kort, setKort] = useState<AktivitetsKort[]>(lagInitialKort);
   const [visning, setVisning] = useState<Visning>("liste");
   const [forslagVisning, setForslagVisning] = useState<ForslagVisning>("varsel");
   const [avtaleModalApen, setAvtaleModalApen] = useState(false);
@@ -58,7 +58,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   } = useMal(kort);
 
   const nullstillPrototype = () => {
-    setKort(initialKort);
+    setKort(lagInitialKort());
     nullstillMal();
     setVisOnboarding(false);
     setForslagVisning("varsel");

@@ -1,4 +1,4 @@
-import { Alternativ, SporId } from "./types";
+import { Alternativ } from "./types";
 
 export const SITUASJON_ALTERNATIVER: Alternativ[] = [
   { id: "finn-jobb", tekst: "Jeg vil finne meg en jobb" },
@@ -7,16 +7,12 @@ export const SITUASJON_ALTERNATIVER: Alternativ[] = [
   { id: "usikker", tekst: "Jeg er usikker på hva som passer" },
 ];
 
-export const RETNING_ALTERNATIVER: Alternativ[] = [
-  { id: "vet", tekst: "Ja" },
-  { id: "trenger-hjelp", tekst: "Nei" },
-];
-
-export const ERFARING_ALTERNATIVER: Alternativ[] = [
-  { id: "relevant", tekst: "Jeg har relevant erfaring eller utdanning" },
-  { id: "noe", tekst: "Jeg har noe erfaring eller kompetanse som kan brukes" },
-  { id: "mangler", tekst: "Jeg mangler erfaring eller kvalifikasjoner" },
-  { id: "vet-ikke", tekst: "Jeg vet ikke hva som kreves" },
+export const FINN_JOBB_FOKUS_ALTERNATIVER: Alternativ[] = [
+  { id: "vet-hva", tekst: "Søke på en bestemt type jobb" },
+  { id: "usikker-retning", tekst: "Jeg er usikker på hvilken retning eller bransje som passer for meg" },
+  { id: "mangler-kvalifikasjoner", tekst: "Jeg mangler erfaring eller kvalifikasjoner for jobbene jeg vil ha" },
+  { id: "annet", tekst: "Noe annet enn dette" },
+  { id: "veileder", tekst: "Jeg vet ikke ennå – vil finne ut av dette sammen med veilederen min" },
 ];
 
 export const IKKE_KLAR_FOKUS_ALTERNATIVER: Alternativ[] = [
@@ -53,22 +49,76 @@ export const INTERESSE_ALTERNATIVER: Alternativ[] = [
   { id: "vet-ikke", tekst: "Vet ikke ennå" },
 ];
 
-export const AKTIVITETER_PER_SPOR: Record<SporId, Alternativ[]> = {
-  spor_a_jobb_realistisk_na: [
+// Generisk fallback når fokus-svaret er "annet" eller "veileder" — det finnes ikke et konkret forslag å gi ennå.
+export const AKTIVITET_VEILEDER_FALLBACK: Alternativ[] = [
+  { id: "snakk-veileder", tekst: "Snakke med veileder om neste steg" },
+];
+
+export const AKTIVITETER_FINN_JOBB: Record<string, Alternativ[]> = {
+  "vet-hva": [
     { id: "oppdater-cv", tekst: "Oppdatere CV" },
     { id: "tilpass-cv", tekst: "Tilpasse CV til ønsket stilling" },
     { id: "soke-stillinger", tekst: "Søke på aktuelle stillinger" },
   ],
-  spor_b_styrke_jobbmuligheter: [
+  "usikker-retning": [
     { id: "kartlegge-kompetanse", tekst: "Kartlegge kompetansen min" },
     { id: "undersoke-krav", tekst: "Undersøke kravene til aktuelle jobber" },
     { id: "undersoke-kurs", tekst: "Undersøke relevante kurs" },
   ],
-  spor_c_naermere_realistisk_jobbmal: [
-    { id: "kartlegge-situasjon", tekst: "Få bedre oversikt over situasjonen min" },
-    { id: "helseopplysninger", tekst: "Gi opplysninger om medisinsk behandling" },
+  "mangler-kvalifikasjoner": [
+    { id: "undersoke-kurs", tekst: "Undersøke relevante kurs" },
+    { id: "undersoke-krav", tekst: "Undersøke kravene til aktuelle jobber" },
+    { id: "kartlegge-kompetanse", tekst: "Kartlegge kompetansen min" },
   ],
-  eksisterende_jobb_beholde: [
-    { id: "snakk-arbeidsgiver", tekst: "Snakke med arbeidsgiver om tilrettelegging" },
+};
+
+export const AKTIVITETER_IKKE_KLAR: Record<string, Alternativ[]> = {
+  livssituasjon: [
+    { id: "snakk-veileder-situasjon", tekst: "Snakke med veileder om situasjonen min" },
+    { id: "undersoke-stotte", tekst: "Undersøke hvilken hjelp eller støtte som finnes" },
+  ],
+  helse: [
+    { id: "helseopplysninger", tekst: "Gi opplysninger om medisinsk behandling" },
+    { id: "snakk-behandler", tekst: "Snakke med lege eller behandler om arbeidsevnen min" },
+  ],
+  kunnskap: [
+    { id: "undersoke-kurs", tekst: "Undersøke relevante kurs" },
+    { id: "kartlegge-kompetanse", tekst: "Kartlegge kompetansen min" },
+  ],
+  utforske: [
+    { id: "prove-praksis", tekst: "Prøve ut en arbeidsrettet aktivitet eller praksisplass" },
+    { id: "snakk-veileder-yrker", tekst: "Snakke med veileder om aktuelle yrker" },
+  ],
+};
+
+export const AKTIVITETER_BEHOLD_JOBB: Record<string, Alternativ[]> = {
+  tilrettelegging: [
+    { id: "snakk-arbeidsgiver-tilrettelegging", tekst: "Snakke med arbeidsgiver om tilrettelegging" },
+    { id: "undersoke-rettigheter", tekst: "Undersøke rettigheter til tilrettelegging" },
+  ],
+  helse: [
+    { id: "helseopplysninger", tekst: "Gi opplysninger om medisinsk behandling" },
+    { id: "snakk-behandler", tekst: "Snakke med lege eller behandler om arbeidsevnen min" },
+  ],
+  "dialog-arbeidsgiver": [
+    { id: "avtale-samtale", tekst: "Avtale samtale med arbeidsgiver om situasjonen" },
+    { id: "forberede-samtale", tekst: "Forberede hva jeg vil ta opp med arbeidsgiver" },
+  ],
+};
+
+export const AKTIVITETER_USIKKER: Record<string, Alternativ[]> = {
+  "jobber-passer": [
+    { id: "kartlegge-kompetanse", tekst: "Kartlegge kompetansen min" },
+    { id: "undersoke-krav", tekst: "Undersøke kravene til aktuelle jobber" },
+  ],
+  "erfaring-kompetanse": [
+    { id: "kartlegge-kompetanse", tekst: "Kartlegge kompetansen min" },
+    { id: "undersoke-krav", tekst: "Undersøke kravene til aktuelle jobber" },
+  ],
+  "klar-na": [
+    { id: "kartlegge-situasjon", tekst: "Få bedre oversikt over situasjonen min" },
+  ],
+  "hvor-mye": [
+    { id: "kartlegge-situasjon", tekst: "Få bedre oversikt over situasjonen min" },
   ],
 };

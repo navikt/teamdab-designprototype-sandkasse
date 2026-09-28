@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import { AktivitetsKort, KolonneId, Perspektiv } from "./types";
-import { initialKort } from "./initialData";
+import { lagInitialKort } from "./initialData";
 import { AktivitetsplanKolonne } from "./AktivitetsplanKolonne";
 import { SamtalereferatModal } from "./samtalereferat/SamtalereferatModal";
 
 const KOLONNER: KolonneId[] = ["forslag", "planlegger", "gjennomforer", "fullfort", "avbrutt"];
 
 export function AktivitetsplanBoard({ perspektiv }: { perspektiv: Perspektiv }) {
-  const [kort, setKort] = useState(initialKort);
+  const [kort, setKort] = useState(lagInitialKort);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [aktivtKort, setAktivtKort] = useState<AktivitetsKort | null>(null);
 

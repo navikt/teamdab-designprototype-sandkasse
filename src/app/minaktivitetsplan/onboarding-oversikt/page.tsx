@@ -35,7 +35,7 @@ flowchart TD
   beholdJobbFokus -->|"Jeg vet ikke ennå – vil finne ut<br/>av dette sammen med veilederen min"| bekreft
   beholdJobbAnnet --> bekreft
 
-  ikkeKlarFokus{"Hva tror du kan hjelpe<br/>deg videre mot jobb?"}
+  ikkeKlarFokus{"Hva tror du er viktigst akkurat<br/>nå for å hjelpe deg videre mot jobb?"}
   ikkeKlarFokus -->|"Mestre en vanskelig livssituasjon bedre"| bekreft
   ikkeKlarFokus -->|"Bli sterkere fysisk eller psykisk"| bekreft
   ikkeKlarFokus -->|"Bygge mer kunnskap og erfaring"| bekreft

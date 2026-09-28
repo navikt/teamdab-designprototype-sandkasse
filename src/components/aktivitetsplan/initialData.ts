@@ -14,7 +14,8 @@ function isoDato(d: Date): string {
   return d.toISOString().slice(0, 10);
 }
 
-export const initialKort: AktivitetsKort[] = [
+export function lagInitialKort(): AktivitetsKort[] {
+  return [
   // --- Forslag ---
   {
     id: "1",
@@ -156,4 +157,5 @@ export const initialKort: AktivitetsKort[] = [
       { label: "Stillingsprosent", verdi: "50 %" },
     ],
   },
-];
+  ];
+}
