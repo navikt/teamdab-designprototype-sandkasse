@@ -351,7 +351,7 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
         {steg === "behold-jobb-fokus" && (
           <>
             <Heading level="1" size="medium">
-              Hva tror du kan hjelpe deg til å bli i jobben?
+              Hva tror du er viktigst for å hjelpe deg til å bli i jobben?
             </Heading>
             <BodyLong>
               Svaret hjelper deg og veilederen din med å finne ut hva dere bør fokusere på først.
