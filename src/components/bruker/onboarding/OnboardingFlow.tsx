@@ -14,11 +14,6 @@ import {
 import { beregnAktiviteter, beregnMal } from "./logic";
 import { OnboardingResultat, Svar } from "./types";
 
-// Opplæringsvideo om aktivitetsplanen, hentet fra nav.no.
-// 720p brukt i stedet for 144p — lydsporet i 144p-proxyen er nærmest hørbart tomt.
-const OPPLAERINGSVIDEO_SRC =
-  "https://8ddea47b592f7070a4d71e706ef5ec37-httpcache0-15227-cachedown99.dna.contentdelivery.net/15227-cachedown99/assets/2023-09-21/fb0502e7-2ed9-4f27-a6d5-3a40a68975d2/fb0502e7-2ed9-4f27-a6d5-3a40a68975d2_720p.mp4";
-
 interface OnboardingFlowProps {
   onFullfor: (resultat: OnboardingResultat) => void;
   onHopp: () => void;
@@ -222,9 +217,14 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
       <VStack gap="space-24" className="w-full min-w-0 bg-ax-bg-default rounded-2xl p-4 md:p-8">
         {steg === "intro" && (
           <>
-            <video controls preload="metadata" className="w-full rounded-md" src={OPPLAERINGSVIDEO_SRC}>
-              Nettleseren din støtter ikke videoavspilling.
-            </video>
+            {/* Placeholder for opplæringsvideo om aktivitetsplanen — ikke en fungerende avspiller i prototypen. */}
+            <Image
+              src="/Video_placeholder.png"
+              alt="Forhåndsvisning av opplæringsvideo om aktivitetsplanen (spilles ikke av i prototypen)"
+              width={778}
+              height={436}
+              className="w-full h-auto rounded-md"
+            />
             <Heading level="2" size="medium">
               La oss gjøre planen relevant for deg
             </Heading>

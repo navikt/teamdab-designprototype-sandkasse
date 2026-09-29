@@ -113,7 +113,7 @@ export function lagInitialKort(): AktivitetsKort[] {
     sluttDato: "2026-03-01",
     tags: ["fatt-jobben"],
     arbeidsgiver: "Skole",
-    arbeidssted: "Stavanger",
+    arbeidssted: "Eksempel",
     beskrivelse: "Fikk tilbud om stilling som assistent på SFO.",
   },
   {
