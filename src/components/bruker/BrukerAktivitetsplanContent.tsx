@@ -21,6 +21,7 @@ import { MINE_AKTIVITETER_KOLONNER } from "./sortering";
 import { useMal } from "./mal/useMal";
 import { OnboardingFlow } from "./onboarding/OnboardingFlow";
 import { OnboardingResultat } from "./onboarding/types";
+import { withBasePath } from "@/lib/basePath";
 
 const VISNING_STORAGE_KEY = "minaktivitetsplan-visning";
 const FORSLAG_VISNING_STORAGE_KEY = "minaktivitetsplan-forslag-visning";
@@ -190,7 +191,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
         <>
         <div className="max-w-4xl mx-auto px-6 pt-6 pb-[25px] flex flex-col gap-4 relative">
           <Image
-            src="/Trenger-hjelp-til-a-komme-i-jobb.png"
+            src={withBasePath("/Trenger-hjelp-til-a-komme-i-jobb.png")}
             alt=""
             width={80}
             height={80}

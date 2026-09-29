@@ -13,6 +13,7 @@ import {
 import { Tag, Detail, Heading, BodyShort } from "@navikt/ds-react";
 import { AktivitetsKort, TagVariant } from "./types";
 import { getDatoTekst } from "./datoVisning";
+import { withBasePath } from "@/lib/basePath";
 
 interface TagConfig {
   label: string;
@@ -175,7 +176,7 @@ export function AktivitetsKortCard({ kort, onDragStart, onKlikk, visSnart, onAvt
         <div className="flex items-start gap-7">
           <span className="shrink-0 flex items-center justify-center w-16 h-16">
             {pictogram ? (
-              <Image src={pictogram} alt="" width={64} height={64} />
+              <Image src={withBasePath(pictogram)} alt="" width={64} height={64} />
             ) : (
               <Ikon aria-hidden fontSize="2rem" className="text-[var(--ax-text-neutral-subtle)]" />
             )}
