@@ -13,6 +13,7 @@ import {
 } from "./data";
 import { beregnAktiviteter, beregnMal } from "./logic";
 import { OnboardingResultat, Svar } from "./types";
+import { withBasePath } from "@/lib/basePath";
 
 interface OnboardingFlowProps {
   onFullfor: (resultat: OnboardingResultat) => void;
@@ -183,7 +184,7 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
     <>
       <div className="max-w-4xl mx-auto px-4 md:px-6 flex flex-col gap-4 pt-6 pb-[25px] relative">
         <Image
-          src="/Trenger-hjelp-til-a-komme-i-jobb.png"
+          src={withBasePath("/Trenger-hjelp-til-a-komme-i-jobb.png")}
           alt=""
           width={80}
           height={80}
@@ -219,7 +220,7 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
           <>
             {/* Placeholder for opplæringsvideo om aktivitetsplanen — ikke en fungerende avspiller i prototypen. */}
             <Image
-              src="/Video_placeholder.png"
+              src={withBasePath("/Video_placeholder.png")}
               alt="Forhåndsvisning av opplæringsvideo om aktivitetsplanen (spilles ikke av i prototypen)"
               width={778}
               height={436}
