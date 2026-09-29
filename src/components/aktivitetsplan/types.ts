@@ -57,6 +57,22 @@ export interface SamtalereferatData {
   erReferatPublisert: boolean;
 }
 
+// Kolonner en aktivitet må være i for å kunne gjøres til et delmål (aktiv eller gjennomført).
+export const DELMAL_KOLONNER: KolonneId[] = ["planlegger", "gjennomforer", "fullfort"];
+
+// Forenklet status vist i AktivitetDetaljerModal. "aktiv" dekker både planlegger og gjennomfører.
+export type AktivitetStatus = "aktiv" | "fullfort" | "avbrutt";
+
+export interface Delmal {
+  id: string;
+  // "aktivitet": tittel/status følger den koblede aktiviteten. "fritekst": frittstående delmål brukeren har skrevet inn selv.
+  kilde: "aktivitet" | "fritekst";
+  aktivitetId?: string;
+  // Kun brukt for kilde "fritekst" (tittel/status for "aktivitet" hentes fra selve aktiviteten).
+  tekst?: string;
+  oppnadd?: boolean;
+}
+
 export interface AktivitetsKort {
   id: string;
   kolonne: KolonneId;
@@ -67,4 +83,36 @@ export interface AktivitetsKort {
   tags: TagVariant[];
   hasBlueDot?: boolean;
   samtalereferatData?: SamtalereferatData;
+  // Strukturerte datoer (ISO, YYYY-MM-DD) brukt av bruker-flatens sortering/kalendervisning.
+  startDato?: string;
+  sluttDato?: string;
+  // Uten fast dato/klokkeslett, f.eks. løpende jobbsøking. Regnes som løpende også når startDato mangler.
+  lopende?: boolean;
+
+  // Mock-detaljer vist i AktivitetDetaljerModal, felter varierer etter type (se prod-repoets aktivitetsdetaljer).
+  beskrivelse?: string;
+  lenke?: string;
+  arbeidsgiver?: string;
+  arbeidssted?: string;
+  kontaktperson?: string;
+  frist?: string;
+  stillingsandel?: string;
+  ansettelsesforhold?: string;
+  mal?: string;
+  huskeliste?: string;
+  soknadsstatus?: TagVariant;
+  moteform?: MoteForm;
+  // Klokkeslett (HH:MM), brukt for "Møte med Nav" som har én dato + ett tidspunkt i stedet for Fra/Til.
+  klokkeslett?: string;
+  varighet?: string;
+  hensikt?: string;
+  forberedelser?: string;
+  arrangor?: string;
+  deltakelseProsent?: string;
+  dagerPerUke?: string;
+  behandlingstype?: string;
+  behandlingssted?: string;
+  oppfolgingFraNav?: string;
+  // Generiske rader, brukt av leseorienterte typer som Arbeidstrening.
+  detaljRader?: { label: string; verdi: string }[];
 }

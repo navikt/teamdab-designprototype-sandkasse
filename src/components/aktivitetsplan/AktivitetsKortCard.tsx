@@ -1,5 +1,18 @@
+import classNames from "classnames";
+import Image from "next/image";
+import {
+  BellIcon,
+  BriefcaseIcon,
+  Buildings2Icon,
+  ClipboardIcon,
+  DocPencilIcon,
+  FileCheckmarkIcon,
+  PersonChatIcon,
+  StethoscopeIcon,
+} from "@navikt/aksel-icons";
 import { Tag, Detail, Heading, BodyShort } from "@navikt/ds-react";
 import { AktivitetsKort, TagVariant } from "./types";
+import { getDatoTekst } from "./datoVisning";
 
 interface TagConfig {
   label: string;
@@ -30,24 +43,55 @@ const TAG_CONFIG: Record<TagVariant, TagConfig> = {
   "fatt-avslag":        { label: "Fått avslag",                   variant: "neutral" },
 };
 
+// Ikonvalg per aktivitetstype, uten fargekoding (kommer senere). Fallback: ClipboardIcon.
+const TYPE_IKON: Record<string, typeof BriefcaseIcon> = {
+  "Stilling": BriefcaseIcon,
+  "Stilling fra Nav": BriefcaseIcon,
+  "Jobb jeg har nå": BriefcaseIcon,
+  "Jobbsøking": DocPencilIcon,
+  "Jobbrettet egenaktivitet": DocPencilIcon,
+  "Møte med Nav": PersonChatIcon,
+  "Tiltak gjennom Nav": Buildings2Icon,
+  "Arbeidstrening": Buildings2Icon,
+  "Behandling": StethoscopeIcon,
+  "Samtalereferat": FileCheckmarkIcon,
+};
+
+// Pictogram per aktivitetstype, brukt i "romslig" visning. Gjenbruker der det ikke finnes unikt.
+const TYPE_PICTOGRAM: Record<string, string> = {
+  "Stilling": "/Stilling_pictogram.svg",
+  "Stilling fra Nav": "/stillingfranav_pictogram.svg",
+  "Jobb jeg har nå": "/Stilling_pictogram.svg",
+  "Jobbsøking": "/jobbsoking_pictogram.svg",
+  "Jobbrettet egenaktivitet": "/jobbrettetegenaktivitet_pictogram.svg",
+  "Møte med Nav": "/motemednav_pictogram.svg",
+  "Tiltak gjennom Nav": "/tiltakgjennomnav_pictogram.svg",
+  "Arbeidstrening": "/arbeidstrening_pictogram.svg",
+  "Behandling": "/behandling_pictogram.svg",
+  "Samtalereferat": "/motemednav_pictogram.svg",
+};
+
 interface Props {
   kort: AktivitetsKort;
-  onDragStart: (e: React.DragEvent, id: string) => void;
+  onDragStart?: (e: React.DragEvent, id: string) => void;
   onKlikk: (kort: AktivitetsKort) => void;
+  // Vises kun i bruker-flatens kronologiske liste, ikke i veileders kanban.
+  visSnart?: boolean;
+  onAvtaltKlikk?: () => void;
+  // "kompakt" = veileders kanban (uendret), "romslig" = bruker-flatens lister.
+  visning?: "kompakt" | "romslig";
 }
 
-export function AktivitetsKortCard({ kort, onDragStart, onKlikk }: Props) {
-  const erKlikkbar = !!kort.samtalereferatData;
+export function AktivitetsKortCard({ kort, onDragStart, onKlikk, visSnart, onAvtaltKlikk, visning = "kompakt" }: Props) {
+  const erKlikkbar = true;
+  const erRomslig = visning === "romslig";
+  const Ikon = TYPE_IKON[kort.type] ?? ClipboardIcon;
+  const pictogram = TYPE_PICTOGRAM[kort.type];
 
-  return (
-    <div
-      draggable
-      onDragStart={(e) => onDragStart(e, kort.id)}
-      onClick={erKlikkbar ? () => onKlikk(kort) : undefined}
-      className={`bg-ax-bg-default rounded-md border border-ax-border-neutral p-3 pb-4 flex flex-col gap-1 cursor-grab active:cursor-grabbing active:opacity-60 select-none${erKlikkbar ? " hover:border-ax-border-action cursor-pointer" : ""}`}
-    >
-      {/* Type label + blue dot */}
-      <div className="flex items-baseline gap-1.5">
+  const innhold = (
+    <>
+      {/* Type label + blue dot + Snart */}
+      <div className="flex flex-wrap items-center gap-1.5">
         {kort.hasBlueDot && (
           <span
             className="inline-block w-2 h-2 rounded-full bg-ax-bg-accent-strong shrink-0 self-center"
@@ -57,16 +101,21 @@ export function AktivitetsKortCard({ kort, onDragStart, onKlikk }: Props) {
         <Detail as="p" className="uppercase text-ax-text-neutral">
           {kort.type}
         </Detail>
+        {visSnart && (
+          <Tag variant="warning" size="small" icon={<BellIcon aria-hidden />} className="self-center">
+            Starter snart
+          </Tag>
+        )}
       </div>
 
       {/* Title */}
-      <Heading level="3" size="xsmall">
+      <Heading level="3" size="small" className="hyphens-auto">
         {kort.title}
       </Heading>
 
-      {/* Date range */}
-      {kort.dateRange && (
-        <BodyShort>{kort.dateRange}</BodyShort>
+      {/* Fra/Til, Dato+Kl. eller Frist — se datoVisning.ts */}
+      {getDatoTekst(kort) && (
+        <BodyShort>{getDatoTekst(kort)}</BodyShort>
       )}
 
       {/* Extra line */}
@@ -79,6 +128,22 @@ export function AktivitetsKortCard({ kort, onDragStart, onKlikk }: Props) {
         <div className="flex flex-wrap gap-1 pt-1">
           {kort.tags.map((t) => {
             const cfg = TAG_CONFIG[t];
+            if (t === "avtalt-med-nav" && onAvtaltKlikk) {
+              return (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onAvtaltKlikk();
+                  }}
+                >
+                  <Tag variant={cfg.variant} size="small" className="cursor-pointer hover:opacity-80">
+                    {cfg.label}
+                  </Tag>
+                </button>
+              );
+            }
             return (
               <Tag key={t} variant={cfg.variant} size="small">
                 {cfg.label}
@@ -86,6 +151,39 @@ export function AktivitetsKortCard({ kort, onDragStart, onKlikk }: Props) {
             );
           })}
         </div>
+      )}
+    </>
+  );
+
+  return (
+    <div
+      draggable={!!onDragStart}
+      onDragStart={onDragStart ? (e) => onDragStart(e, kort.id) : undefined}
+      onClick={erKlikkbar ? () => onKlikk(kort) : undefined}
+      className={classNames(
+        "bg-ax-bg-default select-none break-words",
+        erRomslig ? "rounded-xl p-6 shadow-sm" : "rounded-md p-3 pb-4 flex flex-col gap-1 border border-ax-border-neutral",
+        visSnart && "border-l-4 border-l-[var(--ax-border-warning)]",
+        onDragStart && "cursor-grab active:cursor-grabbing active:opacity-60",
+        erRomslig
+          ? "hover:shadow-[var(--ax-shadow-dialog)] transition-shadow"
+          : "hover:border-ax-border-accent",
+        erKlikkbar && "cursor-pointer",
+      )}
+    >
+      {erRomslig ? (
+        <div className="flex items-start gap-7">
+          <span className="shrink-0 flex items-center justify-center w-16 h-16">
+            {pictogram ? (
+              <Image src={pictogram} alt="" width={64} height={64} />
+            ) : (
+              <Ikon aria-hidden fontSize="2rem" className="text-[var(--ax-text-neutral-subtle)]" />
+            )}
+          </span>
+          <div className="flex flex-col gap-1 flex-1 min-w-0">{innhold}</div>
+        </div>
+      ) : (
+        innhold
       )}
     </div>
   );
