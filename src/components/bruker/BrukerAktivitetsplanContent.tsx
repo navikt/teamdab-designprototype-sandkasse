@@ -43,6 +43,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   const [avtaleModalApen, setAvtaleModalApen] = useState(false);
   const [nyAktivitetType, setNyAktivitetType] = useState<NyAktivitetType | null>(null);
   const [visOnboarding, setVisOnboarding] = useState(false);
+  const [visIngenDelmalVarsel, setVisIngenDelmalVarsel] = useState(false);
   const erForstePersistering = useRef(true);
   const {
     hovedmal,
@@ -63,6 +64,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
     nullstillMal();
     setVisOnboarding(false);
     setForslagVisning("liste");
+    setVisIngenDelmalVarsel(false);
     window.localStorage.removeItem(ONBOARDING_STORAGE_KEY);
     window.localStorage.removeItem(FORSLAG_VISNING_STORAGE_KEY);
   };
@@ -128,8 +130,8 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
     window.localStorage.setItem(VISNING_STORAGE_KEY, v);
   };
 
-  const byttForslagVisning = () => {
-    const nyVisning: ForslagVisning = forslagVisning === "varsel" ? "liste" : "varsel";
+  const byttForslagVisning = (visSomVarsel: boolean) => {
+    const nyVisning: ForslagVisning = visSomVarsel ? "varsel" : "liste";
     setForslagVisning(nyVisning);
     window.localStorage.setItem(FORSLAG_VISNING_STORAGE_KEY, nyVisning);
   };
@@ -225,6 +227,8 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
               onSettFritekstOppnadd={settFritekstOppnadd}
               onFjernDelmal={fjernDelmal}
               onFlyttDelmal={flyttDelmal}
+              visIngenDelmalVarsel={visIngenDelmalVarsel}
+              onSkjulIngenDelmalVarsel={() => setVisIngenDelmalVarsel(false)}
             />
           </div>
         </div>
@@ -354,9 +358,18 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
             <ActionMenu.Item icon={<TrashIcon aria-hidden />} onSelect={visTomAktivitetsplan}>
               Vis tom aktivitetsplan
             </ActionMenu.Item>
-            <ActionMenu.Item onSelect={byttForslagVisning}>
-              {forslagVisning === "varsel" ? "Vis forslag øverst i aktivitetslisten" : "Vis forslag som varsel"}
-            </ActionMenu.Item>
+            <ActionMenu.CheckboxItem
+              checked={forslagVisning === "varsel"}
+              onCheckedChange={byttForslagVisning}
+            >
+              Vis forslag som varsel
+            </ActionMenu.CheckboxItem>
+            <ActionMenu.CheckboxItem
+              checked={visIngenDelmalVarsel}
+              onCheckedChange={setVisIngenDelmalVarsel}
+            >
+              Vis &quot;ingen delmål&quot;-varsel
+            </ActionMenu.CheckboxItem>
             <ActionMenu.Item icon={<CompassIcon aria-hidden />} onSelect={() => router.push("/minaktivitetsplan/onboarding-oversikt")}>
               Vis onboarding-flyt (oversikt)
             </ActionMenu.Item>

@@ -19,7 +19,7 @@ import {
   PencilIcon,
   TrashIcon,
 } from "@navikt/aksel-icons";
-import { ActionMenu, BodyShort, Button, Checkbox, Process } from "@navikt/ds-react";
+import { ActionMenu, BodyShort, Button, Checkbox, LocalAlert, Process, ProgressBar } from "@navikt/ds-react";
 import { DelmalVisning } from "./mal/useMal";
 import { RedigerMalModal } from "./mal/RedigerMalModal";
 import { LeggTilDelmalModal } from "./mal/LeggTilDelmalModal";
@@ -56,6 +56,8 @@ interface MalLinjeProps {
   onSettFritekstOppnadd: (id: string, oppnadd: boolean) => void;
   onFjernDelmal: (id: string) => void;
   onFlyttDelmal: (id: string, retning: "opp" | "ned") => void;
+  visIngenDelmalVarsel: boolean;
+  onSkjulIngenDelmalVarsel: () => void;
 }
 
 export function MalLinje({
@@ -69,10 +71,13 @@ export function MalLinje({
   onSettFritekstOppnadd,
   onFjernDelmal,
   onFlyttDelmal,
+  visIngenDelmalVarsel,
+  onSkjulIngenDelmalVarsel,
 }: MalLinjeProps) {
   const [apen, setApen] = useState(false);
   const [redigerModalApen, setRedigerModalApen] = useState(false);
   const [leggTilModalApen, setLeggTilModalApen] = useState(false);
+  const antallOppnadd = delmal.filter((d) => d.oppnadd).length;
 
   return (
     <div className="border border-ax-border-neutral-subtle rounded-md bg-ax-bg-default">
@@ -106,6 +111,58 @@ export function MalLinje({
           {apen ? <ChevronUpIcon aria-hidden /> : <ChevronDownIcon aria-hidden />}
         </button>
       </div>
+      {!apen && (delmal.length > 0 || visIngenDelmalVarsel) && (
+        <div className="px-4 pb-3">
+          {delmal.length === 0 ? (
+            visIngenDelmalVarsel && (
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() => setApen((v) => !v)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setApen((v) => !v);
+                  }
+                }}
+                className="cursor-pointer"
+                aria-expanded={apen}
+              >
+                <LocalAlert status="announcement" size="small" as="div">
+                  <LocalAlert.Header>
+                    <LocalAlert.Title as="div">
+                      Du har ingen delmål. Klikk her for å komme i gang.
+                    </LocalAlert.Title>
+                    <LocalAlert.CloseButton
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onSkjulIngenDelmalVarsel();
+                      }}
+                    />
+                  </LocalAlert.Header>
+                </LocalAlert>
+              </div>
+            )
+          ) : (
+            <button
+              type="button"
+              onClick={() => setApen((v) => !v)}
+              className="flex flex-col gap-1 w-full text-left rounded px-2 py-1 -mx-2 hover:bg-ax-bg-neutral-soft transition-colors"
+              aria-expanded={apen}
+            >
+              <BodyShort size="small" className="text-ax-text-neutral-subtle">
+                {antallOppnadd} av {delmal.length} delmål fullført
+              </BodyShort>
+              <ProgressBar
+                size="small"
+                value={antallOppnadd}
+                valueMax={delmal.length}
+                aria-label={`${antallOppnadd} av ${delmal.length} delmål fullført`}
+              />
+            </button>
+          )}
+        </div>
+      )}
       {apen && (
         <div className="px-6 pb-6 pt-4 flex flex-col gap-4 border-t border-ax-border-neutral-subtle">
           <BodyShort size="small" className="text-ax-text-neutral-subtle mt-2">
