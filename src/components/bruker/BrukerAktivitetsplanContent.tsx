@@ -204,9 +204,12 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
           <div className="flex flex-col gap-4 flex-1">
             <Heading size="large" level="1">Aktivitetsplan</Heading>
 
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-lg">
               <Link href="#" onClick={(e) => { e.preventDefault(); router.push("/minaktivitetsplan/arkiv"); }}>
                 Arkiv
+              </Link>
+              <Link href="#" onClick={(e) => { e.preventDefault(); router.push("/minaktivitetsplan/arkiv?type=Samtalereferat"); }}>
+                Samtalereferater
               </Link>
               <Link href="#">
                 Dialog med veileder
