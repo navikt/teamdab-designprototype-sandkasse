@@ -24,7 +24,7 @@ export function ForslagSeksjon({ forslag, visning, onGodta, onAvsla, onKortKlikk
     return (
       <section aria-label="Forslag til aktiviteter" className="flex flex-col gap-2">
         {forslag.map((k) => (
-          <div key={k.id} className="border border-ax-border-neutral-subtle rounded-md bg-ax-bg-default px-3 py-2 flex items-center justify-between gap-4">
+          <div key={k.id} className="border border-ax-border-neutral-subtle rounded-xl shadow-sm bg-ax-bg-default px-3 py-2 flex items-center justify-between gap-4">
             <div className="flex flex-col gap-1">
               <Detail className="text-ax-text-neutral">FORSLAG</Detail>
               <Heading level="2" size="xsmall">{k.title}</Heading>
@@ -53,7 +53,7 @@ export function ForslagSeksjon({ forslag, visning, onGodta, onAvsla, onKortKlikk
       <Modal open={open} onClose={() => setOpen(false)} header={{ heading: "Forslag til aktiviteter" }} width="medium">
         <Modal.Body className="flex flex-col gap-4">
           {forslag.map((k) => (
-            <div key={k.id} className="border border-ax-border-neutral-subtle rounded-md p-3 flex flex-col gap-2">
+            <div key={k.id} className="border border-ax-border-neutral-subtle rounded-xl p-3 flex flex-col gap-2">
               <Detail className="uppercase text-ax-text-neutral">{k.type}</Detail>
               <Heading level="3" size="xsmall">{k.title}</Heading>
               {getDatoTekst(k) && <BodyShort>{getDatoTekst(k)}</BodyShort>}

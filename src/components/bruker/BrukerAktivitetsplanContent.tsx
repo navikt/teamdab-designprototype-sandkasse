@@ -39,7 +39,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   const searchParams = useSearchParams();
   const [kort, setKort] = useState<AktivitetsKort[]>(lagInitialKort);
   const [visning, setVisning] = useState<Visning>("liste");
-  const [forslagVisning, setForslagVisning] = useState<ForslagVisning>("varsel");
+  const [forslagVisning, setForslagVisning] = useState<ForslagVisning>("liste");
   const [avtaleModalApen, setAvtaleModalApen] = useState(false);
   const [nyAktivitetType, setNyAktivitetType] = useState<NyAktivitetType | null>(null);
   const [visOnboarding, setVisOnboarding] = useState(false);
@@ -62,7 +62,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
     setKort(lagInitialKort());
     nullstillMal();
     setVisOnboarding(false);
-    setForslagVisning("varsel");
+    setForslagVisning("liste");
     window.localStorage.removeItem(ONBOARDING_STORAGE_KEY);
     window.localStorage.removeItem(FORSLAG_VISNING_STORAGE_KEY);
   };
@@ -267,13 +267,15 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
                 <ToggleGroup.Item value="kalender">Kalender</ToggleGroup.Item>
               </ToggleGroup>
             </div>
-            <ForslagSeksjon
-              forslag={forslag}
-              visning={forslagVisning}
-              onGodta={(id) => oppdaterKolonne(id, "planlegger")}
-              onAvsla={(id) => oppdaterKolonne(id, "avbrutt")}
-              onKortKlikk={handleKortKlikk}
-            />
+            <div className={forslagVisning === "liste" && forslag.length > 0 ? "mb-4" : undefined}>
+              <ForslagSeksjon
+                forslag={forslag}
+                visning={forslagVisning}
+                onGodta={(id) => oppdaterKolonne(id, "planlegger")}
+                onAvsla={(id) => oppdaterKolonne(id, "avbrutt")}
+                onKortKlikk={handleKortKlikk}
+              />
+            </div>
             {visning === "liste" ? (
               <MineAktiviteterListe
                 kort={mineAktiviteter}
