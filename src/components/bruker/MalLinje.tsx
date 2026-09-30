@@ -80,11 +80,11 @@ export function MalLinje({
         <button
           type="button"
           onClick={() => setApen((v) => !v)}
-          className="flex items-center gap-2 flex-1 min-w-0 text-left rounded px-2 py-1 -mx-2 -my-1 hover:bg-ax-bg-neutral-soft transition-colors"
+          className="flex items-start gap-2 flex-1 min-w-0 text-left rounded px-2 py-1 -mx-2 -my-1 hover:bg-ax-bg-neutral-soft transition-colors"
           aria-expanded={apen}
         >
-          <CompassIcon aria-hidden fontSize="1.25rem" className="shrink-0 text-ax-text-neutral" />
-          <BodyShort className="flex-1 truncate">
+          <CompassIcon aria-hidden fontSize="1.25rem" className="shrink-0 text-ax-text-neutral mt-0.5" />
+          <BodyShort className="flex-1 line-clamp-2">
             <strong>Mitt mål:</strong> {hovedmal}
           </BodyShort>
         </button>
