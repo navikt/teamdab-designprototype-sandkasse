@@ -28,6 +28,7 @@ export function ForslagSeksjon({ forslag, visning, onGodta, onAvsla, onKortKlikk
             <div className="flex flex-col gap-1">
               <Detail className="text-ax-text-neutral">FORSLAG</Detail>
               <Heading level="2" size="xsmall">{k.title}</Heading>
+              {getDatoTekst(k) && <BodyShort size="small">{getDatoTekst(k)}</BodyShort>}
               <Link as="button" onClick={() => onKortKlikk(k)} className="text-sm">
                 Detaljer
               </Link>
