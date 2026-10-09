@@ -85,6 +85,18 @@ export const avsluttForlengBrukereFase2: Bruker[] = [
     statusVariant: "warning",
     merkelapper: [{ tekst: "Kandidat for avslutning", variant: "warning" }],
   },
+  {
+    id: "b6",
+    navn: "Tidevann, Rolig",
+    fnr: "00080212346",
+    oppfolgingStartet: "09.05.2024",
+    dagerTilAvslutning: 24,
+    veileder: "Utvikling, Klar",
+    tildelingsdato: "16.05.2024",
+    status: "Har ikke lenger AAP",
+    statusVariant: "warning",
+    merkelapper: [{ tekst: "Kandidat for avslutning", variant: "warning" }],
+  },
 ];
 
 export const avsluttForlengBrukere: Bruker[] = [

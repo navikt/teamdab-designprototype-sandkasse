@@ -39,10 +39,11 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   const searchParams = useSearchParams();
   const [kort, setKort] = useState<AktivitetsKort[]>(lagInitialKort);
   const [visning, setVisning] = useState<Visning>("liste");
-  const [forslagVisning, setForslagVisning] = useState<ForslagVisning>("varsel");
+  const [forslagVisning, setForslagVisning] = useState<ForslagVisning>("liste");
   const [avtaleModalApen, setAvtaleModalApen] = useState(false);
   const [nyAktivitetType, setNyAktivitetType] = useState<NyAktivitetType | null>(null);
   const [visOnboarding, setVisOnboarding] = useState(false);
+  const [visIngenDelmalVarsel, setVisIngenDelmalVarsel] = useState(false);
   const erForstePersistering = useRef(true);
   const {
     hovedmal,
@@ -62,7 +63,8 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
     setKort(lagInitialKort());
     nullstillMal();
     setVisOnboarding(false);
-    setForslagVisning("varsel");
+    setForslagVisning("liste");
+    setVisIngenDelmalVarsel(false);
     window.localStorage.removeItem(ONBOARDING_STORAGE_KEY);
     window.localStorage.removeItem(FORSLAG_VISNING_STORAGE_KEY);
   };
@@ -128,8 +130,8 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
     window.localStorage.setItem(VISNING_STORAGE_KEY, v);
   };
 
-  const byttForslagVisning = () => {
-    const nyVisning: ForslagVisning = forslagVisning === "varsel" ? "liste" : "varsel";
+  const byttForslagVisning = (visSomVarsel: boolean) => {
+    const nyVisning: ForslagVisning = visSomVarsel ? "varsel" : "liste";
     setForslagVisning(nyVisning);
     window.localStorage.setItem(FORSLAG_VISNING_STORAGE_KEY, nyVisning);
   };
@@ -202,9 +204,12 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
           <div className="flex flex-col gap-4 flex-1">
             <Heading size="large" level="1">Aktivitetsplan</Heading>
 
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-lg">
               <Link href="#" onClick={(e) => { e.preventDefault(); router.push("/minaktivitetsplan/arkiv"); }}>
                 Arkiv
+              </Link>
+              <Link href="#" onClick={(e) => { e.preventDefault(); router.push("/minaktivitetsplan/arkiv?type=Samtalereferat"); }}>
+                Samtalereferater
               </Link>
               <Link href="#">
                 Dialog med veileder
@@ -225,6 +230,8 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
               onSettFritekstOppnadd={settFritekstOppnadd}
               onFjernDelmal={fjernDelmal}
               onFlyttDelmal={flyttDelmal}
+              visIngenDelmalVarsel={visIngenDelmalVarsel}
+              onSkjulIngenDelmalVarsel={() => setVisIngenDelmalVarsel(false)}
             />
           </div>
         </div>
@@ -267,13 +274,15 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
                 <ToggleGroup.Item value="kalender">Kalender</ToggleGroup.Item>
               </ToggleGroup>
             </div>
-            <ForslagSeksjon
-              forslag={forslag}
-              visning={forslagVisning}
-              onGodta={(id) => oppdaterKolonne(id, "planlegger")}
-              onAvsla={(id) => oppdaterKolonne(id, "avbrutt")}
-              onKortKlikk={handleKortKlikk}
-            />
+            <div className={forslagVisning === "liste" && forslag.length > 0 ? "mb-4" : undefined}>
+              <ForslagSeksjon
+                forslag={forslag}
+                visning={forslagVisning}
+                onGodta={(id) => oppdaterKolonne(id, "planlegger")}
+                onAvsla={(id) => oppdaterKolonne(id, "avbrutt")}
+                onKortKlikk={handleKortKlikk}
+              />
+            </div>
             {visning === "liste" ? (
               <MineAktiviteterListe
                 kort={mineAktiviteter}
@@ -352,9 +361,18 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
             <ActionMenu.Item icon={<TrashIcon aria-hidden />} onSelect={visTomAktivitetsplan}>
               Vis tom aktivitetsplan
             </ActionMenu.Item>
-            <ActionMenu.Item onSelect={byttForslagVisning}>
-              {forslagVisning === "varsel" ? "Vis forslag øverst i aktivitetslisten" : "Vis forslag som varsel"}
-            </ActionMenu.Item>
+            <ActionMenu.CheckboxItem
+              checked={forslagVisning === "varsel"}
+              onCheckedChange={byttForslagVisning}
+            >
+              Vis forslag som varsel
+            </ActionMenu.CheckboxItem>
+            <ActionMenu.CheckboxItem
+              checked={visIngenDelmalVarsel}
+              onCheckedChange={setVisIngenDelmalVarsel}
+            >
+              Vis &quot;ingen delmål&quot;-varsel
+            </ActionMenu.CheckboxItem>
             <ActionMenu.Item icon={<CompassIcon aria-hidden />} onSelect={() => router.push("/minaktivitetsplan/onboarding-oversikt")}>
               Vis onboarding-flyt (oversikt)
             </ActionMenu.Item>

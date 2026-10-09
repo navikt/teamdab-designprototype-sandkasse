@@ -11,7 +11,7 @@ import {
   StethoscopeIcon,
 } from "@navikt/aksel-icons";
 import { Tag, Detail, Heading, BodyShort } from "@navikt/ds-react";
-import { AktivitetsKort, TagVariant } from "./types";
+import { AktivitetsKort, KOLONNE_LABELS, TagVariant } from "./types";
 import { getDatoTekst } from "./datoVisning";
 import { withBasePath } from "@/lib/basePath";
 
@@ -125,8 +125,13 @@ export function AktivitetsKortCard({ kort, onDragStart, onKlikk, visSnart, onAvt
       )}
 
       {/* Tags */}
-      {kort.tags.length > 0 && (
+      {(kort.tags.length > 0 || kort.kolonne === "fullfort" || kort.kolonne === "avbrutt") && (
         <div className="flex flex-wrap gap-1 pt-1">
+          {(kort.kolonne === "fullfort" || kort.kolonne === "avbrutt") && (
+            <Tag variant={kort.kolonne === "fullfort" ? "success" : "neutral"} size="small">
+              {KOLONNE_LABELS[kort.kolonne]}
+            </Tag>
+          )}
           {kort.tags.map((t) => {
             const cfg = TAG_CONFIG[t];
             if (t === "avtalt-med-nav" && onAvtaltKlikk) {
