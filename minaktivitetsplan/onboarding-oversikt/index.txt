@@ -1,0 +1,84 @@
+1:"$Sreact.fragment"
+2:I[339756,["/teamdab-designprototype-sandkasse/_next/static/chunks/33t46atd3n2zd.js"],"default"]
+3:I[837457,["/teamdab-designprototype-sandkasse/_next/static/chunks/33t46atd3n2zd.js"],"default"]
+4:I[605500,["/teamdab-designprototype-sandkasse/_next/static/chunks/33t46atd3n2zd.js","/teamdab-designprototype-sandkasse/_next/static/chunks/105yywu6z0vzc.js","/teamdab-designprototype-sandkasse/_next/static/chunks/2iyw8cl8hff4r.js","/teamdab-designprototype-sandkasse/_next/static/chunks/3pmo7dxuhbozi.js"],"Image"]
+5:I[969519,["/teamdab-designprototype-sandkasse/_next/static/chunks/33t46atd3n2zd.js","/teamdab-designprototype-sandkasse/_next/static/chunks/105yywu6z0vzc.js","/teamdab-designprototype-sandkasse/_next/static/chunks/2iyw8cl8hff4r.js","/teamdab-designprototype-sandkasse/_next/static/chunks/3pmo7dxuhbozi.js"],"default"]
+6:I[937456,["/teamdab-designprototype-sandkasse/_next/static/chunks/33t46atd3n2zd.js","/teamdab-designprototype-sandkasse/_next/static/chunks/105yywu6z0vzc.js","/teamdab-designprototype-sandkasse/_next/static/chunks/2iyw8cl8hff4r.js","/teamdab-designprototype-sandkasse/_next/static/chunks/3pmo7dxuhbozi.js"],"Heading"]
+7:I[522016,["/teamdab-designprototype-sandkasse/_next/static/chunks/33t46atd3n2zd.js","/teamdab-designprototype-sandkasse/_next/static/chunks/105yywu6z0vzc.js","/teamdab-designprototype-sandkasse/_next/static/chunks/2iyw8cl8hff4r.js","/teamdab-designprototype-sandkasse/_next/static/chunks/3pmo7dxuhbozi.js"],""]
+8:I[937456,["/teamdab-designprototype-sandkasse/_next/static/chunks/33t46atd3n2zd.js","/teamdab-designprototype-sandkasse/_next/static/chunks/105yywu6z0vzc.js","/teamdab-designprototype-sandkasse/_next/static/chunks/2iyw8cl8hff4r.js","/teamdab-designprototype-sandkasse/_next/static/chunks/3pmo7dxuhbozi.js"],"Button"]
+9:I[937456,["/teamdab-designprototype-sandkasse/_next/static/chunks/33t46atd3n2zd.js","/teamdab-designprototype-sandkasse/_next/static/chunks/105yywu6z0vzc.js","/teamdab-designprototype-sandkasse/_next/static/chunks/2iyw8cl8hff4r.js","/teamdab-designprototype-sandkasse/_next/static/chunks/3pmo7dxuhbozi.js"],"BodyShort"]
+a:I[547268,["/teamdab-designprototype-sandkasse/_next/static/chunks/33t46atd3n2zd.js","/teamdab-designprototype-sandkasse/_next/static/chunks/105yywu6z0vzc.js","/teamdab-designprototype-sandkasse/_next/static/chunks/2iyw8cl8hff4r.js","/teamdab-designprototype-sandkasse/_next/static/chunks/3pmo7dxuhbozi.js"],"MermaidDiagram"]
+13:I[168027,["/teamdab-designprototype-sandkasse/_next/static/chunks/33t46atd3n2zd.js"],"default",1]
+:HL["/teamdab-designprototype-sandkasse/_next/static/chunks/0ga72dv0ewx5o.css","style"]
+:HL["https://cdn.nav.no/aksel/fonts/SourceSans3-normal.woff2","font",{"crossOrigin":"anonymous","type":"font/woff2"}]
+b:Tc45,
+flowchart TD
+  intro["La oss gjøre planen relevant for deg<br/>«Kom i gang»"] --> situasjon
+
+  situasjon{"Hva beskriver din situasjon best?"}
+
+  situasjon -->|"Jeg vil finne meg en jobb"| finnjobbFokus
+  situasjon -->|"Trenger hjelp til å bli værende i jobben"| beholdJobbFokus
+  situasjon -->|"Ikke klar for jobb akkurat nå"| ikkeKlarFokus
+  situasjon -->|"Usikker på hva som passer"| usikkerFokus
+
+  finnjobbFokus{"Hva trenger du mest hjelp til<br/>i jobbsøket akkurat nå?"}
+  finnjobbFokus -->|"Søke på en bestemt type jobb"| finnjobbYrke["Yrke, stilling eller bransje (valgfritt)"]
+  finnjobbFokus -->|"Jeg er usikker på hvilken retning<br/>eller bransje som passer for meg"| finnjobbInteresser["Hva slags oppgaver liker du å jobbe med? (valgfritt)"]
+  finnjobbFokus -->|"Jeg mangler erfaring eller kvalifikasjoner<br/>for jobbene jeg vil ha"| bekreft
+  finnjobbFokus -->|"Noe annet enn dette"| finnjobbAnnet["Beskriv med egne ord (fritekst)"]
+  finnjobbFokus -->|"Jeg vet ikke ennå – vil finne ut<br/>av dette sammen med veilederen min"| bekreft
+  finnjobbYrke --> bekreft
+  finnjobbInteresser --> bekreft
+  finnjobbAnnet --> bekreft
+
+  beholdJobbFokus{"Hva tror du kan hjelpe deg<br/>til å bli i jobben?"}
+  beholdJobbFokus -->|"Få jobben tilpasset, for eksempel<br/>arbeidstid, oppgaver eller utstyr"| bekreft
+  beholdJobbFokus -->|"Få helsa til å fungere bedre sammen med jobben"| bekreft
+  beholdJobbFokus -->|"Snakke bedre med sjefen min<br/>om hvordan det går"| bekreft
+  beholdJobbFokus -->|"Noe annet enn dette"| beholdJobbAnnet["Beskriv med egne ord (fritekst)"]
+  beholdJobbFokus -->|"Jeg vet ikke ennå – vil finne ut<br/>av dette sammen med veilederen min"| bekreft
+  beholdJobbAnnet --> bekreft
+
+  ikkeKlarFokus{"Hva tror du er viktigst akkurat<br/>nå for å hjelpe deg videre mot jobb?"}
+  ikkeKlarFokus -->|"Mestre en vanskelig livssituasjon bedre"| bekreft
+  ikkeKlarFokus -->|"Bli sterkere fysisk eller psykisk"| bekreft
+  ikkeKlarFokus -->|"Bygge mer kunnskap og erfaring"| bekreft
+  ikkeKlarFokus -->|"Utforske hvilken type arbeid som kan passe for meg"| bekreft
+  ikkeKlarFokus -->|"Noe annet enn dette"| ikkeKlarAnnet["Beskriv med egne ord (fritekst)"]
+  ikkeKlarFokus -->|"Jeg vet ikke ennå – vil finne ut<br/>av dette sammen med veilederen min"| bekreft
+  ikkeKlarAnnet --> bekreft
+
+  usikkerFokus{"Hva er du mest usikker på?"}
+  usikkerFokus -->|"Hvilke jobber som kan passe for meg"| bekreft
+  usikkerFokus -->|"Om jeg har erfaringen eller kompetansen jeg trenger"| bekreft
+  usikkerFokus -->|"Om jeg er klar for å jobbe nå"| bekreft
+  usikkerFokus -->|"Hvor mye jeg kan jobbe"| bekreft
+  usikkerFokus -->|"Jeg vet ikke ennå"| bekreft
+
+  bekreft["Passer denne retningen for deg?<br/>(forslag til mål, direkte redigerbart felt)"] -->|"Dette passer"| aktivitet
+
+  aktivitet["Hva vil du starte med?<br/>(forslag / egen aktivitet / sammen med veileder)"] --> oppsummering
+
+  oppsummering["Du er klar til å komme i gang<br/>(mål + første aktivitet)"] --> ferdig(["Gå til aktivitetsplanen"])
+
+  intro -.->|"Hopp rett til aktivitetsplanen<br/>(tilgjengelig på alle steg)"| ferdig
+11:X
+0:{"P":null,"c":["","minaktivitetsplan","onboarding-oversikt",""],"q":"","i":false,"f":[[["",{"children":["minaktivitetsplan",{"children":["onboarding-oversikt",{"children":["__PAGE__",{},"$undefined","$undefined",4608]},"$undefined","$undefined",4608]},"$undefined","$undefined",4608]},"$undefined","$undefined",4624],[["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/teamdab-designprototype-sandkasse/_next/static/chunks/0ga72dv0ewx5o.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/teamdab-designprototype-sandkasse/_next/static/chunks/33t46atd3n2zd.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"nb","className":"h-full","children":[["$","head",null,{"children":["$","link",null,{"rel":"preload","href":"https://cdn.nav.no/aksel/fonts/SourceSans3-normal.woff2","as":"font","type":"font/woff2","crossOrigin":"anonymous"}]}],["$","body",null,{"className":"min-h-full flex flex-col","children":[["$","div",null,{"className":"demo-corner","aria-hidden":"true","children":[["$","span",null,{"className":"demo-corner__label","children":"DEMO"}],["$","span",null,{"className":"demo-corner__sublabel","children":"Designprototype"}]]}],["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]]}]]}]]}],{"children":[["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["$","$1","c",{"children":[["$","div",null,{"className":"flex flex-col min-h-screen overflow-x-hidden","children":[["$","header",null,{"className":"flex items-center justify-between h-16 px-6 border-b border-ax-border-neutral-subtle bg-ax-bg-default","children":[["$","div",null,{"className":"flex items-center gap-3","children":["$","$L4",null,{"src":"/teamdab-designprototype-sandkasse/NAV_logo_digital_Red.svg","alt":"Nav","width":64,"height":45,"priority":true,"style":{"width":"64px","height":"45px"}}]}],["$","div",null,{"className":"flex items-center gap-2 text-ax-text-accent-strong","children":[["$","$L5",null,{"aria-hidden":true,"fontSize":"1.5rem"}],["$","span",null,{"children":"Uspesifisert, Testbruker"}]]}]]}],["$","main",null,{"className":"flex-1 w-full bg-ax-bg-default","children":["$","div",null,{"className":"max-w-6xl mx-auto px-6 py-8 flex flex-col gap-6","children":[["$","div",null,{"className":"flex items-center justify-between gap-4","children":[["$","$L6",null,{"size":"large","level":"1","children":"Flyt for onboarding i Min aktivitetsplan"}],["$","$L7",null,{"href":"/minaktivitetsplan","children":["$","$L8",null,{"variant":"secondary","size":"small","children":"Tilbake til aktivitetsplanen"}]}]]}],["$","$L9",null,{"className":"text-ax-text-subtle","children":"Diagrammet viser den faktiske stegmaskinen: spørsmålstekst, svaralternativer og hvor de leder. Interne spornavn (A/B/C) vises aldri til brukeren – kun målet og aktiviteten."}],["$","$La",null,{"chart":"$b"}]]}]}],"$Lc"]}],["$Ld","$Le","$Lf"],"$L10"]}],{},null,false,null]},null,false,"$11"]},null,false,"$11"]},null,false,null],"$L12",false]],"m":"$undefined","G":["$13",["$L14"]],"S":true,"h":null,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"hXJGvv6m56NlUxoXmWbgG"}
+15:I[937456,["/teamdab-designprototype-sandkasse/_next/static/chunks/33t46atd3n2zd.js","/teamdab-designprototype-sandkasse/_next/static/chunks/105yywu6z0vzc.js","/teamdab-designprototype-sandkasse/_next/static/chunks/2iyw8cl8hff4r.js","/teamdab-designprototype-sandkasse/_next/static/chunks/3pmo7dxuhbozi.js"],"Link"]
+16:I[897367,["/teamdab-designprototype-sandkasse/_next/static/chunks/33t46atd3n2zd.js"],"OutletBoundary"]
+17:"$Sreact.suspense"
+19:I[897367,["/teamdab-designprototype-sandkasse/_next/static/chunks/33t46atd3n2zd.js"],"ViewportBoundary"]
+1b:I[897367,["/teamdab-designprototype-sandkasse/_next/static/chunks/33t46atd3n2zd.js"],"MetadataBoundary"]
+c:["$","footer",null,{"className":"mt-auto border-t border-ax-border-neutral-subtle bg-ax-bg-neutral-soft px-6 py-8","children":["$","div",null,{"className":"grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto text-sm","children":[["$","div",null,{"className":"flex flex-col gap-2","children":[["$","$L15",null,{"href":"#","children":"Om nav.no"}],["$","$L15",null,{"href":"#","children":"Tilgjengelighet"}]]}],["$","div",null,{"className":"flex flex-col gap-2","children":[["$","$L15",null,{"href":"#","children":"Personvern"}],["$","$L15",null,{"href":"#","children":"Informasjonskapsler"}]]}],["$","div",null,{"className":"flex flex-col gap-2","children":[["$","$L15",null,{"href":"#","children":"Kontakt oss"}],["$","$L15",null,{"href":"#","children":"Klage og tilbakemelding"}]]}]]}]}]
+d:["$","script","script-0",{"src":"/teamdab-designprototype-sandkasse/_next/static/chunks/105yywu6z0vzc.js","async":true,"nonce":"$undefined"}]
+e:["$","script","script-1",{"src":"/teamdab-designprototype-sandkasse/_next/static/chunks/2iyw8cl8hff4r.js","async":true,"nonce":"$undefined"}]
+f:["$","script","script-2",{"src":"/teamdab-designprototype-sandkasse/_next/static/chunks/3pmo7dxuhbozi.js","async":true,"nonce":"$undefined"}]
+10:["$","$L16",null,{"children":["$","$17",null,{"name":"Next.MetadataOutlet","children":"$@18"}]}]
+12:["$","$1","h",{"children":[null,["$","$L19",null,{"children":"$L1a"}],["$","div",null,{"hidden":true,"children":["$","$L1b",null,{"children":["$","$17",null,{"name":"Next.Metadata","children":"$L1c"}]}]}],null]}]
+14:["$","link","0",{"rel":"stylesheet","href":"/teamdab-designprototype-sandkasse/_next/static/chunks/0ga72dv0ewx5o.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]
+11:C
+1a:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+1d:I[27201,["/teamdab-designprototype-sandkasse/_next/static/chunks/33t46atd3n2zd.js"],"IconMark"]
+18:null
+1c:[["$","title","0",{"children":"Designprototype - Team DAB"}],["$","meta","1",{"name":"description","content":"Interaktiv prototype for utforskning og brukertesting."}],["$","link","2",{"rel":"icon","href":"/teamdab-designprototype-sandkasse/favicon-16x16.png","sizes":"16x16","type":"image/png"}],["$","link","3",{"rel":"icon","href":"/teamdab-designprototype-sandkasse/favicon-32x32.png","sizes":"32x32","type":"image/png"}],["$","link","4",{"rel":"apple-touch-icon","href":"/teamdab-designprototype-sandkasse/apple-touch-icon.png"}],["$","link","5",{"rel":"android-chrome","href":"/teamdab-designprototype-sandkasse/android-chrome-192x192.png","sizes":"192x192"}],["$","link","6",{"rel":"android-chrome","href":"/teamdab-designprototype-sandkasse/android-chrome-512x512.png","sizes":"512x512"}],["$","$L1d","7",{}]]
