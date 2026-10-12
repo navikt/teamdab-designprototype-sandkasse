@@ -181,6 +181,7 @@ export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, 
               setKort={setAktivitetsKort}
               perspektiv={perspektiv}
               brukerNavn={navn ?? "Bruker"}
+              brukerFnr={fnr}
             />
           </div>
         </Tabs.Panel>

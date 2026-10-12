@@ -3,12 +3,13 @@
 import { PlusIcon, TrashIcon } from "@navikt/aksel-icons";
 import { BodyShort, Button, Box, Fieldset, HGrid, Select, TextField } from "@navikt/ds-react";
 import { useEffect, useState } from "react";
-import { DELTAKER_ROLLER, DeltakerRad, DeltakerRadFeil, VEILEDER_RAD_ID, visningsNavn } from "./moteUtils";
+import { DELTAKER_ROLLER, DeltakerRad, DeltakerRadFeil, VEILEDER_NAV_IDENT, VEILEDER_RAD_ID, visningsNavn } from "./moteUtils";
 
 interface Props {
   rader: DeltakerRad[];
   onChange: (rader: DeltakerRad[]) => void;
   brukerNavn: string;
+  brukerFnr?: string;
   // Feil per rad-id, vist når skjemaet er forsøkt sendt.
   feil: Record<string, DeltakerRadFeil>;
 }
@@ -16,7 +17,7 @@ interface Props {
 export const deltakerNavnId = (id: string) => `deltaker-navn-${id}`;
 export const deltakerRolleId = (id: string) => `deltaker-rolle-${id}`;
 
-export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
+export function DeltakereFelt({ rader, onChange, brukerNavn, brukerFnr, feil }: Props) {
   const [fokusId, setFokusId] = useState<string>();
   const [melding, setMelding] = useState("");
 
@@ -57,16 +58,23 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
     </div>
   );
 
+  // Identifikator som ren tekst, på linje med inputfeltet ved siden av.
+  const identTekst = (tekst: string, verdi?: string) => (
+    <Box marginBlock={{ xs: "space-0", sm: "space-32 space-0" }}>
+      <div className="flex items-center" style={{ minHeight: "3rem" }}>
+        <BodyShort>
+          {tekst}: {verdi ?? "—"}
+        </BodyShort>
+      </div>
+    </Box>
+  );
+
   return (
     <Fieldset legend="Deltakere">
       <div role="group" aria-label="Bruker">
         <HGrid columns={{ xs: 1, sm: "minmax(0, 2fr) minmax(0, 1fr) auto" }} gap="space-16" align="start">
-          <TextField
-            label={<BodyShort as="span">Bruker</BodyShort>}
-            value={visningsNavn(brukerNavn)}
-            readOnly
-          />
-          <div className="hidden sm:block" aria-hidden />
+          <TextField label={<BodyShort as="span">Navn</BodyShort>} value={visningsNavn(brukerNavn)} readOnly />
+          {identTekst("Fnr", brukerFnr)}
           {fjernPlassholder}
         </HGrid>
       </div>
@@ -81,13 +89,13 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
           <HGrid columns={{ xs: 1, sm: "minmax(0, 2fr) minmax(0, 1fr) auto" }} gap="space-16" align="start">
             <TextField
               id={deltakerNavnId(rad.id)}
-              label={<BodyShort as="span">{rad.id === VEILEDER_RAD_ID ? "Veileder" : "Navn"}</BodyShort>}
+              label={<BodyShort as="span">Navn</BodyShort>}
               value={rad.navn}
               onChange={(e) => oppdater(i, { navn: e.target.value })}
               error={feil[rad.id]?.navn}
             />
             {rad.id === VEILEDER_RAD_ID ? (
-              <div className="hidden sm:block" aria-hidden />
+              identTekst("Nav-ident", VEILEDER_NAV_IDENT)
             ) : (
               <Select
                 id={deltakerRolleId(rad.id)}

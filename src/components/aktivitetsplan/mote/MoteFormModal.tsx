@@ -30,6 +30,7 @@ interface Props {
   // Uten `kort` opprettes et nytt møte, ellers redigeres det eksisterende.
   kort?: AktivitetsKort;
   brukerNavn: string;
+  brukerFnr?: string;
   onLagre: (verdier: { tittel: string; startDato: string; klokkeslett: string; varighetMinutter: number; moteform: MoteForm; moteSted: string; deltakere: Deltaker[]; hensikt: string; forberedelser: string }) => void;
   onClose: () => void;
 }
@@ -45,7 +46,7 @@ const FEILFELT_ID: Record<keyof MoteFormFeil, string> = {
   forberedelser: "mote-forberedelser",
 };
 
-export function MoteFormModal({ kort, brukerNavn, onLagre, onClose }: Props) {
+export function MoteFormModal({ kort, brukerNavn, brukerFnr, onLagre, onClose }: Props) {
   const erRedigering = !!kort;
   const iDag = new Date();
   iDag.setHours(0, 0, 0, 0);
@@ -185,7 +186,7 @@ export function MoteFormModal({ kort, brukerNavn, onLagre, onClose }: Props) {
           </div>
 
           <div>
-            <DeltakereFelt rader={deltakerRader} onChange={setDeltakerRader} brukerNavn={brukerNavn} feil={synligeRadFeil} />
+            <DeltakereFelt rader={deltakerRader} onChange={setDeltakerRader} brukerNavn={brukerNavn} brukerFnr={brukerFnr} feil={synligeRadFeil} />
           </div>
 
           <Select
