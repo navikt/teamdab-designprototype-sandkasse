@@ -15,17 +15,15 @@ interface Props {
   setKort: Dispatch<SetStateAction<AktivitetsKort[]>>;
   perspektiv: Perspektiv;
   brukerNavn: string;
-  brukerFnr?: string;
 }
 
-export function MoteModaler({ state, setState, kort, setKort, perspektiv, brukerNavn, brukerFnr }: Props) {
+export function MoteModaler({ state, setState, kort, setKort, perspektiv, brukerNavn }: Props) {
   if (!state) return null;
 
   if (state.type === "opprett") {
     return (
       <MoteFormModal
         brukerNavn={brukerNavn}
-        brukerFnr={brukerFnr}
         onClose={() => setState(null)}
         onLagre={(v) => {
           const id = `mote-${Date.now()}`;
@@ -62,7 +60,6 @@ export function MoteModaler({ state, setState, kort, setKort, perspektiv, bruker
       <MoteFormModal
         kort={aktivt}
         brukerNavn={brukerNavn}
-        brukerFnr={brukerFnr}
         onClose={() => setState({ type: "detaljer", id: aktivt.id })}
         onLagre={(v) => {
           setKort((prev) =>

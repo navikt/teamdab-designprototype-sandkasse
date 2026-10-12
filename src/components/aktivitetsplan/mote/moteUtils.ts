@@ -2,7 +2,6 @@ import { AktivitetsKort, Deltaker, DeltakerRolle, HistorikkInnslag, KolonneId, M
 
 // Testnavn etter reglene i AGENTS.md. Prod forhåndsutfyller «Hilsen {veiledernavn}» i hensiktsfeltet.
 export const VEILEDER_NAVN = "Kompass, Trygg";
-export const VEILEDER_NAV_IDENT = "Z000000";
 export const DELTAKER_ROLLER: DeltakerRolle[] = ["Veileder", "Arbeidsgiver", "Behandler", "Mentor", "Fadder", "Annet"];
 export const visningsNavn = (navn: string) => {
   const [etternavn, fornavn] = navn.split(", ");
