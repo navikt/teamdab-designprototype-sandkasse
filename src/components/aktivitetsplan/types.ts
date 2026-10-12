@@ -86,7 +86,7 @@ export interface HistorikkInnslag {
   beskrivelse: string; // f.eks. «opprettet aktivitet»
 }
 
-export type DeltakerRolle = "Veileder" | "Arbeidsgiver" | "Behandler" | "Mentor" | "Annet";
+export type DeltakerRolle = "Veileder" | "Arbeidsgiver" | "Behandler" | "Mentor" | "Fadder" | "Annet";
 
 // Ekstra deltakere utover bruker og veileder, som alltid er med.
 export interface Deltaker {
