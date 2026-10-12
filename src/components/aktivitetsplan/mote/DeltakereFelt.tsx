@@ -62,7 +62,7 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
       <div role="group" aria-label="Bruker">
         <HGrid columns={{ xs: 1, sm: "minmax(0, 2fr) minmax(0, 1fr) auto" }} gap="space-16" align="start">
           <TextField
-            label={<BodyShort as="span">Bruker (får alltid innkallingen)</BodyShort>}
+            label={<BodyShort as="span">Bruker</BodyShort>}
             value={visningsNavn(brukerNavn)}
             readOnly
           />
