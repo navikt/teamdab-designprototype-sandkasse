@@ -1,20 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { AktivitetsKort, KolonneId, Perspektiv } from "./types";
-import { lagInitialKort } from "./initialData";
 import { AktivitetsplanKolonne } from "./AktivitetsplanKolonne";
 import { SamtalereferatModal } from "./samtalereferat/SamtalereferatModal";
 
 const KOLONNER: KolonneId[] = ["forslag", "planlegger", "gjennomforer", "fullfort", "avbrutt"];
 
-export function AktivitetsplanBoard({ perspektiv }: { perspektiv: Perspektiv }) {
-  const [kort, setKort] = useState(lagInitialKort);
+interface Props {
+  perspektiv: Perspektiv;
+  kort: AktivitetsKort[];
+  setKort: Dispatch<SetStateAction<AktivitetsKort[]>>;
+  onMoteKlikk: (id: string) => void;
+}
+
+export function AktivitetsplanBoard({ perspektiv, kort, setKort, onMoteKlikk }: Props) {
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [aktivtKort, setAktivtKort] = useState<AktivitetsKort | null>(null);
 
   const handleKortKlikk = (k: AktivitetsKort) => {
-    if (k.samtalereferatData) setAktivtKort(k);
+    if (k.type === "Møte med Nav") onMoteKlikk(k.id);
+    else if (k.samtalereferatData) setAktivtKort(k);
   };
 
   const handleDragStart = (e: React.DragEvent, id: string) => {

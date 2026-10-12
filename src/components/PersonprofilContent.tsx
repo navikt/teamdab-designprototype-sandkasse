@@ -7,6 +7,8 @@ import { Visittkort } from "./Visittkort";
 import { PersonprofilTabBar } from "./PersonprofilTabBar";
 import { AktivitetsplanSection } from "./AktivitetsplanSection";
 import { AktivitetsplanBoard } from "./aktivitetsplan/AktivitetsplanBoard";
+import { MoteModaler, MoteModalState } from "./aktivitetsplan/mote/MoteModaler";
+import { useAktivitetsKort } from "./aktivitetsplan/useAktivitetsKort";
 import { DialogSection } from "./dialog/DialogSection";
 import { ForlengOppfolgingModal } from "./ForlengOppfolgingModal";
 import { AvsluttOppfolgingModal } from "./AvsluttOppfolgingModal";
@@ -35,6 +37,8 @@ export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, 
   const [alertVariant, setAlertVariant] = useState<"info" | "warning">("warning");
   const [perspektiv, setPerspektiv] = useState<Perspektiv>("veileder");
   const [aktivTab, setAktivTab] = useState("aktivitetsplan");
+  const [aktivitetsKort, setAktivitetsKort] = useAktivitetsKort();
+  const [moteModal, setMoteModal] = useState<MoteModalState>(null);
   const [forlengOpen, setForlengOpen] = useState(false);
   const [avsluttOpen, setAvsluttOpen] = useState(false);
 
@@ -161,10 +165,23 @@ export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, 
         <PersonprofilTabBar />
         <Tabs.Panel value="aktivitetsplan" className="flex-1 flex flex-col items-center gap-6 py-6 overflow-x-hidden">
           <div className="w-full max-w-3xl px-6">
-            <AktivitetsplanSection perspektiv={perspektiv} onPerspektivChange={setPerspektiv} />
+            <AktivitetsplanSection perspektiv={perspektiv} onPerspektivChange={setPerspektiv} onOpprettMote={() => setMoteModal({ type: "opprett" })} />
           </div>
           <div className="w-full px-6">
-            <AktivitetsplanBoard perspektiv={perspektiv} />
+            <AktivitetsplanBoard
+              perspektiv={perspektiv}
+              kort={aktivitetsKort}
+              setKort={setAktivitetsKort}
+              onMoteKlikk={(id) => setMoteModal({ type: "detaljer", id })}
+            />
+            <MoteModaler
+              state={moteModal}
+              setState={setMoteModal}
+              kort={aktivitetsKort}
+              setKort={setAktivitetsKort}
+              perspektiv={perspektiv}
+              brukerNavn={navn ?? "Bruker"}
+            />
           </div>
         </Tabs.Panel>
         <Tabs.Panel value="dialog" className="flex flex-1 overflow-hidden">
