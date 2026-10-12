@@ -76,7 +76,7 @@ export function lagInitialKort(): AktivitetsKort[] {
     varighet: "15 minutter",
     varighetMinutter: 15,
     moteSted: "Telefonnummeret du har oppgitt til Nav",
-    hensikt: "Avklare videre oppfølging.\nHilsen Utsikt, Rolig",
+    hensikt: "Avklare videre oppfølging.\nHilsen Trygg Kompass",
     historikk: [{ tidspunkt: new Date().toISOString(), beskrivelse: "opprettet aktivitet" }],
   },
   {
@@ -91,7 +91,7 @@ export function lagInitialKort(): AktivitetsKort[] {
     varighet: "1 time",
     varighetMinutter: 60,
     moteSted: "Møterom hos Nav",
-    hensikt: "Gå gjennom aktivitetene dine og avtale veien videre.\nHilsen Utsikt, Rolig",
+    hensikt: "Gå gjennom aktivitetene dine og avtale veien videre.\nHilsen Trygg Kompass",
     forberedelser: "Ta med oversikt over aktivitetene du har gjort.",
     historikk: [{ tidspunkt: new Date(Date.now() - 5 * 24 * 3600 * 1000).toISOString(), beskrivelse: "opprettet aktivitet" }],
   },

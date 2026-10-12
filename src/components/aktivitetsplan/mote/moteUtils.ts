@@ -1,10 +1,14 @@
 import { AktivitetsKort, Deltaker, DeltakerRolle, HistorikkInnslag, KolonneId, MoteForm } from "../types";
 
 // Testnavn etter reglene i AGENTS.md. Prod forhåndsutfyller «Hilsen {veiledernavn}» i hensiktsfeltet.
-export const VEILEDER_NAVN = "Utsikt, Rolig";
+export const VEILEDER_NAVN = "Kompass, Trygg";
 export const VEILEDER_TITTEL = "Veileder";
 export const DELTAKER_ROLLER: DeltakerRolle[] = ["Veileder", "Arbeidsgiver", "Behandler", "Mentor", "Annet"];
-export const HILSEN_TEKST = `\nHilsen ${VEILEDER_NAVN}`;
+export const visningsNavn = (navn: string) => {
+  const [etternavn, fornavn] = navn.split(", ");
+  return fornavn ? `${fornavn} ${etternavn}` : navn;
+};
+export const HILSEN_TEKST = `\nHilsen ${visningsNavn(VEILEDER_NAVN)}`;
 
 export const MOTE_INGRESS = "Nav ønsker et møte med deg. Du må gi beskjed så raskt som mulig hvis tidspunktet ikke passer.";
 

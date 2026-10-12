@@ -3,7 +3,7 @@
 import { PersonIcon, PlusIcon, TrashIcon } from "@navikt/aksel-icons";
 import { BodyShort, Button, Box, Fieldset, HGrid, HStack, Select, TextField, VStack } from "@navikt/ds-react";
 import { useEffect, useState } from "react";
-import { DELTAKER_ROLLER, DeltakerRad, DeltakerRadFeil, VEILEDER_NAVN, VEILEDER_TITTEL } from "./moteUtils";
+import { DELTAKER_ROLLER, DeltakerRad, DeltakerRadFeil, VEILEDER_NAVN, VEILEDER_TITTEL, visningsNavn } from "./moteUtils";
 
 interface Props {
   rader: DeltakerRad[];
@@ -52,12 +52,12 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
         <VStack as="ul" gap="space-8" style={{ listStyle: "none", padding: 0, margin: 0 }}>
           <HStack as="li" gap="space-8" align="center">
             <PersonIcon aria-hidden />
-            <BodyShort>{brukerNavn}</BodyShort>
+            <BodyShort>{visningsNavn(brukerNavn)}</BodyShort>
           </HStack>
           <HStack as="li" gap="space-8" align="center">
             <PersonIcon aria-hidden />
             <BodyShort>
-              {VEILEDER_NAVN} ({VEILEDER_TITTEL})
+              {visningsNavn(VEILEDER_NAVN)} ({VEILEDER_TITTEL})
             </BodyShort>
           </HStack>
         </VStack>
