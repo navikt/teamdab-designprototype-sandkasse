@@ -61,8 +61,12 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
     <Fieldset legend="Deltakere">
       <div role="group" aria-label="Bruker">
         <HGrid columns={{ xs: 1, sm: "minmax(0, 2fr) minmax(0, 1fr) auto" }} gap="space-16" align="start">
-          <TextField label={<BodyShort as="span">Navn</BodyShort>} value={visningsNavn(brukerNavn)} readOnly />
-          <TextField label={<BodyShort as="span">Rolle</BodyShort>} value="Bruker" readOnly />
+          <TextField
+            label={<BodyShort as="span">Bruker (får alltid innkallingen)</BodyShort>}
+            value={visningsNavn(brukerNavn)}
+            readOnly
+          />
+          <div className="hidden sm:block" aria-hidden />
           {fjernPlassholder}
         </HGrid>
       </div>
@@ -77,13 +81,13 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
           <HGrid columns={{ xs: 1, sm: "minmax(0, 2fr) minmax(0, 1fr) auto" }} gap="space-16" align="start">
             <TextField
               id={deltakerNavnId(rad.id)}
-              label={<BodyShort as="span">Navn</BodyShort>}
+              label={<BodyShort as="span">{rad.id === VEILEDER_RAD_ID ? "Veileder" : "Navn"}</BodyShort>}
               value={rad.navn}
               onChange={(e) => oppdater(i, { navn: e.target.value })}
               error={feil[rad.id]?.navn}
             />
             {rad.id === VEILEDER_RAD_ID ? (
-              <TextField label={<BodyShort as="span">Rolle</BodyShort>} value="Veileder" readOnly />
+              <div className="hidden sm:block" aria-hidden />
             ) : (
               <Select
                 id={deltakerRolleId(rad.id)}
