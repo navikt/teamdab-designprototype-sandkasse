@@ -1,9 +1,9 @@
 "use client";
 
-import { PersonIcon, PlusIcon, TrashIcon } from "@navikt/aksel-icons";
-import { BodyShort, Button, Box, Fieldset, HGrid, HStack, Select, TextField, VStack } from "@navikt/ds-react";
+import { PlusIcon, TrashIcon } from "@navikt/aksel-icons";
+import { BodyShort, Button, Box, Fieldset, HGrid, Select, TextField } from "@navikt/ds-react";
 import { useEffect, useState } from "react";
-import { DELTAKER_ROLLER, DeltakerRad, DeltakerRadFeil, VEILEDER_NAVN, VEILEDER_TITTEL, visningsNavn } from "./moteUtils";
+import { DELTAKER_ROLLER, DeltakerRad, DeltakerRadFeil, VEILEDER_RAD_ID, visningsNavn } from "./moteUtils";
 
 interface Props {
   rader: DeltakerRad[];
@@ -46,28 +46,32 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
   const oppdater = (indeks: number, endring: Partial<DeltakerRad>) =>
     onChange(rader.map((r, i) => (i === indeks ? { ...r, ...endring } : r)));
 
+  // Usynlig kopi av Fjern-knappen holder kolonnene like brede som i radene som kan fjernes.
+  const fjernPlassholder = (
+    <div aria-hidden className="hidden sm:block invisible">
+      <Box marginBlock="space-32 space-0">
+        <Button type="button" variant="tertiary" tabIndex={-1} icon={<TrashIcon aria-hidden />}>
+          Fjern
+        </Button>
+      </Box>
+    </div>
+  );
+
   return (
     <Fieldset legend="Deltakere">
-      <Box background="neutral-soft" borderRadius="8" padding="space-12">
-        <VStack as="ul" gap="space-8" style={{ listStyle: "none", padding: 0, margin: 0 }}>
-          <HStack as="li" gap="space-8" align="center">
-            <PersonIcon aria-hidden />
-            <BodyShort>{visningsNavn(brukerNavn)}</BodyShort>
-          </HStack>
-          <HStack as="li" gap="space-8" align="center">
-            <PersonIcon aria-hidden />
-            <BodyShort>
-              {visningsNavn(VEILEDER_NAVN)} ({VEILEDER_TITTEL})
-            </BodyShort>
-          </HStack>
-        </VStack>
-      </Box>
+      <div role="group" aria-label="Bruker">
+        <HGrid columns={{ xs: 1, sm: "minmax(0, 2fr) minmax(0, 1fr) auto" }} gap="space-16" align="start">
+          <TextField label={<BodyShort as="span">Navn</BodyShort>} value={visningsNavn(brukerNavn)} readOnly />
+          <TextField label={<BodyShort as="span">Rolle</BodyShort>} value="Bruker" readOnly />
+          {fjernPlassholder}
+        </HGrid>
+      </div>
 
       {rader.map((rad, i) => (
         <div
           key={rad.id}
           role="group"
-          aria-label={`Deltaker ${i + 1}`}
+          aria-label={rad.id === VEILEDER_RAD_ID ? "Veileder" : `Deltaker ${i + 1}`}
           style={{ marginTop: "var(--ax-space-16)" }}
         >
           <HGrid columns={{ xs: 1, sm: "minmax(0, 2fr) minmax(0, 1fr) auto" }} gap="space-16" align="start">
@@ -78,31 +82,39 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
               onChange={(e) => oppdater(i, { navn: e.target.value })}
               error={feil[rad.id]?.navn}
             />
-            <Select
-              id={deltakerRolleId(rad.id)}
-              label={<BodyShort as="span">Rolle</BodyShort>}
-              value={rad.rolle}
-              onChange={(e) => oppdater(i, { rolle: e.target.value })}
-              error={feil[rad.id]?.rolle}
-            >
-              <option value="">Velg rolle</option>
-              {DELTAKER_ROLLER.map((r) => (
-                <option key={r} value={r}>
-                  {r}
-                </option>
-              ))}
-            </Select>
-            <Box marginBlock={{ xs: "space-0", sm: "space-32 space-0" }}>
-              <Button
-                type="button"
-                variant="tertiary"
-                data-color="danger"
-                icon={<TrashIcon aria-hidden />}
-                onClick={() => slett(i)}
+            {rad.id === VEILEDER_RAD_ID ? (
+              <TextField label={<BodyShort as="span">Rolle</BodyShort>} value="Veileder" readOnly />
+            ) : (
+              <Select
+                id={deltakerRolleId(rad.id)}
+                label={<BodyShort as="span">Rolle</BodyShort>}
+                value={rad.rolle}
+                onChange={(e) => oppdater(i, { rolle: e.target.value })}
+                error={feil[rad.id]?.rolle}
               >
-                Fjern<span className="sr-only"> deltaker {i + 1}</span>
-              </Button>
-            </Box>
+                <option value="">Velg rolle</option>
+                {DELTAKER_ROLLER.map((r) => (
+                  <option key={r} value={r}>
+                    {r}
+                  </option>
+                ))}
+              </Select>
+            )}
+            {rad.id === VEILEDER_RAD_ID ? (
+              fjernPlassholder
+            ) : (
+              <Box marginBlock={{ xs: "space-0", sm: "space-32 space-0" }}>
+                <Button
+                  type="button"
+                  variant="tertiary"
+                  data-color="danger"
+                  icon={<TrashIcon aria-hidden />}
+                  onClick={() => slett(i)}
+                >
+                  Fjern<span className="sr-only"> deltaker {i + 1}</span>
+                </Button>
+              </Box>
+            )}
           </HGrid>
         </div>
       ))}

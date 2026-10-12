@@ -2,7 +2,6 @@ import { AktivitetsKort, Deltaker, DeltakerRolle, HistorikkInnslag, KolonneId, M
 
 // Testnavn etter reglene i AGENTS.md. Prod forhåndsutfyller «Hilsen {veiledernavn}» i hensiktsfeltet.
 export const VEILEDER_NAVN = "Kompass, Trygg";
-export const VEILEDER_TITTEL = "Veileder";
 export const DELTAKER_ROLLER: DeltakerRolle[] = ["Veileder", "Arbeidsgiver", "Behandler", "Mentor", "Fadder", "Annet"];
 export const visningsNavn = (navn: string) => {
   const [etternavn, fornavn] = navn.split(", ");
@@ -120,6 +119,8 @@ export function validerMote(v: MoteFormVerdier): MoteFormFeil {
   return feil;
 }
 
+export const VEILEDER_RAD_ID = "veileder";
+
 export interface DeltakerRad {
   id: string;
   navn: string;
@@ -135,6 +136,7 @@ export interface DeltakerRadFeil {
 export function validerDeltakerRad(r: DeltakerRad): DeltakerRadFeil {
   const harNavn = r.navn.trim() !== "";
   const harRolle = r.rolle !== "";
+  if (r.id === VEILEDER_RAD_ID) return harNavn ? {} : { navn: "Du må fylle ut navn på veilederen" };
   if (!harNavn && !harRolle) return {};
   return {
     navn: harNavn ? undefined : "Du må fylle ut navn på deltakeren",

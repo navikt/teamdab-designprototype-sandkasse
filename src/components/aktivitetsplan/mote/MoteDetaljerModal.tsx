@@ -34,9 +34,7 @@ import {
   formaterTidspunkt,
   formatterVarighet,
   lagHistorikkInnslag,
-  VEILEDER_NAVN,
   visningsNavn,
-  VEILEDER_TITTEL,
   moteStart,
 } from "./moteUtils";
 
@@ -132,11 +130,6 @@ export function MoteDetaljerModal({ kort, perspektiv, brukerNavn, setKort, onEnd
                 <ul className="list-none p-0 m-0">
                   <li>
                     <BodyShort as="span">{visningsNavn(brukerNavn)}</BodyShort>
-                  </li>
-                  <li>
-                    <BodyShort as="span">
-                      {visningsNavn(VEILEDER_NAVN)} ({VEILEDER_TITTEL})
-                    </BodyShort>
                   </li>
                   {(kort.deltakere ?? []).map((d, i) => (
                     <li key={i}>

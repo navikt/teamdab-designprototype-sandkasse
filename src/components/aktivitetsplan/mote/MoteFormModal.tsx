@@ -14,11 +14,14 @@ import {
   DeltakerRadFeil,
   MoteFormVerdier,
   VARIGHETER,
+  VEILEDER_NAVN,
+  VEILEDER_RAD_ID,
   fraIsoDato,
   raderTilDeltakere,
   tilIsoDato,
   validerDeltakerRad,
   validerMote,
+  visningsNavn,
 } from "./moteUtils";
 
 const CONFIRM = "Alle endringer blir borte hvis du ikke lagrer. Er du sikker på at du vil lukke siden?";
@@ -57,6 +60,14 @@ export function MoteFormModal({ kort, brukerNavn, onLagre, onClose }: Props) {
     forberedelser: kort?.forberedelser ?? "",
   };
   const startDato = kort?.startDato;
+  const veilederStart: Deltaker = { navn: visningsNavn(VEILEDER_NAVN), rolle: "Veileder" };
+  const eksisterende = kort?.deltakere ?? [];
+  const veilederIndeks = eksisterende.findIndex((d) => d.rolle === "Veileder");
+  // Veileder ligger alltid først, også for eldre kort uten veileder.
+  const startDeltakereListe: Deltaker[] =
+    veilederIndeks === -1
+      ? [veilederStart, ...eksisterende]
+      : [eksisterende[veilederIndeks], ...eksisterende.filter((_, i) => i !== veilederIndeks)];
 
   const [tittel, setTittel] = useState(startVerdier.tittel);
   const [klokkeslett, setKlokkeslett] = useState(startVerdier.klokkeslett);
@@ -66,7 +77,7 @@ export function MoteFormModal({ kort, brukerNavn, onLagre, onClose }: Props) {
   const [beskrivelse, setBeskrivelse] = useState(startVerdier.beskrivelse);
   const [forberedelser, setForberedelser] = useState(startVerdier.forberedelser);
   const [deltakerRader, setDeltakerRader] = useState<DeltakerRad[]>(() =>
-    (kort?.deltakere ?? []).map((d, i) => ({ id: `eksisterende-${i}`, navn: d.navn, rolle: d.rolle })),
+    startDeltakereListe.map((d, i) => ({ id: i === 0 ? VEILEDER_RAD_ID : `eksisterende-${i}`, navn: d.navn, rolle: d.rolle })),
   );
   const [visFeil, setVisFeil] = useState(false);
   const errorSummaryRef = useRef<HTMLDivElement>(null);
@@ -95,7 +106,7 @@ export function MoteFormModal({ kort, brukerNavn, onLagre, onClose }: Props) {
   });
   const synligeFeil: MoteFormFeil = visFeil ? feil : {};
   const synligeRadFeil = visFeil ? radFeil : {};
-  const startDeltakere = JSON.stringify(kort?.deltakere ?? []);
+  const startDeltakere = JSON.stringify(startDeltakereListe);
 
   const erEndret =
     tittel !== startVerdier.tittel ||
