@@ -9,7 +9,7 @@ interface Props {
   onOpprettMote: () => void;
 }
 
-export function AktivitetsplanSection({ perspektiv: _perspektiv, onPerspektivChange: _onPerspektivChange, onOpprettMote }: Props) {
+export function AktivitetsplanSection({ perspektiv, onPerspektivChange: _onPerspektivChange, onOpprettMote }: Props) {
   return (
     <div className="flex flex-col gap-4 w-full">
       {/* Top links row */}
@@ -42,7 +42,7 @@ export function AktivitetsplanSection({ perspektiv: _perspektiv, onPerspektivCha
 
       {/* Actions row */}
       <div className="flex items-center gap-4 w-full">
-        {_perspektiv === "veileder" ? (
+        {perspektiv === "veileder" ? (
           <LeggTilAktivitetMeny onVelgMote={onOpprettMote} />
         ) : (
           <Button variant="primary" size="small" icon={<PlusIcon aria-hidden />} iconPosition="left">
