@@ -10,7 +10,7 @@ import { MinOversiktFilterPanel } from "@/components/MinOversiktFilterPanel";
 import { MinOversiktFilterHeader } from "@/components/MinOversiktFilterHeader";
 import { Toolbar } from "@/components/Toolbar";
 import { Brukerliste } from "@/components/brukerliste/Brukerliste";
-import { avsluttForlengBrukere, avsluttForlengBrukereFase2 } from "@/data/brukere";
+import { avsluttForlengBrukere, avsluttForlengBrukereFase2, iavtaltAktivitetBrukere } from "@/data/brukere";
 
 function EnhetensOversiktInnhold() {
   const router = useRouter();
@@ -48,7 +48,9 @@ function MinOversiktInnhold() {
 
   const tableData =
     statusFilter === "avslutt-forleng-fase-2" ? avsluttForlengBrukereFase2
+    : statusFilter === "i-avtalt-aktivitet" ? iavtaltAktivitetBrukere
     : avsluttForlengBrukere;
+  const avtaltAktivitet = statusFilter === "i-avtalt-aktivitet";
 
   const handleStatusFilterChange = (value: string) => {
     setSelectedRows([]);
@@ -71,7 +73,7 @@ function MinOversiktInnhold() {
           onClearFilter={handleClearFilter}
         />
         <Toolbar minOversikt />
-        <Brukerliste data={tableData} selectedRows={selectedRows} onSelectedRowsChange={setSelectedRows} minOversikt avslutning fase2={statusFilter === "avslutt-forleng-fase-2"} />
+        <Brukerliste data={tableData} selectedRows={selectedRows} onSelectedRowsChange={setSelectedRows} minOversikt avslutning={!avtaltAktivitet} avtaltAktivitet={avtaltAktivitet} fase2={statusFilter === "avslutt-forleng-fase-2"} />
       </div>
     </main>
   );
