@@ -29,6 +29,7 @@ interface TimeplanProps {
   visning: TimeplanVisning;
   valgtDag: Date;
   onAktivitetKlikk: (aktivitet: TimeplanAktivitet) => void;
+  sentrerPaaNaa?: boolean;
 }
 
 function leggTilDager(dato: Date, dager: number): Date {
@@ -37,7 +38,7 @@ function leggTilDager(dato: Date, dager: number): Date {
   return d;
 }
 
-export function Timeplan({ aktiviteter, ukeStart, visning, valgtDag, onAktivitetKlikk }: TimeplanProps) {
+export function Timeplan({ aktiviteter, ukeStart, visning, valgtDag, onAktivitetKlikk, sentrerPaaNaa = true }: TimeplanProps) {
   const datoer = visning === "uke" ? [0, 1, 2, 3, 4, 5, 6].map((i) => leggTilDager(ukeStart, i)) : [valgtDag];
   const dager = datoer.map((dato) => ({ dato, ukedagIndeks: (dato.getDay() + 6) % 7 }));
   const antallKolonner = dager.length;
@@ -87,8 +88,9 @@ export function Timeplan({ aktiviteter, ukeStart, visning, valgtDag, onAktivitet
   useEffect(() => {
     if (harSentrert.current || !naaLinjeSynlig) return;
     harSentrert.current = true;
+    if (!sentrerPaaNaa) return;
     naaLinjeRef.current?.scrollIntoView({ block: "center" });
-  }, [naaLinjeSynlig]);
+  }, [naaLinjeSynlig, sentrerPaaNaa]);
 
   return (
     <div className="overflow-x-auto border-y border-ax-border-neutral-subtle sm:rounded-md sm:border">

@@ -45,6 +45,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   const [visIngenDelmalVarsel, setVisIngenDelmalVarsel] = useState(false);
   const erForstePersistering = useRef(true);
   const stickyRef = useRef<HTMLDivElement>(null);
+  const [harByttetVisning, setHarByttetVisning] = useState(false);
   const [stickyHoyde, setStickyHoyde] = useState(0);
   const {
     hovedmal,
@@ -136,6 +137,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
 
   const byttVisning = (v: Visning) => {
     setVisning(v);
+    setHarByttetVisning(true);
     window.localStorage.setItem(VISNING_STORAGE_KEY, v);
   };
 
@@ -313,7 +315,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
               />
             ) : (
               <div className="-mx-6">
-                <MineAktiviteterKalender />
+                <MineAktiviteterKalender sentrerPaaNaa={!harByttetVisning} />
               </div>
             )}
           </div>

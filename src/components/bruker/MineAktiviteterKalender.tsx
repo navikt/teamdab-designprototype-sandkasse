@@ -21,7 +21,7 @@ function leggTilDager(dato: Date, dager: number): Date {
   return d;
 }
 
-export function MineAktiviteterKalender() {
+export function MineAktiviteterKalender({ sentrerPaaNaa = true }: { sentrerPaaNaa?: boolean }) {
   const [valgtAktivitet, setValgtAktivitet] = useState<TimeplanAktivitet | null>(null);
   const [visning, setVisning] = useState<TimeplanVisning>("uke");
   const [valgtDag, setValgtDag] = useState(() => {
@@ -94,6 +94,7 @@ export function MineAktiviteterKalender() {
         ukeStart={ukeStart}
         visning={visning}
         valgtDag={valgtDag}
+        sentrerPaaNaa={sentrerPaaNaa}
         onAktivitetKlikk={setValgtAktivitet}
       />
       {valgtAktivitet && (
