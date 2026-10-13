@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Heading, BodyShort, Button } from "@navikt/ds-react";
 import { DekoratorHeader } from "@/components/dekorator-lookalike/DekoratorHeader";
-import { DekoratorFooter } from "@/components/dekorator-lookalike/DekoratorFooter";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
 
 // Speiler nesteSteg()-logikken i src/components/bruker/onboarding/OnboardingFlow.tsx.
@@ -85,7 +84,6 @@ export default function OnboardingOversiktPage() {
           <MermaidDiagram chart={FLYT_DIAGRAM} />
         </div>
       </main>
-      <DekoratorFooter />
     </div>
   );
 }
