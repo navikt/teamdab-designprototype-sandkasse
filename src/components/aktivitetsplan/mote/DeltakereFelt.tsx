@@ -81,7 +81,7 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
           <HGrid columns={{ xs: 1, sm: "minmax(0, 2fr) minmax(0, 1fr) auto" }} gap="space-16" align="start">
             <TextField
               id={deltakerNavnId(rad.id)}
-              label={<BodyShort as="span">{rad.id === VEILEDER_RAD_ID ? "Veileder" : "Navn"}</BodyShort>}
+              label={<BodyShort as="span">{rad.id === VEILEDER_RAD_ID ? "Veileder" : "Deltakers navn"}</BodyShort>}
               value={rad.navn}
               onChange={(e) => oppdater(i, { navn: e.target.value })}
               error={feil[rad.id]?.navn}
@@ -91,7 +91,7 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
             ) : (
               <Select
                 id={deltakerRolleId(rad.id)}
-                label={<BodyShort as="span">Rolle</BodyShort>}
+                label={<BodyShort as="span">Deltakers rolle</BodyShort>}
                 value={rad.rolle}
                 onChange={(e) => oppdater(i, { rolle: e.target.value })}
                 error={feil[rad.id]?.rolle}
