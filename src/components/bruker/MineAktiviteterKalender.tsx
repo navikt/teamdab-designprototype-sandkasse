@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@navikt/aksel-icons";
-import { BodyShort, Button } from "@navikt/ds-react";
-import { Timeplan } from "./testdata-unge/Timeplan";
+import { Button, ToggleGroup } from "@navikt/ds-react";
+import { Timeplan, TimeplanVisning } from "./testdata-unge/Timeplan";
 import { TimeplanAktivitet, testdataUngeTimeplan } from "./testdata-unge/timeplanTestdata";
 import { TimeplanAktivitetModal } from "./testdata-unge/TimeplanAktivitetModal";
 
@@ -23,37 +23,79 @@ function leggTilDager(dato: Date, dager: number): Date {
 
 export function MineAktiviteterKalender() {
   const [valgtAktivitet, setValgtAktivitet] = useState<TimeplanAktivitet | null>(null);
-  const [ukeStart, setUkeStart] = useState(() => mandagIUke(new Date()));
-  const ukeSlutt = leggTilDager(ukeStart, 4);
+  const [visning, setVisning] = useState<TimeplanVisning>("uke");
+  const [valgtDag, setValgtDag] = useState(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  });
+  const navRef = useRef<HTMLDivElement>(null);
+  const [navHoyde, setNavHoyde] = useState(0);
+  useEffect(() => {
+    const el = navRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver(() => setNavHoyde(el.offsetHeight));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  const ukeStart = mandagIUke(valgtDag);
+  const ukeSlutt = leggTilDager(ukeStart, 6);
+  const erUke = visning === "uke";
+  const steg = erUke ? 7 : 1;
+  const enhet = erUke ? "uke" : "dag";
+  const statusTekst = erUke
+    ? `Viser uke ${ukeStart.toLocaleDateString("nb-NO", { day: "numeric", month: "long" })} til ${ukeSlutt.toLocaleDateString("nb-NO", { day: "numeric", month: "long" })}`
+    : `Viser ${valgtDag.toLocaleDateString("nb-NO", { weekday: "long", day: "numeric", month: "long" })}`;
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-2">
+    <div
+      className="flex flex-col gap-4"
+      style={{ "--kalender-header-top": `calc(var(--kalender-sticky-top, 0px) + ${navHoyde}px)` } as React.CSSProperties}
+    >
+      <div
+        ref={navRef}
+        className="sticky z-30 flex items-center justify-between gap-2 bg-[var(--ax-bg-accent-soft)] px-2 pb-2 sm:px-0"
+        style={{ top: "var(--kalender-sticky-top, 0px)" }}
+      >
         <Button
           variant="tertiary"
           size="xsmall"
           icon={<ChevronLeftIcon aria-hidden />}
-          onClick={() => setUkeStart((u) => leggTilDager(u, -7))}
-          aria-label="Forrige uke"
+          onClick={() => setValgtDag((d) => leggTilDager(d, -steg))}
+          aria-label={`Forrige ${enhet}`}
         >
-          <span className="hidden sm:inline">Forrige uke</span>
+          <span className="hidden sm:inline">Forrige {enhet}</span>
         </Button>
-        <BodyShort weight="semibold" className="text-xs sm:text-base">
-          Uke {ukeStart.toLocaleDateString("nb-NO", { day: "2-digit", month: "2-digit" })} – {ukeSlutt.toLocaleDateString("nb-NO", { day: "2-digit", month: "2-digit" })}
-        </BodyShort>
+        <ToggleGroup
+          value={visning}
+          onChange={(v) => setVisning(v as TimeplanVisning)}
+          size="small"
+          data-color="accent"
+          aria-label="Visning"
+        >
+          <ToggleGroup.Item value="dag">Dag</ToggleGroup.Item>
+          <ToggleGroup.Item value="uke">Uke</ToggleGroup.Item>
+        </ToggleGroup>
         <Button
           variant="tertiary"
           size="xsmall"
           icon={<ChevronRightIcon aria-hidden />}
           iconPosition="right"
-          onClick={() => setUkeStart((u) => leggTilDager(u, 7))}
-          aria-label="Neste uke"
+          onClick={() => setValgtDag((d) => leggTilDager(d, steg))}
+          aria-label={`Neste ${enhet}`}
         >
-          <span className="hidden sm:inline">Neste uke</span>
+          <span className="hidden sm:inline">Neste {enhet}</span>
         </Button>
       </div>
+      <span className="sr-only" aria-live="polite">{statusTekst}</span>
 
-      <Timeplan aktiviteter={testdataUngeTimeplan} ukeStart={ukeStart} onAktivitetKlikk={setValgtAktivitet} />
+      <Timeplan
+        aktiviteter={testdataUngeTimeplan}
+        ukeStart={ukeStart}
+        visning={visning}
+        valgtDag={valgtDag}
+        onAktivitetKlikk={setValgtAktivitet}
+      />
       {valgtAktivitet && (
         <TimeplanAktivitetModal aktivitet={valgtAktivitet} onClose={() => setValgtAktivitet(null)} />
       )}
