@@ -45,3 +45,6 @@ next-env.d.ts
 
 # cplt lokal verktøykonfig (maskin-/miljøspesifikk, auto-generert)
 .cplt.toml
+
+# Lokale referanseskjermbilder
+/Reference screenshots/

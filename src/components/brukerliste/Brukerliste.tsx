@@ -14,6 +14,7 @@ interface Props {
     minOversikt?: boolean;
     avslutning?: boolean;
     fase2?: boolean;
+    avtaltAktivitet?: boolean;
 }
 
 const fargekategoriOrdre: Record<string, number> = { A: 1, B: 2, C: 3, D: 4, E: 5, F: 6 };
@@ -29,7 +30,7 @@ function sorterBrukere(data: Bruker[], felt: Sorteringsfelt | null, rekkefolge: 
         if (felt === "datoForArsak") {
             return ((a.dagerTilAvslutning ?? Infinity) - (b.dagerTilAvslutning ?? Infinity)) * dir;
         }
-        if (felt === "oppfolgingStartet") {
+        if (felt === "oppfolgingStartet" || felt === "tildelingsdato") {
             const toNum = (s: string | undefined) => (s ? s.split(".").reverse().join("") : "");
             return toNum(a[felt]).localeCompare(toNum(b[felt])) * dir;
         }
@@ -47,7 +48,7 @@ function sorterBrukere(data: Bruker[], felt: Sorteringsfelt | null, rekkefolge: 
     });
 }
 
-export function Brukerliste({ data, selectedRows, onSelectedRowsChange, minOversikt = false, avslutning = false, fase2 = false }: Props) {
+export function Brukerliste({ data, selectedRows, onSelectedRowsChange, minOversikt = false, avslutning = false, fase2 = false, avtaltAktivitet = false }: Props) {
     const [sortFelt, setSortFelt] = useState<Sorteringsfelt | null>(null);
     const [sortRekkefolge, setSortRekkefolge] = useState<Sorteringsrekkefolge>("ikke_satt");
 
@@ -89,6 +90,7 @@ export function Brukerliste({ data, selectedRows, onSelectedRowsChange, minOvers
                 onSort={handleSort}
                 minOversikt={minOversikt}
                 avslutning={avslutning}
+                avtaltAktivitet={avtaltAktivitet}
             />
             <div className="brukerliste-tabell">
                 <ul className="brukerliste">
@@ -101,6 +103,7 @@ export function Brukerliste({ data, selectedRows, onSelectedRowsChange, minOvers
                             minOversikt={minOversikt}
                             avslutning={avslutning}
                             fase2={fase2}
+                            avtaltAktivitet={avtaltAktivitet}
                         />
                     ))}
                 </ul>

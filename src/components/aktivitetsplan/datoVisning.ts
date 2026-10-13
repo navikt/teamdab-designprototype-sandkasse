@@ -36,6 +36,11 @@ export function getDatoLinjer(kort: AktivitetsKort): DatoLinje[] {
     return linjer;
   }
 
+  // Som i prod vises kun «Fra» når «Jobb jeg har nå» ikke har sluttdato.
+  if (kort.startDato && kort.type === "Jobb jeg har nå" && !kort.sluttDato) {
+    return [{ label: "Fra", verdi: formatDato(kort.startDato) }];
+  }
+
   if (kort.startDato) {
     return [
       { label: "Fra", verdi: formatDato(kort.startDato) },

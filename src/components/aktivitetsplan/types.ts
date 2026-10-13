@@ -73,6 +73,27 @@ export interface Delmal {
   oppnadd?: boolean;
 }
 
+export type ForhaandsorienteringType = "SEND_STANDARD" | "SEND_PARAGRAF_11_9" | "IKKE_SEND";
+
+export interface Forhaandsorientering {
+  type: ForhaandsorienteringType;
+  tekst: string;
+}
+
+// Innslag i "Historikk"-seksjonen. Aktør ("Veileder"/"Nav") avgjøres ved visning ut fra perspektiv.
+export interface HistorikkInnslag {
+  tidspunkt: string; // ISO-tidspunkt
+  beskrivelse: string; // f.eks. «opprettet aktivitet»
+}
+
+export type DeltakerRolle = "Veileder" | "Arbeidsgiver" | "Behandler" | "Mentor" | "Fadder" | "Annet";
+
+// Ekstra deltakere utover bruker og veileder, som alltid er med.
+export interface Deltaker {
+  navn: string;
+  rolle: DeltakerRolle;
+}
+
 export interface AktivitetsKort {
   id: string;
   kolonne: KolonneId;
@@ -105,6 +126,19 @@ export interface AktivitetsKort {
   // Klokkeslett (HH:MM), brukt for "Møte med Nav" som har én dato + ett tidspunkt i stedet for Fra/Til.
   klokkeslett?: string;
   varighet?: string;
+  // Kilden til `varighet` for "Møte med Nav" (varighet vises formatert, f.eks. «1 time, 30 minutter»).
+  varighetMinutter?: number;
+  // «Møtested eller annen praktisk informasjon» for "Møte med Nav".
+  moteSted?: string;
+  deltakere?: Deltaker[];
+  avtalt?: boolean;
+  forhaandsorientering?: Forhaandsorientering;
+  // Begrunnelse oppgitt ved avbrudd/fullføring, vist i detaljvisningen.
+  avsluttetKommentar?: string;
+  historikk?: HistorikkInnslag[];
+  // Referat for "Møte med Nav" (egen datamodell fra `samtalereferatData`, som brukes av Samtalereferat-kort).
+  referat?: string;
+  erReferatPublisert?: boolean;
   hensikt?: string;
   forberedelser?: string;
   arrangor?: string;

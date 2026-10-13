@@ -16,9 +16,10 @@ interface Props {
     bruker: Bruker;
     avslutning?: boolean;
     fase2?: boolean;
+    avtaltAktivitet?: boolean;
 }
 
-export function BrukerlisteDataCeller({ bruker, avslutning = false, fase2 = false }: Props) {
+export function BrukerlisteDataCeller({ bruker, avslutning = false, fase2 = false, avtaltAktivitet = false }: Props) {
     return (
         <>
             <div className="brukerliste__innhold">
@@ -36,6 +37,14 @@ export function BrukerlisteDataCeller({ bruker, avslutning = false, fase2 = fals
                         {bruker.oppfolgingStartet}
                     </div>
                 )}
+                {avtaltAktivitet && (
+                    <>
+                        <div style={{ flex: 1.5, padding: "0 0.5rem" }}>{bruker.tildelingsdato ?? "—"}</div>
+                        <div style={{ flex: 3, padding: "0 0.5rem" }} />
+                    </>
+                )}
+                {!avtaltAktivitet && (
+                    <>
                 <div style={{ flex: 3, padding: "0 0.5rem" }}>
                     <NextLink
                         href={`/personprofil?id=${encodeURIComponent(bruker.id)}${avslutning ? "&avslutning=1" : ""}${fase2 ? "&fase2=1" : ""}`}
@@ -57,6 +66,8 @@ export function BrukerlisteDataCeller({ bruker, avslutning = false, fase2 = fals
                         <Tag key={i} variant={m.variant} size="small">{m.tekst}</Tag>
                     ))}
                 </div>
+                    </>
+                )}
             </div>
             <div className="brukerliste__gutter-right" />
         </>
