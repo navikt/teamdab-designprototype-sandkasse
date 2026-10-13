@@ -2,7 +2,6 @@
 
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { Topbar } from "@/components/Topbar";
 import { PersonprofilContent } from "@/components/PersonprofilContent";
 import { brukere, avsluttForlengBrukere, avsluttForlengBrukereFase2, iavtaltAktivitetBrukere } from "@/data/brukere";
 
@@ -38,7 +37,6 @@ function PersonProfilInnhold() {
 export default function PersonProfilPage() {
   return (
     <div className="flex flex-col h-screen">
-      <Topbar />
       <Suspense fallback={null}>
         <PersonProfilInnhold />
       </Suspense>

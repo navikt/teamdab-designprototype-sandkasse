@@ -1,5 +1,8 @@
 export type Perspektiv = "veileder" | "bruker";
 
+// «Vis som»-valg i personprofilen. «bruker-ny» er den nye aktivitetsplanen (liste/kalender, mål, forslag).
+export type Visning = Perspektiv | "bruker-ny";
+
 export type KolonneId =
   | "forslag"
   | "planlegger"

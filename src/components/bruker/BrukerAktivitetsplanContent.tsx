@@ -32,9 +32,11 @@ type Visning = "liste" | "kalender";
 
 interface BrukerAktivitetsplanContentProps {
   somVeileder?: boolean;
+  // Vises inne i personprofilen: ligger over «Vis som»-panelet og fyller ikke hele skjermhøyden.
+  embedded?: boolean;
 }
 
-export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktivitetsplanContentProps) {
+export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = false }: BrukerAktivitetsplanContentProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -164,7 +166,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   };
 
   return (
-    <div className="flex flex-col min-h-screen overflow-x-hidden">
+    <div className={`flex flex-col overflow-x-hidden ${embedded ? "" : "min-h-screen"}`}>
       <DekoratorHeader />
       {somVeileder && (
         <div className="bg-[var(--ax-bg-info-moderate)] text-ax-text-info px-6 py-2 text-sm">
@@ -320,7 +322,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
         perspektiv="bruker"
       />
 
-      <div className="fixed bottom-4 right-4 z-50">
+      <div className={`fixed z-50 ${embedded ? "bottom-24 right-6" : "bottom-4 right-4"}`}>
         <ActionMenu>
           <ActionMenu.Trigger>
             <Button
