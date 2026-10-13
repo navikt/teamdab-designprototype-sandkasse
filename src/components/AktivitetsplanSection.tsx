@@ -7,9 +7,10 @@ interface Props {
   perspektiv: Perspektiv;
   onPerspektivChange: (p: Perspektiv) => void;
   onOpprettMote: () => void;
+  onOpprettIjobb: () => void;
 }
 
-export function AktivitetsplanSection({ perspektiv, onPerspektivChange: _onPerspektivChange, onOpprettMote }: Props) {
+export function AktivitetsplanSection({ perspektiv, onPerspektivChange: _onPerspektivChange, onOpprettMote, onOpprettIjobb }: Props) {
   return (
     <div className="flex flex-col gap-4 w-full">
       {/* Top links row */}
@@ -43,7 +44,7 @@ export function AktivitetsplanSection({ perspektiv, onPerspektivChange: _onPersp
       {/* Actions row */}
       <div className="flex items-center gap-4 w-full">
         {perspektiv === "veileder" ? (
-          <LeggTilAktivitetMeny onVelgMote={onOpprettMote} />
+          <LeggTilAktivitetMeny onVelgMote={onOpprettMote} onVelgIjobb={onOpprettIjobb} />
         ) : (
           <Button variant="primary" size="small" icon={<PlusIcon aria-hidden />} iconPosition="left">
             Legg til en aktivitet

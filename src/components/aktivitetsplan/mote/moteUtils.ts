@@ -62,6 +62,12 @@ export function moteStart(kort: AktivitetsKort): Date | undefined {
   return dato;
 }
 
+// Datoen forhåndsorienteringen vurderes mot: møtetidspunktet for møter, ellers sluttdatoen (som i SattTilAvtaltVisning i prod).
+export function avtaltFrist(kort: AktivitetsKort): Date | undefined {
+  if (kort.type === "Møte med Nav") return moteStart(kort);
+  return kort.sluttDato ? fraIsoDato(kort.sluttDato) : undefined;
+}
+
 export function erMerEnnSyvDagerTil(dato: Date): boolean {
   const grense = new Date();
   grense.setHours(0, 0, 0, 0);

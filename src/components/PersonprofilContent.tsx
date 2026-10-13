@@ -8,6 +8,7 @@ import { PersonprofilTabBar } from "./PersonprofilTabBar";
 import { AktivitetsplanSection } from "./AktivitetsplanSection";
 import { AktivitetsplanBoard } from "./aktivitetsplan/AktivitetsplanBoard";
 import { MoteModaler, MoteModalState } from "./aktivitetsplan/mote/MoteModaler";
+import { IjobbModaler, IjobbModalState } from "./aktivitetsplan/ijobb/IjobbModaler";
 import { useAktivitetsKort } from "./aktivitetsplan/useAktivitetsKort";
 import { DialogSection } from "./dialog/DialogSection";
 import { ForlengOppfolgingModal } from "./ForlengOppfolgingModal";
@@ -39,6 +40,7 @@ export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, 
   const [aktivTab, setAktivTab] = useState("aktivitetsplan");
   const [aktivitetsKort, setAktivitetsKort] = useAktivitetsKort();
   const [moteModal, setMoteModal] = useState<MoteModalState>(null);
+  const [ijobbModal, setIjobbModal] = useState<IjobbModalState>(null);
   const [forlengOpen, setForlengOpen] = useState(false);
   const [avsluttOpen, setAvsluttOpen] = useState(false);
 
@@ -165,7 +167,7 @@ export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, 
         <PersonprofilTabBar />
         <Tabs.Panel value="aktivitetsplan" className="flex-1 flex flex-col items-center gap-6 py-6 overflow-x-hidden">
           <div className="w-full max-w-3xl px-6">
-            <AktivitetsplanSection perspektiv={perspektiv} onPerspektivChange={setPerspektiv} onOpprettMote={() => setMoteModal({ type: "opprett" })} />
+            <AktivitetsplanSection perspektiv={perspektiv} onPerspektivChange={setPerspektiv} onOpprettMote={() => setMoteModal({ type: "opprett" })} onOpprettIjobb={() => setIjobbModal({ type: "opprett" })} />
           </div>
           <div className="w-full px-6">
             <AktivitetsplanBoard
@@ -173,6 +175,14 @@ export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, 
               kort={aktivitetsKort}
               setKort={setAktivitetsKort}
               onMoteKlikk={(id) => setMoteModal({ type: "detaljer", id })}
+              onIjobbKlikk={(id) => setIjobbModal({ type: "detaljer", id })}
+            />
+            <IjobbModaler
+              state={ijobbModal}
+              setState={setIjobbModal}
+              kort={aktivitetsKort}
+              setKort={setAktivitetsKort}
+              perspektiv={perspektiv}
             />
             <MoteModaler
               state={moteModal}

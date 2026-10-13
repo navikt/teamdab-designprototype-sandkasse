@@ -35,6 +35,7 @@ import {
   formatterVarighet,
   lagHistorikkInnslag,
   visningsNavn,
+  avtaltFrist,
   moteStart,
 } from "./moteUtils";
 
@@ -224,7 +225,7 @@ interface DelProps {
   oppdater: (endre: (k: AktivitetsKort) => AktivitetsKort) => void;
 }
 
-function AvtaltContainer({ kort, erVeileder, ferdig, oppdater }: DelProps) {
+export function AvtaltContainer({ kort, erVeileder, ferdig, oppdater }: DelProps) {
   if (kort.avtalt) {
     return kort.forhaandsorientering ? <ForhaandsorienteringVisning kort={kort} /> : null;
   }
@@ -234,7 +235,7 @@ function AvtaltContainer({ kort, erVeileder, ferdig, oppdater }: DelProps) {
 
 function ForhaandsorienteringVisning({ kort }: { kort: AktivitetsKort }) {
   const fo = kort.forhaandsorientering!;
-  const start = moteStart(kort);
+  const start = avtaltFrist(kort);
   const mindreEnnSyvDager = start ? !erMerEnnSyvDagerTil(start) : false;
   let tekst: string;
   if (mindreEnnSyvDager) {
@@ -260,7 +261,7 @@ function ForhaandsorienteringVisning({ kort }: { kort: AktivitetsKort }) {
 }
 
 function AvtaltForm({ kort, oppdater }: Pick<DelProps, "kort" | "oppdater">) {
-  const start = moteStart(kort);
+  const start = avtaltFrist(kort);
   const mindreEnnSyvDagerTil = start ? !erMerEnnSyvDagerTil(start) : false;
   const kanSendeForhaandsvarsel = !mindreEnnSyvDagerTil;
 
@@ -475,7 +476,7 @@ function ReferatForm({
   );
 }
 
-function StatusForm({ kort, oppdater }: Pick<DelProps, "kort" | "oppdater">) {
+export function StatusForm({ kort, oppdater }: Pick<DelProps, "kort" | "oppdater">) {
   const ferdig = erFerdig(kort);
   const [valgt, setValgt] = useState<KolonneId>(kort.kolonne);
   const [begrunnelse, setBegrunnelse] = useState("");
@@ -494,7 +495,7 @@ function StatusForm({ kort, oppdater }: Pick<DelProps, "kort" | "oppdater">) {
 
     const nyeFeil: typeof feil = {};
     // Samme regel som manglerPubliseringAvSamtaleReferat i prod: avbrutt er unntatt.
-    if (valgt === "fullfort" && !kort.erReferatPublisert) {
+    if (kort.type === "Møte med Nav" && valgt === "fullfort" && !kort.erReferatPublisert) {
       nyeFeil.status = "Samtalereferatet må deles før du kan sette aktiviteten til denne statusen";
     }
     if (krevBegrunnelse && !begrunnelse.trim()) nyeFeil.begrunnelse = "Du må fylle ut en begrunnelse";

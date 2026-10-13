@@ -12,14 +12,16 @@ interface Props {
   kort: AktivitetsKort[];
   setKort: Dispatch<SetStateAction<AktivitetsKort[]>>;
   onMoteKlikk: (id: string) => void;
+  onIjobbKlikk: (id: string) => void;
 }
 
-export function AktivitetsplanBoard({ perspektiv, kort, setKort, onMoteKlikk }: Props) {
+export function AktivitetsplanBoard({ perspektiv, kort, setKort, onMoteKlikk, onIjobbKlikk }: Props) {
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [aktivtKort, setAktivtKort] = useState<AktivitetsKort | null>(null);
 
   const handleKortKlikk = (k: AktivitetsKort) => {
     if (k.type === "Møte med Nav") onMoteKlikk(k.id);
+    else if (k.type === "Jobb jeg har nå") onIjobbKlikk(k.id);
     else if (k.samtalereferatData) setAktivtKort(k);
   };
 
