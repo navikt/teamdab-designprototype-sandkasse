@@ -1,7 +1,8 @@
 export type Perspektiv = "veileder" | "bruker";
 
-// «Vis som»-valg i personprofilen. «bruker-ny» er den nye aktivitetsplanen (liste/kalender, mål, forslag).
-export type Visning = Perspektiv | "bruker-ny";
+// «Vis som»-valg i personprofilen. «ny» er den nye aktivitetsplanen (liste/kalender, mål, forslag);
+// «gammel-*» er den gamle kanban-tavlen sett fra veileder- eller bruker-perspektiv.
+export type Visning = "gammel-veileder" | "gammel-bruker" | "ny";
 
 export type KolonneId =
   | "forslag"

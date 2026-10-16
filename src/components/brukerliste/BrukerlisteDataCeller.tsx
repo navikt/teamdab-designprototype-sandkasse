@@ -25,7 +25,7 @@ export function BrukerlisteDataCeller({ bruker, avslutning = false, fase2 = fals
             <div className="brukerliste__innhold">
                 <div style={{ flex: 1.5, padding: "0 0.5rem" }}>
                     <NextLink
-                        href={`/personprofil?id=${encodeURIComponent(bruker.id)}${avslutning ? "&avslutning=1" : ""}${fase2 ? "&fase2=1" : ""}`}
+                        href={`/personprofil?id=${encodeURIComponent(bruker.id)}${avslutning ? "&avslutning=1" : ""}${fase2 ? "&fase2=1" : ""}&visning=gammel-veileder`}
                         className="bruker-lenke"
                     >
                         {bruker.navn}
@@ -47,7 +47,7 @@ export function BrukerlisteDataCeller({ bruker, avslutning = false, fase2 = fals
                     <>
                 <div style={{ flex: 3, padding: "0 0.5rem" }}>
                     <NextLink
-                        href={`/personprofil?id=${encodeURIComponent(bruker.id)}${avslutning ? "&avslutning=1" : ""}${fase2 ? "&fase2=1" : ""}`}
+                        href={`/personprofil?id=${encodeURIComponent(bruker.id)}${avslutning ? "&avslutning=1" : ""}${fase2 ? "&fase2=1" : ""}&visning=gammel-veileder`}
                         className="bruker-lenke"
                     >
                         {bruker.status}
