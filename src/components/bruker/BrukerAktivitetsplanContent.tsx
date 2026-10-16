@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { ArrowsCirclepathIcon, CompassIcon, TrashIcon, WrenchIcon } from "@navikt/aksel-icons";
@@ -48,6 +48,9 @@ export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = fa
   const [ijobbModal, setIjobbModal] = useState<IjobbModalState>(null);
   const [visOnboarding, setVisOnboarding] = useState(false);
   const [visIngenDelmalVarsel, setVisIngenDelmalVarsel] = useState(false);
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const [harByttetVisning, setHarByttetVisning] = useState(false);
+  const [stickyHoyde, setStickyHoyde] = useState(0);
   const {
     hovedmal,
     setHovedmal,
@@ -110,8 +113,17 @@ export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = fa
     if (window.localStorage.getItem(ONBOARDING_STORAGE_KEY) === "1") setVisOnboarding(true);
   }, []);
 
+  useEffect(() => {
+    const el = stickyRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver(() => setStickyHoyde(el.offsetHeight));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [visOnboarding]);
+
   const byttVisning = (v: Visning) => {
     setVisning(v);
+    setHarByttetVisning(true);
     window.localStorage.setItem(VISNING_STORAGE_KEY, v);
   };
 
@@ -166,7 +178,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = fa
   };
 
   return (
-    <div className={`flex flex-col overflow-x-hidden ${embedded ? "" : "min-h-screen"}`}>
+    <div className={`flex flex-col overflow-x-clip ${embedded ? "" : "min-h-screen"}`}>
       <DekoratorHeader />
       {somVeileder && (
         <div className="bg-[var(--ax-bg-info-moderate)] text-ax-text-info px-6 py-2 text-sm">
@@ -204,6 +216,12 @@ export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = fa
               <Link href="#" onClick={(e) => { e.preventDefault(); setAvtaleModalApen(true); }}>
                 Avtale om å søke jobber
               </Link>
+              <Link href="#">
+                Hva er aktivitetsplanen?
+              </Link>
+              <Link href="#" onClick={(e) => { e.preventDefault(); window.print(); }}>
+                Skriv ut
+              </Link>
             </div>
 
             <MalLinje
@@ -224,8 +242,12 @@ export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = fa
         </div>
 
         {/* Fullbredde-seksjon, bryter ut av max-w-4xl-kolonnen over */}
-        <div className="w-screen relative left-1/2 -translate-x-1/2 bg-[var(--ax-bg-accent-soft)]">
-          <div className="max-w-4xl mx-auto px-6 py-6 flex flex-col gap-3">
+        <div
+          className="w-screen relative left-1/2 -translate-x-1/2 bg-[var(--ax-bg-accent-soft)]"
+          style={{ "--kalender-sticky-top": `${stickyHoyde}px` } as React.CSSProperties}
+        >
+          <div ref={stickyRef} className="sticky top-0 z-40 bg-[var(--ax-bg-accent-soft)]">
+            <div className="max-w-4xl mx-auto px-6 pt-6 pb-3">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <LeggTilAktivitetMeny
@@ -244,6 +266,9 @@ export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = fa
                 <ToggleGroup.Item value="kalender">Kalender</ToggleGroup.Item>
               </ToggleGroup>
             </div>
+            </div>
+          </div>
+          <div className="max-w-4xl mx-auto px-6 pb-6 flex flex-col gap-3">
             <div className={forslagVisning === "liste" && forslag.length > 0 ? "mb-4" : undefined}>
               <ForslagSeksjon
                 forslag={forslag}
@@ -260,17 +285,10 @@ export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = fa
                 onAvtaltKlikk={() => setAvtaleModalApen(true)}
               />
             ) : (
-              <MineAktiviteterKalender />
+              <div className="-mx-6">
+                <MineAktiviteterKalender sentrerPaaNaa={!harByttetVisning} />
+              </div>
             )}
-
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-              <Link href="#">
-                Hva er aktivitetsplanen?
-              </Link>
-              <Link href="#" onClick={(e) => { e.preventDefault(); window.print(); }}>
-                Skriv ut
-              </Link>
-            </div>
           </div>
         </div>
         </>
