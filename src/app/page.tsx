@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Topbar } from "@/components/Topbar";
 import { TabBar } from "@/components/TabBar";
@@ -80,8 +80,17 @@ function MinOversiktInnhold() {
 }
 
 function Innhold() {
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const harTab = searchParams.has("tab");
   const tab = searchParams.get("tab") ?? "enhetens-oversikt";
+
+  // Rot-URL uten parametere åpner Min oversikt med filteret «I avtalt aktivitet».
+  useEffect(() => {
+    if (!harTab) router.replace("?tab=min-oversikt&filter=i-avtalt-aktivitet");
+  }, [harTab, router]);
+
+  if (!harTab) return null;
 
   if (tab === "min-oversikt") {
     return <MinOversiktInnhold />;

@@ -93,7 +93,7 @@ export const avsluttForlengBrukereFase2: Bruker[] = [
     dagerTilAvslutning: 24,
     veileder: "Utvikling, Klar",
     tildelingsdato: "16.05.2024",
-    status: "Har ikke lenger AAP",
+    status: "Avsluttet AAP-sak",
     statusVariant: "warning",
     merkelapper: [{ tekst: "Kandidat for avslutning", variant: "warning" }],
   },
