@@ -5,22 +5,22 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { Button, Heading } from "@navikt/ds-react";
 import { DekoratorHeader } from "@/components/dekorator-lookalike/DekoratorHeader";
-import { DekoratorFooter } from "@/components/dekorator-lookalike/DekoratorFooter";
 import { ArkivFane } from "@/components/bruker/ArkivFane";
 import { ArkivFilterMeny } from "@/components/bruker/ArkivFilterMeny";
 import { ARKIV_KOLONNER } from "@/components/bruker/sortering";
 import { SamtalereferatModal } from "@/components/aktivitetsplan/samtalereferat/SamtalereferatModal";
 import { AktivitetDetaljerModal } from "@/components/aktivitetsplan/visning/AktivitetDetaljerModal";
-import { lagInitialKort } from "@/components/aktivitetsplan/initialData";
+import { useAktivitetsKort } from "@/components/aktivitetsplan/useAktivitetsKort";
 import { AktivitetsKort } from "@/components/aktivitetsplan/types";
 
 function ArkivInnhold() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [aktivtKort, setAktivtKort] = useState<AktivitetsKort | null>(null);
+  const [alleKort] = useAktivitetsKort();
   const arkiv = useMemo(
-    () => lagInitialKort().filter((k) => ARKIV_KOLONNER.includes(k.kolonne)),
-    [],
+    () => alleKort.filter((k) => ARKIV_KOLONNER.includes(k.kolonne)),
+    [alleKort],
   );
   const alleTyper = useMemo(
     () => Array.from(new Set(arkiv.map((k) => k.type))).sort((a, b) => a.localeCompare(b, "nb")),
@@ -74,7 +74,6 @@ function ArkivInnhold() {
       {aktivtKort && !aktivtKort.samtalereferatData && aktivtKort.type !== "Jobbsøking" && (
         <AktivitetDetaljerModal kort={aktivtKort} onClose={() => setAktivtKort(null)} />
       )}
-      <DekoratorFooter />
     </div>
   );
 }
