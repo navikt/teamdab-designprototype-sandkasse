@@ -2,7 +2,7 @@ import { AktivitetsKort, Deltaker, DeltakerRolle, HistorikkInnslag, KolonneId, M
 
 // Testnavn etter reglene i AGENTS.md. Prod forhåndsutfyller «Hilsen {veiledernavn}» i hensiktsfeltet.
 export const VEILEDER_NAVN = "Kompass, Trygg";
-export const DELTAKER_ROLLER: DeltakerRolle[] = ["Veileder", "Behandler", "Fadder/Mentor", "Annet"];
+export const DELTAKER_ROLLER: DeltakerRolle[] = ["Veileder", "Arbeidsgiver", "Behandler", "Fadder/Mentor", "Annet"];
 export const visningsNavn = (navn: string) => {
   const [etternavn, fornavn] = navn.split(", ");
   return fornavn ? `${fornavn} ${etternavn}` : navn;
@@ -130,7 +130,7 @@ export const VEILEDER_RAD_ID = "veileder";
 export interface DeltakerRad {
   id: string;
   navn: string;
-  rolle: string;
+  roller: DeltakerRolle[];
 }
 
 export interface DeltakerRadFeil {
@@ -141,19 +141,19 @@ export interface DeltakerRadFeil {
 // Helt tomme rader ignoreres, halvfylte gir feil.
 export function validerDeltakerRad(r: DeltakerRad): DeltakerRadFeil {
   const harNavn = r.navn.trim() !== "";
-  const harRolle = r.rolle !== "";
+  const harRolle = r.roller.length > 0;
   if (r.id === VEILEDER_RAD_ID) return harNavn ? {} : { navn: "Du må fylle ut navn på veilederen" };
   if (!harNavn && !harRolle) return {};
   return {
     navn: harNavn ? undefined : "Du må fylle ut navn på deltakeren",
-    rolle: harRolle ? undefined : "Du må velge rolle for deltakeren",
+    rolle: harRolle ? undefined : "Du må velge minst én rolle for deltakeren",
   };
 }
 
 export function raderTilDeltakere(rader: DeltakerRad[]): Deltaker[] {
   return rader
-    .filter((r) => r.navn.trim() !== "" && r.rolle !== "")
-    .map((r) => ({ navn: r.navn.trim(), rolle: r.rolle as DeltakerRolle }));
+    .filter((r) => r.navn.trim() !== "" && r.roller.length > 0)
+    .map((r) => ({ navn: r.navn.trim(), roller: r.roller }));
 }
 
 export function lagHistorikkInnslag(beskrivelse: string): HistorikkInnslag {
