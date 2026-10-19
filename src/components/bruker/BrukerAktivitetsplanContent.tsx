@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { ArrowsCirclepathIcon, CompassIcon, PlusIcon, TrashIcon, WrenchIcon } from "@navikt/aksel-icons";
+import { ArrowsCirclepathIcon, CompassIcon, TrashIcon, WrenchIcon } from "@navikt/aksel-icons";
 import { ActionMenu, Button, Heading, Link, ToggleGroup } from "@navikt/ds-react";
 import { DekoratorHeader } from "../dekorator-lookalike/DekoratorHeader";
 import { MalLinje } from "./MalLinje";
@@ -11,7 +11,10 @@ import { ForslagSeksjon, ForslagVisning } from "./ForslagSeksjon";
 import { MineAktiviteterListe } from "./MineAktiviteterListe";
 import { MineAktiviteterKalender } from "./MineAktiviteterKalender";
 import { AvtaleModal } from "./AvtaleModal";
-import { NyAktivitetModal, NyAktivitetType } from "./NyAktivitetModal";
+import { LeggTilAktivitetMeny } from "../aktivitetsplan/mote/LeggTilAktivitetMeny";
+import { MoteModaler, MoteModalState } from "../aktivitetsplan/mote/MoteModaler";
+import { IjobbModaler, IjobbModalState } from "../aktivitetsplan/ijobb/IjobbModaler";
+import { useAktivitetsKort } from "../aktivitetsplan/useAktivitetsKort";
 import { SamtalereferatModal } from "../aktivitetsplan/samtalereferat/SamtalereferatModal";
 import { AktivitetDetaljerModal } from "../aktivitetsplan/visning/AktivitetDetaljerModal";
 import { lagInitialKort } from "../aktivitetsplan/initialData";
@@ -25,25 +28,26 @@ import { withBasePath } from "@/lib/basePath";
 const VISNING_STORAGE_KEY = "minaktivitetsplan-visning";
 const FORSLAG_VISNING_STORAGE_KEY = "minaktivitetsplan-forslag-visning";
 const ONBOARDING_STORAGE_KEY = "minaktivitetsplan-vis-onboarding";
-const KORT_STORAGE_KEY = "minaktivitetsplan-kort";
 type Visning = "liste" | "kalender";
 
 interface BrukerAktivitetsplanContentProps {
   somVeileder?: boolean;
+  // Vises inne i personprofilen: ligger over «Vis som»-panelet og fyller ikke hele skjermhøyden.
+  embedded?: boolean;
 }
 
-export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktivitetsplanContentProps) {
+export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = false }: BrukerAktivitetsplanContentProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [kort, setKort] = useState<AktivitetsKort[]>(lagInitialKort);
+  const [kort, setKort] = useAktivitetsKort();
   const [visning, setVisning] = useState<Visning>("liste");
   const [forslagVisning, setForslagVisning] = useState<ForslagVisning>("liste");
   const [avtaleModalApen, setAvtaleModalApen] = useState(false);
-  const [nyAktivitetType, setNyAktivitetType] = useState<NyAktivitetType | null>(null);
+  const [moteModal, setMoteModal] = useState<MoteModalState>(null);
+  const [ijobbModal, setIjobbModal] = useState<IjobbModalState>(null);
   const [visOnboarding, setVisOnboarding] = useState(false);
   const [visIngenDelmalVarsel, setVisIngenDelmalVarsel] = useState(false);
-  const erForstePersistering = useRef(true);
   const stickyRef = useRef<HTMLDivElement>(null);
   const [harByttetVisning, setHarByttetVisning] = useState(false);
   const [stickyHoyde, setStickyHoyde] = useState(0);
@@ -107,25 +111,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
     const lagretForslagVisning = window.localStorage.getItem(FORSLAG_VISNING_STORAGE_KEY);
     if (lagretForslagVisning === "varsel" || lagretForslagVisning === "liste") setForslagVisning(lagretForslagVisning);
     if (window.localStorage.getItem(ONBOARDING_STORAGE_KEY) === "1") setVisOnboarding(true);
-    const lagretKort = window.localStorage.getItem(KORT_STORAGE_KEY);
-    if (lagretKort) {
-      try {
-        setKort(JSON.parse(lagretKort));
-      } catch {
-        // ignorer korrupt lagret data, behold demo-kortene
-      }
-    }
   }, []);
-
-  // Persisterer kortene slik at en refresh midt i onboardingen ikke faller tilbake til demo-utvalget.
-  // Hopper over selve mount-skrivingen for å unngå å overskrive lagret data med demo-verdien før den er lastet inn.
-  useEffect(() => {
-    if (erForstePersistering.current) {
-      erForstePersistering.current = false;
-      return;
-    }
-    window.localStorage.setItem(KORT_STORAGE_KEY, JSON.stringify(kort));
-  }, [kort]);
 
   useEffect(() => {
     const el = stickyRef.current;
@@ -176,7 +162,9 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   };
 
   const handleKortKlikk = (k: AktivitetsKort) => {
-    apneAktivitet(k.id);
+    if (k.type === "Møte med Nav") setMoteModal({ type: "detaljer", id: k.id });
+    else if (k.type === "Jobb jeg har nå") setIjobbModal({ type: "detaljer", id: k.id });
+    else apneAktivitet(k.id);
   };
 
   const kortTilStatus = (k: AktivitetsKort): AktivitetStatus =>
@@ -190,7 +178,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
   };
 
   return (
-    <div className="flex flex-col min-h-screen overflow-x-clip">
+    <div className={`flex flex-col overflow-x-clip ${embedded ? "" : "min-h-screen"}`}>
       <DekoratorHeader />
       {somVeileder && (
         <div className="bg-[var(--ax-bg-info-moderate)] text-ax-text-info px-6 py-2 text-sm">
@@ -262,27 +250,10 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
             <div className="max-w-4xl mx-auto px-6 pt-6 pb-3">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <ActionMenu>
-                  <ActionMenu.Trigger>
-                    <Button variant="primary" size="small" icon={<PlusIcon aria-hidden />}>
-                      Ny aktivitet
-                    </Button>
-                  </ActionMenu.Trigger>
-                  <ActionMenu.Content>
-                    <ActionMenu.Item onSelect={() => setNyAktivitetType("Stilling")}>
-                      En jobb jeg vil søke på
-                    </ActionMenu.Item>
-                    <ActionMenu.Item onSelect={() => setNyAktivitetType("Jobb jeg har nå")}>
-                      En jobb jeg har nå
-                    </ActionMenu.Item>
-                    <ActionMenu.Item onSelect={() => setNyAktivitetType("Jobbrettet egenaktivitet")}>
-                      Jobbrettet egenaktivitet
-                    </ActionMenu.Item>
-                    <ActionMenu.Item onSelect={() => setNyAktivitetType("Behandling")}>
-                      Medisinsk behandling
-                    </ActionMenu.Item>
-                  </ActionMenu.Content>
-                </ActionMenu>
+                <LeggTilAktivitetMeny
+                  onVelgMote={() => setMoteModal({ type: "opprett" })}
+                  onVelgIjobb={() => setIjobbModal({ type: "opprett" })}
+                />
               </div>
               <ToggleGroup
                 value={visning}
@@ -327,7 +298,11 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
       {aktivtKort?.samtalereferatData && (
         <SamtalereferatModal kort={aktivtKort} perspektiv="bruker" onClose={lukkAktivitet} />
       )}
-      {aktivtKort && !aktivtKort.samtalereferatData && aktivtKort.type !== "Jobbsøking" && (
+      {aktivtKort &&
+        !aktivtKort.samtalereferatData &&
+        aktivtKort.type !== "Jobbsøking" &&
+        aktivtKort.type !== "Møte med Nav" &&
+        aktivtKort.type !== "Jobb jeg har nå" && (
         <AktivitetDetaljerModal
           kort={aktivtKort}
           onClose={lukkAktivitet}
@@ -349,18 +324,23 @@ export function BrukerAktivitetsplanContent({ somVeileder = false }: BrukerAktiv
         />
       )}
       <AvtaleModal open={avtaleModalApen} onClose={() => setAvtaleModalApen(false)} />
-      {nyAktivitetType && (
-        <NyAktivitetModal
-          type={nyAktivitetType}
-          onOpprett={(kort, gjorTilDelmal) => {
-            setKort((prev) => [...prev, kort]);
-            if (gjorTilDelmal) leggTilDelmalFraAktivitet(kort.id);
-          }}
-          onClose={() => setNyAktivitetType(null)}
-        />
-      )}
+      <MoteModaler
+        state={moteModal}
+        setState={setMoteModal}
+        kort={kort}
+        setKort={setKort}
+        perspektiv="bruker"
+        brukerNavn="Bruker"
+      />
+      <IjobbModaler
+        state={ijobbModal}
+        setState={setIjobbModal}
+        kort={kort}
+        setKort={setKort}
+        perspektiv="bruker"
+      />
 
-      <div className="fixed bottom-4 right-4 z-50">
+      <div className={`fixed z-50 ${embedded ? "bottom-24 right-6" : "bottom-4 right-4"}`}>
         <ActionMenu>
           <ActionMenu.Trigger>
             <Button
