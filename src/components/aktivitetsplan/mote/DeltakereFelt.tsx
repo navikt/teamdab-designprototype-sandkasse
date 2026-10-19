@@ -1,8 +1,9 @@
 "use client";
 
-import { PlusIcon, TrashIcon } from "@navikt/aksel-icons";
-import { BodyShort, Button, Box, Fieldset, HGrid, Select, TextField } from "@navikt/ds-react";
-import { useEffect, useState } from "react";
+import { ChevronDownIcon, PlusIcon, TrashIcon } from "@navikt/aksel-icons";
+import { ActionMenu, BodyShort, Button, Box, Fieldset, ErrorMessage, HGrid, TextField } from "@navikt/ds-react";
+import { useEffect, useId, useState } from "react";
+import { DeltakerRolle } from "../types";
 import { DELTAKER_ROLLER, DeltakerRad, DeltakerRadFeil, VEILEDER_RAD_ID, visningsNavn } from "./moteUtils";
 
 interface Props {
@@ -15,6 +16,60 @@ interface Props {
 
 export const deltakerNavnId = (id: string) => `deltaker-navn-${id}`;
 export const deltakerRolleId = (id: string) => `deltaker-rolle-${id}`;
+
+interface RolleVelgerProps {
+  id: string;
+  valgte: DeltakerRolle[];
+  onChange: (roller: DeltakerRolle[]) => void;
+  feil?: string;
+}
+
+// ActionMenu er ikke et skjemafelt, så label, feilmelding og feilmarkering kobles til knappen manuelt.
+function RolleVelger({ id, valgte, onChange, feil }: RolleVelgerProps) {
+  const labelId = useId();
+  const feilId = useId();
+  const oppsummering = DELTAKER_ROLLER.filter((r) => valgte.includes(r)).join(", ");
+
+  const toggle = (rolle: DeltakerRolle, erValgt: boolean) =>
+    onChange(DELTAKER_ROLLER.filter((r) => (r === rolle ? erValgt : valgte.includes(r))));
+
+  return (
+    <div className="flex flex-col gap-2">
+      <BodyShort as="span" id={labelId}>
+        Deltakers rolle
+      </BodyShort>
+      <ActionMenu>
+        <ActionMenu.Trigger>
+          <Button
+            id={id}
+            type="button"
+            variant="secondary-neutral"
+            data-color={feil ? "danger" : undefined}
+            icon={<ChevronDownIcon aria-hidden />}
+            iconPosition="right"
+            aria-labelledby={`${labelId} ${id}`}
+            aria-describedby={feil ? feilId : undefined}
+            className="w-full justify-between! text-left [&_.aksel-label]:font-normal! [&_.aksel-label]:flex-1 [&_.aksel-label]:text-left"
+          >
+            {oppsummering || "Velg"}
+          </Button>
+        </ActionMenu.Trigger>
+        <ActionMenu.Content>
+          <ActionMenu.Group aria-label="Deltakers rolle">
+            {DELTAKER_ROLLER.map((r) => (
+              <ActionMenu.CheckboxItem key={r} checked={valgte.includes(r)} onCheckedChange={(erValgt) => toggle(r, erValgt)}>
+                {r}
+              </ActionMenu.CheckboxItem>
+            ))}
+          </ActionMenu.Group>
+        </ActionMenu.Content>
+      </ActionMenu>
+      <div id={feilId} aria-live="polite">
+        {feil && <ErrorMessage showIcon>{feil}</ErrorMessage>}
+      </div>
+    </div>
+  );
+}
 
 export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
   const [fokusId, setFokusId] = useState<string>();
@@ -29,7 +84,7 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
   const leggTil = () => {
     // randomUUID finnes ikke i usikre kontekster (http over lokalnett, f.eks. mobiltesting).
     const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-    onChange([...rader, { id, navn: "", rolle: "" }]);
+    onChange([...rader, { id, navn: "", roller: [] }]);
     setFokusId(deltakerNavnId(id));
     setMelding(`Deltaker ${rader.length + 1} lagt til`);
   };
@@ -89,20 +144,12 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
             {rad.id === VEILEDER_RAD_ID ? (
               <div className="hidden sm:block" aria-hidden />
             ) : (
-              <Select
+              <RolleVelger
                 id={deltakerRolleId(rad.id)}
-                label={<BodyShort as="span">Deltakers rolle</BodyShort>}
-                value={rad.rolle}
-                onChange={(e) => oppdater(i, { rolle: e.target.value })}
-                error={feil[rad.id]?.rolle}
-              >
-                <option value="">Velg rolle</option>
-                {DELTAKER_ROLLER.map((r) => (
-                  <option key={r} value={r}>
-                    {r}
-                  </option>
-                ))}
-              </Select>
+                valgte={rad.roller}
+                onChange={(roller) => oppdater(i, { roller })}
+                feil={feil[rad.id]?.rolle}
+              />
             )}
             {rad.id === VEILEDER_RAD_ID ? (
               fjernPlassholder

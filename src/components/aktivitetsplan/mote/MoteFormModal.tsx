@@ -60,9 +60,9 @@ export function MoteFormModal({ kort, brukerNavn, onLagre, onClose }: Props) {
     forberedelser: kort?.forberedelser ?? "",
   };
   const startDato = kort?.startDato;
-  const veilederStart: Deltaker = { navn: visningsNavn(VEILEDER_NAVN), rolle: "Veileder" };
+  const veilederStart: Deltaker = { navn: visningsNavn(VEILEDER_NAVN), roller: ["Veileder"] };
   const eksisterende = kort?.deltakere ?? [];
-  const veilederIndeks = eksisterende.findIndex((d) => d.rolle === "Veileder");
+  const veilederIndeks = eksisterende.findIndex((d) => d.roller.includes("Veileder"));
   // Veileder ligger alltid først, også for eldre kort uten veileder.
   const startDeltakereListe: Deltaker[] =
     veilederIndeks === -1
@@ -77,7 +77,7 @@ export function MoteFormModal({ kort, brukerNavn, onLagre, onClose }: Props) {
   const [beskrivelse, setBeskrivelse] = useState(startVerdier.beskrivelse);
   const [forberedelser, setForberedelser] = useState(startVerdier.forberedelser);
   const [deltakerRader, setDeltakerRader] = useState<DeltakerRad[]>(() =>
-    startDeltakereListe.map((d, i) => ({ id: i === 0 ? VEILEDER_RAD_ID : `eksisterende-${i}`, navn: d.navn, rolle: d.rolle })),
+    startDeltakereListe.map((d, i) => ({ id: i === 0 ? VEILEDER_RAD_ID : `eksisterende-${i}`, navn: d.navn, roller: d.roller })),
   );
   const [visFeil, setVisFeil] = useState(false);
   const errorSummaryRef = useRef<HTMLDivElement>(null);

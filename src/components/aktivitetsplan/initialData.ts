@@ -75,7 +75,7 @@ export function lagInitialKort(): AktivitetsKort[] {
     moteform: "Telefonmøte",
     varighet: "15 minutter",
     varighetMinutter: 15,
-    deltakere: [{ navn: "Trygg Kompass", rolle: "Veileder" }],
+    deltakere: [{ navn: "Trygg Kompass", roller: ["Veileder"] }],
     moteSted: "Telefonnummeret du har oppgitt til Nav",
     hensikt: "Avklare videre oppfølging.\nHilsen Trygg Kompass",
     historikk: [{ tidspunkt: new Date().toISOString(), beskrivelse: "opprettet aktivitet" }],

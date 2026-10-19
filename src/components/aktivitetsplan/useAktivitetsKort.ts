@@ -6,7 +6,7 @@ import { lagInitialKort } from "./initialData";
 
 // Øk versjonen når AktivitetsKort endres på en måte som gjør lagrede data ugyldige.
 // Nullstill manuelt ved å slette nøkkelen i localStorage.
-export const AKTIVITETER_STORAGE_KEY = "aktivitetsplan-prototype:kort:v1";
+export const AKTIVITETER_STORAGE_KEY = "aktivitetsplan-prototype:kort:v2";
 
 // Prototypen har ingen backend, så localStorage er "databasen". Initial state brukes i første render
 // (likt på server og klient), og lagrede data leses først etter mount for å unngå hydration mismatch.

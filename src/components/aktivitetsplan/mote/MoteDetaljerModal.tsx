@@ -135,7 +135,7 @@ export function MoteDetaljerModal({ kort, perspektiv, brukerNavn, setKort, onEnd
                   {(kort.deltakere ?? []).map((d, i) => (
                     <li key={i}>
                       <BodyShort as="span">
-                        {d.navn} ({d.rolle})
+                        {d.navn} ({d.roller.join(", ")})
                       </BodyShort>
                     </li>
                   ))}
