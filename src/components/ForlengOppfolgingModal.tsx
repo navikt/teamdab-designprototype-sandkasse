@@ -102,7 +102,6 @@ export function ForlengOppfolgingModal({ open, onClose, onBekreft, status, merke
                 </HelpText>
               </span>
             }
-            required
             error={submitted && !selectedDay ? "Velg en dato" : undefined}
           />
         </DatePicker>
