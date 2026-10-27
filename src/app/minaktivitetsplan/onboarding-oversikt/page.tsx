@@ -1,5 +1,15 @@
+"use client";
+
 import Link from "next/link";
-import { Heading, BodyShort, Button } from "@navikt/ds-react";
+import { Heading, BodyShort, Button, Table } from "@navikt/ds-react";
+import {
+  BEHOLD_JOBB_FOKUS_ALTERNATIVER,
+  FINN_JOBB_FOKUS_ALTERNATIVER,
+  IKKE_KLAR_FOKUS_ALTERNATIVER,
+  USIKKER_FOKUS_ALTERNATIVER,
+} from "@/components/bruker/onboarding/data";
+import { beregnAktiviteter, beregnMal } from "@/components/bruker/onboarding/logic";
+import { Alternativ, Svar } from "@/components/bruker/onboarding/types";
 import { DekoratorHeader } from "@/components/dekorator-lookalike/DekoratorHeader";
 import { MermaidDiagram } from "@/components/MermaidDiagram";
 
@@ -124,6 +134,84 @@ function byggDiagram(): string {
 
 const FLYT_DIAGRAM = byggDiagram();
 
+// Tabellene bygges fra data.ts og logic.ts, så de kan ikke komme ut av sync med appen.
+const FORSLAG: {
+  sporId: string;
+  situasjonId: string;
+  fokusNokkel: keyof Svar;
+  alternativer: Alternativ[];
+}[] = [
+  { sporId: "finn", situasjonId: "finn-jobb", fokusNokkel: "finnJobbFokusId", alternativer: FINN_JOBB_FOKUS_ALTERNATIVER },
+  { sporId: "behold", situasjonId: "behold-jobb", fokusNokkel: "beholdJobbFokusId", alternativer: BEHOLD_JOBB_FOKUS_ALTERNATIVER },
+  { sporId: "ikkeklar", situasjonId: "ikke-klar", fokusNokkel: "ikkeKlarFokusId", alternativer: IKKE_KLAR_FOKUS_ALTERNATIVER },
+  { sporId: "usikker", situasjonId: "usikker", fokusNokkel: "usikkerFokusId", alternativer: USIKKER_FOKUS_ALTERNATIVER },
+];
+
+function foreslattMal(situasjonId: string, fokusNokkel: keyof Svar, fokusId: string): string {
+  if (fokusId === "annet") return "Teksten brukeren skriver selv";
+  const svar: Svar = { situasjonId, [fokusNokkel]: fokusId };
+  if (fokusId === "vet-hva") svar.yrke = "[yrke]";
+  const mal = beregnMal(svar);
+  return fokusId === "usikker-retning" ? `${mal} [, med utgangspunkt i valgte interesser]` : mal;
+}
+
+function ForslagTabeller() {
+  return (
+    <section className="flex flex-col gap-6" aria-labelledby="forslag-overskrift">
+      <div className="flex flex-col gap-2">
+        <Heading size="medium" level="2" id="forslag-overskrift">
+          Forslag til mål og første aktivitet
+        </Heading>
+        <BodyShort className="text-ax-text-subtle">
+          Målet og aktivitetene som foreslås i stegene «Passer denne retningen for deg?» og «Hva vil du starte med?»
+          avhenger av svaret på hovedspørsmålet. I tillegg kan brukeren alltid velge «Legg inn en annen aktivitet» eller
+          «Jeg vil velge sammen med veilederen min».
+        </BodyShort>
+      </div>
+      {FORSLAG.map((f) => {
+        const spor = SPOR.find((s) => s.id === f.sporId)!;
+        return (
+          <div
+            key={f.sporId}
+            className="flex flex-col gap-2 rounded-lg border-l-8 p-4"
+            style={{ borderLeftColor: spor.farge, backgroundColor: spor.fyll }}
+          >
+            <Heading size="small" level="3">
+              {spor.situasjon.replace("<br/>", " ")}
+            </Heading>
+            <div className="bg-ax-bg-default rounded-md overflow-x-auto">
+              <Table size="small">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell scope="col">Svar</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">Foreslått mål</Table.HeaderCell>
+                    <Table.HeaderCell scope="col">Foreslåtte aktiviteter</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {f.alternativer.map((a) => (
+                    <Table.Row key={a.id}>
+                      <Table.DataCell>{a.tekst}</Table.DataCell>
+                      <Table.DataCell>{foreslattMal(f.situasjonId, f.fokusNokkel, a.id)}</Table.DataCell>
+                      <Table.DataCell>
+                        <ul className="list-disc pl-4">
+                          {beregnAktiviteter({ situasjonId: f.situasjonId, [f.fokusNokkel]: a.id }).map((akt) => (
+                            <li key={akt.id}>{akt.tekst}</li>
+                          ))}
+                        </ul>
+                      </Table.DataCell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+            </div>
+          </div>
+        );
+      })}
+    </section>
+  );
+}
+
 
 export default function OnboardingOversiktPage() {
   return (
@@ -148,6 +236,9 @@ export default function OnboardingOversiktPage() {
         </div>
         <div className="w-full px-6 pb-8">
           <MermaidDiagram chart={FLYT_DIAGRAM} />
+        </div>
+        <div className="max-w-6xl mx-auto px-6 pb-12">
+          <ForslagTabeller />
         </div>
       </main>
     </div>
