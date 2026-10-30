@@ -1,7 +1,8 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useDemoRouter } from "@/demo/useOppsett";
 import { Topbar } from "@/components/Topbar";
 import { TabBar } from "@/components/TabBar";
 import { FilterHeader } from "@/components/FilterHeader";
@@ -13,7 +14,7 @@ import { Brukerliste } from "@/components/brukerliste/Brukerliste";
 import { avsluttForlengBrukere, avsluttForlengBrukereFase2, iavtaltAktivitetBrukere } from "@/data/brukere";
 
 function EnhetensOversiktInnhold() {
-  const router = useRouter();
+  const router = useDemoRouter();
   const searchParams = useSearchParams();
   const statusFilter = searchParams.get("filter") ?? "avslutt-forleng-fase-2";
   const tab = searchParams.get("tab") ?? "enhetens-oversikt";
@@ -41,7 +42,7 @@ function EnhetensOversiktInnhold() {
 }
 
 function MinOversiktInnhold() {
-  const router = useRouter();
+  const router = useDemoRouter();
   const searchParams = useSearchParams();
   const statusFilter = searchParams.get("filter");
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
@@ -80,7 +81,7 @@ function MinOversiktInnhold() {
 }
 
 function Innhold() {
-  const router = useRouter();
+  const router = useDemoRouter();
   const searchParams = useSearchParams();
   const harTab = searchParams.has("tab");
   const tab = searchParams.get("tab") ?? "enhetens-oversikt";

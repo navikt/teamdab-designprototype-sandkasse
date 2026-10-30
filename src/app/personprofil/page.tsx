@@ -13,7 +13,6 @@ function PersonProfilInnhold() {
   const id = searchParams.get("id") ?? undefined;
   const avslutning = searchParams.get("avslutning") === "1";
   const fase2 = searchParams.get("fase2") === "1";
-  const visning = searchParams.get("visning") === "gammel-veileder" ? "gammel-veileder" : undefined;
   const bruker = id
     ? [...brukere, ...avsluttForlengBrukere, ...avsluttForlengBrukereFase2, ...iavtaltAktivitetBrukere].find((b) => b.id === id)
     : undefined;
@@ -31,7 +30,6 @@ function PersonProfilInnhold() {
       dagerTilAvslutning={bruker?.dagerTilAvslutning}
       avslutning={avslutning}
       fase2={fase2}
-      startVisning={visning}
     />
   );
 }

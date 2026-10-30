@@ -86,17 +86,19 @@ body {
   text-decoration: underline;
 }
 
-/* DEMO-corner guardrail — synlig i alle visninger */
+/* DEMO-corner guardrail — synlig i alle visninger. Klikk åpner demo-oppsettet (src/demo/DemoHjorne.tsx). */
 .demo-corner {
   position: fixed;
   top: 0;
   right: 0;
   width: 120px;
   height: 120px;
+  padding: 0;
+  border: 0;
   background: #ffb000;
   clip-path: polygon(0 0, 100% 0, 100% 100%);
   z-index: 2147483647;
-  pointer-events: none;
+  cursor: pointer;
 }
 
 .demo-corner__label {

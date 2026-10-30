@@ -1,4 +1,7 @@
+"use client";
+
 import NextLink from "next/link";
+import { useDemoRouter } from "@/demo/useOppsett";
 import { Tag } from "@navikt/ds-react";
 import { Bruker } from "@/data/brukere";
 import "./brukerliste.css";
@@ -20,12 +23,14 @@ interface Props {
 }
 
 export function BrukerlisteDataCeller({ bruker, avslutning = false, fase2 = false, avtaltAktivitet = false }: Props) {
+    const router = useDemoRouter();
+    const personprofilHref = router.href(`/personprofil?id=${encodeURIComponent(bruker.id)}${avslutning ? "&avslutning=1" : ""}${fase2 ? "&fase2=1" : ""}`);
     return (
         <>
             <div className="brukerliste__innhold">
                 <div style={{ flex: 1.5, padding: "0 0.5rem" }}>
                     <NextLink
-                        href={`/personprofil?id=${encodeURIComponent(bruker.id)}${avslutning ? "&avslutning=1" : ""}${fase2 ? "&fase2=1" : ""}&visning=gammel-veileder`}
+                        href={personprofilHref}
                         className="bruker-lenke"
                     >
                         {bruker.navn}
@@ -47,7 +52,7 @@ export function BrukerlisteDataCeller({ bruker, avslutning = false, fase2 = fals
                     <>
                 <div style={{ flex: 3, padding: "0 0.5rem" }}>
                     <NextLink
-                        href={`/personprofil?id=${encodeURIComponent(bruker.id)}${avslutning ? "&avslutning=1" : ""}${fase2 ? "&fase2=1" : ""}&visning=gammel-veileder`}
+                        href={personprofilHref}
                         className="bruker-lenke"
                     >
                         {bruker.status}

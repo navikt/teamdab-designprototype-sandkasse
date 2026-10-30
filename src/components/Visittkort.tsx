@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useDemoRouter } from "@/demo/useOppsett";
 import { ChevronLeftIcon, CogIcon } from "@navikt/aksel-icons";
 import { Button, CopyButton, Dropdown, Heading, Tag } from "@navikt/ds-react";
 
@@ -17,7 +17,7 @@ interface VisittkortProps {
 }
 
 export function Visittkort({ navn, fnr, status, statusVariant, merkelapper, onOpenForleng, onOpenAvslutt }: VisittkortProps) {
-  const router = useRouter();
+  const router = useDemoRouter();
   return (
     <div className="flex items-center gap-3 px-2 py-2 bg-ax-bg-default border-b border-ax-border-neutral-subtle min-h-[67px] max-w-[1920px]">
       {/* Tilbakelenke */}

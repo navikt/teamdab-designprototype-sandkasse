@@ -1,7 +1,8 @@
 "use client";
 
 import { Suspense, useMemo, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useDemoRouter } from "@/demo/useOppsett";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { Button, Heading } from "@navikt/ds-react";
 import { DekoratorHeader } from "@/components/dekorator-lookalike/DekoratorHeader";
@@ -14,7 +15,7 @@ import { useAktivitetsKort } from "@/components/aktivitetsplan/useAktivitetsKort
 import { AktivitetsKort } from "@/components/aktivitetsplan/types";
 
 function ArkivInnhold() {
-  const router = useRouter();
+  const router = useDemoRouter();
   const searchParams = useSearchParams();
   const [aktivtKort, setAktivtKort] = useState<AktivitetsKort | null>(null);
   const [alleKort] = useAktivitetsKort();

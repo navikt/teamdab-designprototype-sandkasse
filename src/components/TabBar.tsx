@@ -1,10 +1,11 @@
 "use client";
 
 import { Tabs } from "@navikt/ds-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useDemoRouter } from "@/demo/useOppsett";
 
 export function TabBar() {
-  const router = useRouter();
+  const router = useDemoRouter();
   const searchParams = useSearchParams();
   const aktiveTab = searchParams.get("tab") ?? "enhetens-oversikt";
 
