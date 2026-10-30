@@ -161,7 +161,8 @@ export function PersonprofilContent({ brukerId, navn, fnr, merkelapper, status, 
       )}
 <Tabs value={aktivTab} onChange={setAktivTab} className="flex flex-col flex-1 overflow-hidden">
         <PersonprofilTabBar />
-        <Tabs.Panel value="aktivitetsplan" className="flex-1 flex flex-col items-center gap-6 py-6 overflow-x-hidden">
+        {/* Ingen øvre padding: panelet er scroll-container, og padding ville gitt et gap over sticky-linjer i planen. */}
+        <Tabs.Panel value="aktivitetsplan" className="flex-1 flex flex-col items-center gap-6 pb-6 overflow-x-hidden">
           <VeilederAktivitetsplan brukerNavn={navn} />
         </Tabs.Panel>
         <Tabs.Panel value="dialog" className="flex flex-1 overflow-hidden">

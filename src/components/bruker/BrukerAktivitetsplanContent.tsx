@@ -171,7 +171,7 @@ export function BrukerAktivitetsplanContent({ embedded = false, skjulDekorator =
           <OnboardingFlow onFullfor={fullforOnboarding} onHopp={hoppOverOnboarding} />
         ) : (
         <>
-        <div className="max-w-4xl mx-auto px-6 pt-6 pb-[25px] flex flex-col gap-4 relative">
+        <div className={`max-w-4xl mx-auto px-6 ${embedded ? "pt-12" : "pt-6"} pb-[25px] flex flex-col gap-4 relative`}>
           <Image
             src={withBasePath("/Trenger-hjelp-til-a-komme-i-jobb.png")}
             alt=""
