@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronDownIcon, PlusIcon, TrashIcon } from "@navikt/aksel-icons";
-import { ActionMenu, BodyShort, Button, Box, Fieldset, ErrorMessage, HGrid, TextField } from "@navikt/ds-react";
+import { ActionMenu, BodyShort, Button, Box, Detail, Fieldset, ErrorMessage, HGrid, TextField } from "@navikt/ds-react";
 import { useEffect, useId, useState } from "react";
 import { DeltakerRolle } from "../types";
 import { DELTAKER_ROLLER, DeltakerRad, DeltakerRadFeil, VEILEDER_RAD_ID, visningsNavn } from "./moteUtils";
@@ -134,14 +134,21 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
           style={{ marginTop: "var(--ax-space-16)" }}
         >
           <HGrid columns={{ xs: 1, sm: "minmax(0, 2fr) minmax(0, 1fr) auto" }} gap="space-16" align="start">
-            <TextField
-              id={deltakerNavnId(rad.id)}
-              label={<BodyShort as="span">{rad.id === VEILEDER_RAD_ID ? "Veileder" : "Deltakers navn"}</BodyShort>}
-              description={rad.id === VEILEDER_RAD_ID ? undefined : "Navn på tolk skjules for alle andre enn veileder"}
-              value={rad.navn}
-              onChange={(e) => oppdater(i, { navn: e.target.value })}
-              error={feil[rad.id]?.navn}
-            />
+            <div>
+              <TextField
+                id={deltakerNavnId(rad.id)}
+                label={<BodyShort as="span">{rad.id === VEILEDER_RAD_ID ? "Veileder" : "Deltakers navn"}</BodyShort>}
+                value={rad.navn}
+                onChange={(e) => oppdater(i, { navn: e.target.value })}
+                error={feil[rad.id]?.navn}
+                aria-describedby={rad.id === VEILEDER_RAD_ID ? undefined : `${deltakerNavnId(rad.id)}-info`}
+              />
+              {rad.id !== VEILEDER_RAD_ID && (
+                <Detail id={`${deltakerNavnId(rad.id)}-info`} className="mt-1">
+                  Navn på tolk skjules for alle andre enn veileder
+                </Detail>
+              )}
+            </div>
             {rad.id === VEILEDER_RAD_ID ? (
               <div className="hidden sm:block" aria-hidden />
             ) : (
