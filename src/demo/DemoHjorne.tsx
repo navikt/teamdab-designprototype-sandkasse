@@ -6,7 +6,11 @@ import { Button, Checkbox, CheckboxGroup, Link, Modal, Radio, RadioGroup } from 
 import { withBasePath } from "@/lib/basePath";
 import { SPOR, SPOR_IDER, SporId } from "@/spor/spor";
 import { Flyt, Oppsett, flytFraSti, medOppsett, startUrl } from "./oppsett";
+import { nullstillVedOppstart } from "./nullstillVedOppstart";
 import { useOppsett } from "./useOppsett";
+
+// Lastes i rotlayouten og dekker dermed alle startsider, også de som ikke bruker useLagretTilstand.
+nullstillVedOppstart();
 
 // Den gule trekanten i hjørnet åpner demo-oppsettet. Under en brukertest er den bare en rolig markering,
 // og ?demo=av fjerner den helt.
@@ -96,7 +100,7 @@ function DemoSkjema({ oppsett, onAvbryt }: { oppsett: Oppsett; onAvbryt: () => v
         </Checkbox>
 
         {spor === "framtid" && (
-          <Link href={withBasePath(medOppsett("/minaktivitetsplan/onboarding-oversikt", { ...oppsett, spor, scenario }))}>
+          <Link href={withBasePath(medOppsett("/minaktivitetsplan/onboarding-oversikt", { ...oppsett, spor, scenario, forslagSomVarsel, visIngenDelmalVarsel }))}>
             Se flyt for onboarding (oversikt)
           </Link>
         )}

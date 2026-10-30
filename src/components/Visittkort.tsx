@@ -1,5 +1,7 @@
 "use client";
 
+import { usePathname, useSearchParams } from "next/navigation";
+import { medRetur } from "@/demo/retur";
 import { useDemoRouter } from "@/demo/useOppsett";
 import { ChevronLeftIcon, CogIcon } from "@navikt/aksel-icons";
 import { Button, CopyButton, Dropdown, Heading, Tag } from "@navikt/ds-react";
@@ -18,6 +20,8 @@ interface VisittkortProps {
 
 export function Visittkort({ navn, fnr, status, statusVariant, merkelapper, onOpenForleng, onOpenAvslutt }: VisittkortProps) {
   const router = useDemoRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   return (
     <div className="flex items-center gap-3 px-2 py-2 bg-ax-bg-default border-b border-ax-border-neutral-subtle min-h-[67px] max-w-[1920px]">
       {/* Tilbakelenke */}
@@ -84,7 +88,7 @@ export function Visittkort({ navn, fnr, status, statusVariant, merkelapper, onOp
         </Button>
         <Dropdown.Menu placement="bottom-end">
           <Dropdown.Menu.List>
-            <Dropdown.Menu.List.Item onClick={() => router.push("/minaktivitetsplan?somVeileder=1")}>Se som bruker</Dropdown.Menu.List.Item>
+            <Dropdown.Menu.List.Item onClick={() => router.push(medRetur("/minaktivitetsplan", `${pathname}?${searchParams.toString()}`, true))}>Se som bruker</Dropdown.Menu.List.Item>
             <Dropdown.Menu.List.Item onClick={() => {}}>Arbeidssøkerregisteret</Dropdown.Menu.List.Item>
             <Dropdown.Menu.List.Item onClick={() => {}}>Tildel veileder</Dropdown.Menu.List.Item>
             <Dropdown.Menu.List.Item onClick={() => {}}>Send varsel</Dropdown.Menu.List.Item>

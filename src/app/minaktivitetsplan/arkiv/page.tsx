@@ -3,6 +3,8 @@
 import { Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useDemoRouter } from "@/demo/useOppsett";
+import { SomVeilederBanner } from "@/components/SomVeilederBanner";
+import { brukerSideHref, trygtRetur } from "@/demo/retur";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { Button, Heading } from "@navikt/ds-react";
 import { DekoratorHeader } from "@/components/dekorator-lookalike/DekoratorHeader";
@@ -17,6 +19,9 @@ import { AktivitetsKort } from "@/components/aktivitetsplan/types";
 function ArkivInnhold() {
   const router = useDemoRouter();
   const searchParams = useSearchParams();
+  // Fra profilen (embedded) går tilbake rett til profilen; fra «Se som bruker» til forhåndsvisningen.
+  const retur = trygtRetur(searchParams.get("retur"));
+  const tilbakeHref = retur && searchParams.get("somVeileder") !== "1" ? retur : brukerSideHref(searchParams);
   const [aktivtKort, setAktivtKort] = useState<AktivitetsKort | null>(null);
   const [alleKort] = useAktivitetsKort();
   const arkiv = useMemo(
@@ -40,13 +45,14 @@ function ArkivInnhold() {
   return (
     <div className="flex flex-col min-h-screen">
       <DekoratorHeader />
+      {searchParams.get("somVeileder") === "1" && <SomVeilederBanner />}
       <main className="flex-1 w-full bg-[var(--ax-bg-accent-soft)]">
         <div className="max-w-4xl mx-auto px-6 py-6 flex flex-col gap-4">
           <Button
             variant="tertiary"
             size="small"
             icon={<ArrowLeftIcon aria-hidden />}
-            onClick={() => router.push("/minaktivitetsplan")}
+            onClick={() => router.push(tilbakeHref)}
             className="self-start"
           >
             Tilbake til aktivitetsplan

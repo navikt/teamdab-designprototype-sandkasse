@@ -23,6 +23,7 @@ import { OnboardingFlow } from "./onboarding/OnboardingFlow";
 import { OnboardingResultat } from "./onboarding/types";
 import { withBasePath } from "@/lib/basePath";
 import { lagringsNokkel } from "@/demo/oppsett";
+import { medRetur, trygtRetur } from "@/demo/retur";
 import { useLagretTilstand } from "@/demo/useLagretTilstand";
 import { useDemoRouter, useOppsett, useScenario } from "@/demo/useOppsett";
 
@@ -98,7 +99,7 @@ export function BrukerAktivitetsplanContent({ embedded = false, skjulDekorator =
     const observer = new ResizeObserver(() => setStickyHoyde(el.offsetHeight));
     observer.observe(el);
     return () => observer.disconnect();
-  }, [visOnboarding]);
+  }, [visOnboarding, embedded]);
 
   const byttVisning = (v: Visning) => {
     setVisning(v);
@@ -114,6 +115,18 @@ export function BrukerAktivitetsplanContent({ embedded = false, skjulDekorator =
   const aktivitetId = searchParams.get("aktivitetId");
   const redigerModus = searchParams.get("rediger") === "1";
   const aktivtKort = kort.find((k) => k.id === aktivitetId) ?? null;
+
+  // Arkivet må vite hvor veilederen kom fra: profilen (embedded) eller «Se som bruker»-forhåndsvisningen.
+  const arkivHref = (href: string) => {
+    if (embedded) {
+      const retur = new URLSearchParams(searchParams.toString());
+      retur.delete("aktivitetId");
+      retur.delete("rediger");
+      return medRetur(href, `${pathname}?${retur.toString()}`);
+    }
+    const retur = trygtRetur(searchParams.get("retur"));
+    return searchParams.get("somVeileder") === "1" && retur ? medRetur(href, retur, true) : href;
+  };
 
   const navigerMedParams = (endringer: Record<string, string | null>) => {
     const nyeParams = new URLSearchParams(searchParams.toString());
@@ -154,7 +167,7 @@ export function BrukerAktivitetsplanContent({ embedded = false, skjulDekorator =
       {!skjulDekorator && <DekoratorHeader />}
       {banner}
       <main className="flex-1 w-full bg-ax-bg-default">
-        {visOnboarding ? (
+        {visOnboarding && !embedded ? (
           <OnboardingFlow onFullfor={fullforOnboarding} onHopp={hoppOverOnboarding} />
         ) : (
         <>
@@ -172,10 +185,10 @@ export function BrukerAktivitetsplanContent({ embedded = false, skjulDekorator =
             <Heading size="large" level="1">Aktivitetsplan</Heading>
 
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-lg">
-              <Link href="#" onClick={(e) => { e.preventDefault(); demoRouter.push("/minaktivitetsplan/arkiv"); }}>
+              <Link href="#" onClick={(e) => { e.preventDefault(); demoRouter.push(arkivHref("/minaktivitetsplan/arkiv")); }}>
                 Arkiv
               </Link>
-              <Link href="#" onClick={(e) => { e.preventDefault(); demoRouter.push("/minaktivitetsplan/arkiv?type=Samtalereferat"); }}>
+              <Link href="#" onClick={(e) => { e.preventDefault(); demoRouter.push(arkivHref("/minaktivitetsplan/arkiv?type=Samtalereferat")); }}>
                 Samtalereferater
               </Link>
               <Link href="#">
