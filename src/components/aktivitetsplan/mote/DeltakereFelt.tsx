@@ -137,6 +137,7 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
             <TextField
               id={deltakerNavnId(rad.id)}
               label={<BodyShort as="span">{rad.id === VEILEDER_RAD_ID ? "Veileder" : "Deltakers navn"}</BodyShort>}
+              description={rad.id === VEILEDER_RAD_ID ? undefined : "Navn på tolk skjules for alle andre enn veileder"}
               value={rad.navn}
               onChange={(e) => oppdater(i, { navn: e.target.value })}
               error={feil[rad.id]?.navn}
