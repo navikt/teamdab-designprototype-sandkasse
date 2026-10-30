@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useDemoRouter } from "@/demo/useOppsett";
 import { Heading, BodyShort, Button, Table } from "@navikt/ds-react";
 import {
   BEHOLD_JOBB_FOKUS_ALTERNATIVER,
@@ -214,6 +215,7 @@ function ForslagTabeller() {
 
 
 export default function OnboardingOversiktPage() {
+  const router = useDemoRouter();
   return (
     <div className="flex flex-col min-h-screen overflow-x-hidden">
       <DekoratorHeader />
@@ -223,7 +225,7 @@ export default function OnboardingOversiktPage() {
             <Heading size="large" level="1">
               Flyt for onboarding i Min aktivitetsplan
             </Heading>
-            <Link href="/minaktivitetsplan">
+            <Link href={router.href("/minaktivitetsplan")}>
               <Button variant="secondary" size="small">
                 Tilbake til aktivitetsplanen
               </Button>

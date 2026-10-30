@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { ArrowsCirclepathIcon, CompassIcon, TrashIcon, WrenchIcon } from "@navikt/aksel-icons";
-import { ActionMenu, Button, Heading, Link, ToggleGroup } from "@navikt/ds-react";
+import { Heading, Link, ToggleGroup } from "@navikt/ds-react";
 import { DekoratorHeader } from "../dekorator-lookalike/DekoratorHeader";
 import { MalLinje } from "./MalLinje";
 import { ForslagSeksjon, ForslagVisning } from "./ForslagSeksjon";
@@ -17,37 +16,46 @@ import { IjobbModaler, IjobbModalState } from "../aktivitetsplan/ijobb/IjobbModa
 import { useAktivitetsKort } from "../aktivitetsplan/useAktivitetsKort";
 import { SamtalereferatModal } from "../aktivitetsplan/samtalereferat/SamtalereferatModal";
 import { AktivitetDetaljerModal } from "../aktivitetsplan/visning/AktivitetDetaljerModal";
-import { lagInitialKort } from "../aktivitetsplan/initialData";
 import { AktivitetsKort, AktivitetStatus } from "../aktivitetsplan/types";
 import { MINE_AKTIVITETER_KOLONNER } from "./sortering";
 import { useMal } from "./mal/useMal";
 import { OnboardingFlow } from "./onboarding/OnboardingFlow";
 import { OnboardingResultat } from "./onboarding/types";
 import { withBasePath } from "@/lib/basePath";
+import { lagringsNokkel } from "@/demo/oppsett";
+import { medRetur, trygtRetur } from "@/demo/retur";
+import { useLagretTilstand } from "@/demo/useLagretTilstand";
+import { useDemoRouter, useOppsett, useScenario } from "@/demo/useOppsett";
 
-const VISNING_STORAGE_KEY = "minaktivitetsplan-visning";
-const FORSLAG_VISNING_STORAGE_KEY = "minaktivitetsplan-forslag-visning";
-const ONBOARDING_STORAGE_KEY = "minaktivitetsplan-vis-onboarding";
 type Visning = "liste" | "kalender";
 
 interface BrukerAktivitetsplanContentProps {
-  somVeileder?: boolean;
-  // Vises inne i personprofilen: ligger over «Vis som»-panelet og fyller ikke hele skjermhøyden.
+  // Vises inne i personprofilen: fyller ikke hele skjermhøyden.
   embedded?: boolean;
+  skjulDekorator?: boolean;
+  // Vises under dekoratøren, f.eks. «Du ser dette som veileder».
+  banner?: ReactNode;
 }
 
-export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = false }: BrukerAktivitetsplanContentProps) {
+export function BrukerAktivitetsplanContent({ embedded = false, skjulDekorator = false, banner }: BrukerAktivitetsplanContentProps) {
   const router = useRouter();
+  const demoRouter = useDemoRouter();
+  const oppsett = useOppsett();
+  const scenario = useScenario();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [kort, setKort] = useAktivitetsKort();
-  const [visning, setVisning] = useState<Visning>("liste");
-  const [forslagVisning, setForslagVisning] = useState<ForslagVisning>("liste");
+  const [visning, setVisning] = useLagretTilstand<Visning>(lagringsNokkel(oppsett, "visning"), () => scenario.startVisning);
+  const forslagVisning: ForslagVisning = oppsett.forslagSomVarsel ? "varsel" : "liste";
   const [avtaleModalApen, setAvtaleModalApen] = useState(false);
   const [moteModal, setMoteModal] = useState<MoteModalState>(null);
   const [ijobbModal, setIjobbModal] = useState<IjobbModalState>(null);
-  const [visOnboarding, setVisOnboarding] = useState(false);
-  const [visIngenDelmalVarsel, setVisIngenDelmalVarsel] = useState(false);
+  const [visOnboarding, setVisOnboarding] = useLagretTilstand<boolean>(
+    lagringsNokkel(oppsett, "onboarding"),
+    () => scenario.startMedOnboarding,
+  );
+  const [delmalVarselSkjult, setDelmalVarselSkjult] = useState(false);
+  const visIngenDelmalVarsel = oppsett.visIngenDelmalVarsel && !delmalVarselSkjult;
   const stickyRef = useRef<HTMLDivElement>(null);
   const [harByttetVisning, setHarByttetVisning] = useState(false);
   const [stickyHoyde, setStickyHoyde] = useState(0);
@@ -62,25 +70,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = fa
     settFritekstOppnadd,
     fjernDelmal,
     flyttDelmal,
-    nullstillMal,
   } = useMal(kort);
-
-  const nullstillPrototype = () => {
-    setKort(lagInitialKort());
-    nullstillMal();
-    setVisOnboarding(false);
-    setForslagVisning("liste");
-    setVisIngenDelmalVarsel(false);
-    window.localStorage.removeItem(ONBOARDING_STORAGE_KEY);
-    window.localStorage.removeItem(FORSLAG_VISNING_STORAGE_KEY);
-  };
-
-  const visTomAktivitetsplan = () => {
-    setKort([]);
-    nullstillMal();
-    setVisOnboarding(true);
-    window.localStorage.setItem(ONBOARDING_STORAGE_KEY, "1");
-  };
 
   const fullforOnboarding = (resultat: OnboardingResultat) => {
     setHovedmal(resultat.malTekst);
@@ -97,21 +87,11 @@ export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = fa
       ]);
     }
     setVisOnboarding(false);
-    window.localStorage.removeItem(ONBOARDING_STORAGE_KEY);
   };
 
   const hoppOverOnboarding = () => {
     setVisOnboarding(false);
-    window.localStorage.removeItem(ONBOARDING_STORAGE_KEY);
   };
-
-  useEffect(() => {
-    const lagret = window.localStorage.getItem(VISNING_STORAGE_KEY);
-    if (lagret === "liste" || lagret === "kalender") setVisning(lagret);
-    const lagretForslagVisning = window.localStorage.getItem(FORSLAG_VISNING_STORAGE_KEY);
-    if (lagretForslagVisning === "varsel" || lagretForslagVisning === "liste") setForslagVisning(lagretForslagVisning);
-    if (window.localStorage.getItem(ONBOARDING_STORAGE_KEY) === "1") setVisOnboarding(true);
-  }, []);
 
   useEffect(() => {
     const el = stickyRef.current;
@@ -119,18 +99,11 @@ export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = fa
     const observer = new ResizeObserver(() => setStickyHoyde(el.offsetHeight));
     observer.observe(el);
     return () => observer.disconnect();
-  }, [visOnboarding]);
+  }, [visOnboarding, embedded]);
 
   const byttVisning = (v: Visning) => {
     setVisning(v);
     setHarByttetVisning(true);
-    window.localStorage.setItem(VISNING_STORAGE_KEY, v);
-  };
-
-  const byttForslagVisning = (visSomVarsel: boolean) => {
-    const nyVisning: ForslagVisning = visSomVarsel ? "varsel" : "liste";
-    setForslagVisning(nyVisning);
-    window.localStorage.setItem(FORSLAG_VISNING_STORAGE_KEY, nyVisning);
   };
 
   const forslag = kort.filter((k) => k.kolonne === "forslag");
@@ -142,6 +115,18 @@ export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = fa
   const aktivitetId = searchParams.get("aktivitetId");
   const redigerModus = searchParams.get("rediger") === "1";
   const aktivtKort = kort.find((k) => k.id === aktivitetId) ?? null;
+
+  // Arkivet må vite hvor veilederen kom fra: profilen (embedded) eller «Se som bruker»-forhåndsvisningen.
+  const arkivHref = (href: string) => {
+    if (embedded) {
+      const retur = new URLSearchParams(searchParams.toString());
+      retur.delete("aktivitetId");
+      retur.delete("rediger");
+      return medRetur(href, `${pathname}?${retur.toString()}`);
+    }
+    const retur = trygtRetur(searchParams.get("retur"));
+    return searchParams.get("somVeileder") === "1" && retur ? medRetur(href, retur, true) : href;
+  };
 
   const navigerMedParams = (endringer: Record<string, string | null>) => {
     const nyeParams = new URLSearchParams(searchParams.toString());
@@ -179,14 +164,10 @@ export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = fa
 
   return (
     <div className={`flex flex-col overflow-x-clip ${embedded ? "" : "min-h-screen"}`}>
-      <DekoratorHeader />
-      {somVeileder && (
-        <div className="bg-[var(--ax-bg-info-moderate)] text-ax-text-info px-6 py-2 text-sm">
-          Du ser dette som veileder — dette er nøyaktig det brukeren ser.
-        </div>
-      )}
+      {!skjulDekorator && <DekoratorHeader />}
+      {banner}
       <main className="flex-1 w-full bg-ax-bg-default">
-        {visOnboarding ? (
+        {visOnboarding && !embedded ? (
           <OnboardingFlow onFullfor={fullforOnboarding} onHopp={hoppOverOnboarding} />
         ) : (
         <>
@@ -204,10 +185,10 @@ export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = fa
             <Heading size="large" level="1">Aktivitetsplan</Heading>
 
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-lg">
-              <Link href="#" onClick={(e) => { e.preventDefault(); router.push("/minaktivitetsplan/arkiv"); }}>
+              <Link href="#" onClick={(e) => { e.preventDefault(); demoRouter.push(arkivHref("/minaktivitetsplan/arkiv")); }}>
                 Arkiv
               </Link>
-              <Link href="#" onClick={(e) => { e.preventDefault(); router.push("/minaktivitetsplan/arkiv?type=Samtalereferat"); }}>
+              <Link href="#" onClick={(e) => { e.preventDefault(); demoRouter.push(arkivHref("/minaktivitetsplan/arkiv?type=Samtalereferat")); }}>
                 Samtalereferater
               </Link>
               <Link href="#">
@@ -236,7 +217,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = fa
               onFjernDelmal={fjernDelmal}
               onFlyttDelmal={flyttDelmal}
               visIngenDelmalVarsel={visIngenDelmalVarsel}
-              onSkjulIngenDelmalVarsel={() => setVisIngenDelmalVarsel(false)}
+              onSkjulIngenDelmalVarsel={() => setDelmalVarselSkjult(true)}
             />
           </div>
         </div>
@@ -286,7 +267,7 @@ export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = fa
               />
             ) : (
               <div className="-mx-6">
-                <MineAktiviteterKalender sentrerPaaNaa={!harByttetVisning} />
+                <MineAktiviteterKalender timeplan={scenario.timeplan} sentrerPaaNaa={!harByttetVisning} />
               </div>
             )}
           </div>
@@ -339,41 +320,6 @@ export function BrukerAktivitetsplanContent({ somVeileder = false, embedded = fa
         setKort={setKort}
         perspektiv="bruker"
       />
-
-      <div className={`fixed z-50 ${embedded ? "bottom-24 right-6" : "bottom-4 right-4"}`}>
-        <ActionMenu>
-          <ActionMenu.Trigger>
-            <Button
-              variant="tertiary-neutral"
-              size="small"
-              icon={<WrenchIcon aria-hidden title="Prototype-verktøy" />}
-            />
-          </ActionMenu.Trigger>
-          <ActionMenu.Content>
-            <ActionMenu.Item icon={<ArrowsCirclepathIcon aria-hidden />} onSelect={nullstillPrototype}>
-              Nullstill til standardtilstand
-            </ActionMenu.Item>
-            <ActionMenu.Item icon={<TrashIcon aria-hidden />} onSelect={visTomAktivitetsplan}>
-              Vis tom aktivitetsplan
-            </ActionMenu.Item>
-            <ActionMenu.CheckboxItem
-              checked={forslagVisning === "varsel"}
-              onCheckedChange={byttForslagVisning}
-            >
-              Vis forslag som varsel
-            </ActionMenu.CheckboxItem>
-            <ActionMenu.CheckboxItem
-              checked={visIngenDelmalVarsel}
-              onCheckedChange={setVisIngenDelmalVarsel}
-            >
-              Vis &quot;ingen delmål&quot;-varsel
-            </ActionMenu.CheckboxItem>
-            <ActionMenu.Item icon={<CompassIcon aria-hidden />} onSelect={() => router.push("/minaktivitetsplan/onboarding-oversikt")}>
-              Vis onboarding-flyt (oversikt)
-            </ActionMenu.Item>
-          </ActionMenu.Content>
-        </ActionMenu>
-      </div>
     </div>
   );
 }

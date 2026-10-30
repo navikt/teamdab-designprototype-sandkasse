@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@navikt/aksel-icons";
 import { Button, ToggleGroup } from "@navikt/ds-react";
 import { Timeplan, TimeplanVisning } from "./testdata-unge/Timeplan";
-import { TimeplanAktivitet, testdataUngeTimeplan } from "./testdata-unge/timeplanTestdata";
+import { TimeplanAktivitet } from "./testdata-unge/timeplanTestdata";
 import { TimeplanAktivitetModal } from "./testdata-unge/TimeplanAktivitetModal";
 
 function mandagIUke(dato: Date): Date {
@@ -21,7 +21,7 @@ function leggTilDager(dato: Date, dager: number): Date {
   return d;
 }
 
-export function MineAktiviteterKalender({ sentrerPaaNaa = true }: { sentrerPaaNaa?: boolean }) {
+export function MineAktiviteterKalender({ timeplan, sentrerPaaNaa = true }: { timeplan: TimeplanAktivitet[]; sentrerPaaNaa?: boolean }) {
   const [valgtAktivitet, setValgtAktivitet] = useState<TimeplanAktivitet | null>(null);
   const [visning, setVisning] = useState<TimeplanVisning>("uke");
   const [valgtDag, setValgtDag] = useState(() => {
@@ -90,7 +90,7 @@ export function MineAktiviteterKalender({ sentrerPaaNaa = true }: { sentrerPaaNa
       <span className="sr-only" aria-live="polite">{statusTekst}</span>
 
       <Timeplan
-        aktiviteter={testdataUngeTimeplan}
+        aktiviteter={timeplan}
         ukeStart={ukeStart}
         visning={visning}
         valgtDag={valgtDag}

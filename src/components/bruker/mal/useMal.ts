@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { SetStateAction } from "react";
 import { AktivitetsKort, Delmal } from "../../aktivitetsplan/types";
+import { lagringsNokkel } from "@/demo/oppsett";
+import { useLagretTilstand } from "@/demo/useLagretTilstand";
+import { useOppsett } from "@/demo/useOppsett";
 
-const MAL_STORAGE_KEY = "minaktivitetsplan-mal";
 const DEFAULT_HOVEDMAL = "Komme tilbake i jobb som elektriker";
 
 interface LagretMal {
@@ -20,37 +22,19 @@ export interface DelmalVisning {
   aktivitetType?: string;
 }
 
-function lastLagretMal(): LagretMal {
-  if (typeof window === "undefined") return { hovedmal: DEFAULT_HOVEDMAL, delmal: [] };
-  try {
-    const raw = window.localStorage.getItem(MAL_STORAGE_KEY);
-    if (!raw) return { hovedmal: DEFAULT_HOVEDMAL, delmal: [] };
-    const parsed = JSON.parse(raw) as Partial<LagretMal>;
-    return {
-      hovedmal: parsed.hovedmal ?? DEFAULT_HOVEDMAL,
-      delmal: parsed.delmal ?? [],
-    };
-  } catch {
-    return { hovedmal: DEFAULT_HOVEDMAL, delmal: [] };
-  }
-}
-
 export function useMal(kort: AktivitetsKort[]) {
-  const [hovedmal, setHovedmalState] = useState(DEFAULT_HOVEDMAL);
-  const [delmal, setDelmal] = useState<Delmal[]>([]);
-  const [lastet, setLastet] = useState(false);
-
-  useEffect(() => {
-    const lagret = lastLagretMal();
-    setHovedmalState(lagret.hovedmal);
-    setDelmal(lagret.delmal);
-    setLastet(true);
-  }, []);
-
-  useEffect(() => {
-    if (!lastet) return;
-    window.localStorage.setItem(MAL_STORAGE_KEY, JSON.stringify({ hovedmal, delmal }));
-  }, [hovedmal, delmal, lastet]);
+  const oppsett = useOppsett();
+  const [mal, setMal] = useLagretTilstand<LagretMal>(lagringsNokkel(oppsett, "mal"), () => ({
+    hovedmal: DEFAULT_HOVEDMAL,
+    delmal: [],
+  }));
+  const { hovedmal, delmal } = mal;
+  const setHovedmalState = (nyttMal: string) => setMal((prev) => ({ ...prev, hovedmal: nyttMal }));
+  const setDelmal = (oppdatering: SetStateAction<Delmal[]>) =>
+    setMal((prev) => ({
+      ...prev,
+      delmal: typeof oppdatering === "function" ? oppdatering(prev.delmal) : oppdatering,
+    }));
 
   const setHovedmal = (nyttMal: string) => setHovedmalState(nyttMal);
 

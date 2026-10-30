@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Suspense } from "react";
 import { withBasePath } from "@/lib/basePath";
+import { DemoHjorne } from "@/demo/DemoHjorne";
 
 export const metadata: Metadata = {
   title: "Designprototype - Team DAB",
@@ -35,11 +37,11 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col">
-        <div className="demo-corner" aria-hidden="true">
-          <span className="demo-corner__label">DEMO</span>
-          <span className="demo-corner__sublabel">Designprototype</span>
-        </div>
-        {children}
+        {/* useSearchParams (demo-oppsettet) krever Suspense ved statisk eksport. */}
+        <Suspense fallback={null}>
+          <DemoHjorne />
+          {children}
+        </Suspense>
       </body>
     </html>
   );
