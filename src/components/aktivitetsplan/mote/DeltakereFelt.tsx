@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronDownIcon, PlusIcon, TrashIcon } from "@navikt/aksel-icons";
-import { ActionMenu, BodyShort, Button, Box, Detail, Fieldset, ErrorMessage, HGrid, TextField } from "@navikt/ds-react";
+import { ActionMenu, BodyShort, Button, Box, Detail, Fieldset, ErrorMessage, HGrid, ReadMore, TextField } from "@navikt/ds-react";
 import { useEffect, useId, useState } from "react";
 import { DeltakerRolle } from "../types";
 import { DELTAKER_ROLLER, DeltakerRad, DeltakerRadFeil, VEILEDER_RAD_ID, visningsNavn } from "./moteUtils";
@@ -141,12 +141,14 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
                 value={rad.navn}
                 onChange={(e) => oppdater(i, { navn: e.target.value })}
                 error={feil[rad.id]?.navn}
-                aria-describedby={rad.id === VEILEDER_RAD_ID ? undefined : `${deltakerNavnId(rad.id)}-info`}
+                aria-describedby={rad.roller.includes("Tolk") ? `${deltakerNavnId(rad.id)}-info` : undefined}
               />
               {rad.id !== VEILEDER_RAD_ID && (
-                <Detail id={`${deltakerNavnId(rad.id)}-info`} className="mt-1">
-                  Navn på tolk skjules for alle andre enn Nav når du velger rollen "tolk"
-                </Detail>
+                <div id={`${deltakerNavnId(rad.id)}-info`} aria-live="polite">
+                  {rad.roller.includes("Tolk") && (
+                    <Detail className="mt-1">Navnet på tolk vises ikke for andre enn Nav.</Detail>
+                  )}
+                </div>
               )}
             </div>
             {rad.id === VEILEDER_RAD_ID ? (
@@ -189,6 +191,9 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
           Legg til flere deltakere
         </Button>
       </div>
+      <ReadMore header="Om tolk som deltaker" size="small">
+        Du kan trygt legge til tolk. Navnet på tolk vises ikke for andre enn Nav.
+      </ReadMore>
       <div className="sr-only" aria-live="polite" role="status">
         {melding}
       </div>
