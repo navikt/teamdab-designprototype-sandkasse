@@ -145,7 +145,7 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
               />
               {rad.id !== VEILEDER_RAD_ID && (
                 <Detail id={`${deltakerNavnId(rad.id)}-info`} className="mt-1">
-                  Navn på tolk skjules for alle andre enn veileder
+                  Navn på tolk skjules for alle andre enn veileder når du velger rollen "tolk"
                 </Detail>
               )}
             </div>
