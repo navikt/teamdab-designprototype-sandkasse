@@ -33,32 +33,35 @@ export function Visittkort({ navn, fnr, status, statusVariant, merkelapper, onOp
         <ChevronLeftIcon aria-hidden fontSize="2.8rem" fontWeight="bold" />
       </button>
 
-      {/* Navn og alder */}
-      <Heading size="small" level="2" className="whitespace-nowrap">
-        {navn ?? "Testbruker, Uspesifisert"} (44 år)
-      </Heading>
+      <div className="flex flex-col items-start">
+        {/* Navn og alder */}
+        <Heading size="small" level="2" className="whitespace-nowrap">
+          {navn ?? "Testbruker, Uspesifisert"} (44 år)
+        </Heading>
 
-      {/* Fnr — kopierbar */}
-      {fnr && (
-        <CopyButton
-          copyText={fnr}
-          text={`Fnr: ${fnr}`}
-          activeText="Kopiert!"
-          size="medium"
-          iconPosition="right"
-          aria-label="Kopier fødselsnummer"
-        />
-      )}
-      {!fnr && (
-        <CopyButton
-          copyText="ID-00000000"
-          text="ID: ID-00000000"
-          activeText="Kopiert!"
-          size="medium"
-          iconPosition="right"
-          aria-label="Kopier bruker-ID"
-        />
-      )}
+        {/* Fnr — kopierbar */}
+        {fnr ? (
+          <CopyButton
+            copyText={fnr}
+            text={`Fnr: ${fnr}`}
+            activeText="Kopiert!"
+            size="small"
+            className="relative after:content-[''] after:absolute after:inset-x-0 after:-inset-y-2"
+            iconPosition="right"
+            aria-label="Kopier fødselsnummer"
+          />
+        ) : (
+          <CopyButton
+            copyText="ID-00000000"
+            text="ID: ID-00000000"
+            activeText="Kopiert!"
+            size="small"
+            className="relative after:content-[''] after:absolute after:inset-x-0 after:-inset-y-2"
+            iconPosition="right"
+            aria-label="Kopier bruker-ID"
+          />
+        )}
+      </div>
 
       {/* Etiketter */}
       <div className="flex items-center gap-2 flex-wrap flex-1">
