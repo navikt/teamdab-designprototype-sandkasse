@@ -37,8 +37,10 @@ const SPOR: Spor[] = [
     sporsmal: "Hva trenger du mest hjelp til<br/>i jobbsøket akkurat nå?",
     svar: [
       "Søke på en bestemt type jobb<br/>+ felt: yrke, stilling eller bransje (valgfritt)",
-      "Jeg er usikker på hvilken retning<br/>eller bransje som passer for meg<br/>+ avkrysning: hva slags oppgaver du liker (valgfritt)",
+      "Jeg tror jeg kommer til å trenge tilrettelegging,<br/>for eksempel arbeidstid, oppgaver eller utstyr",
       "Jeg mangler erfaring eller kvalifikasjoner<br/>for jobbene jeg vil ha",
+      "Jeg trenger å bli bedre i et språk for å få jobb,<br/>for eksempel norsk eller engelsk",
+      "Jeg er usikker på hvilken retning<br/>eller bransje som passer for meg<br/>+ avkrysning: hva slags oppgaver du liker (valgfritt)",
       ANNET,
       VEILEDER,
     ],

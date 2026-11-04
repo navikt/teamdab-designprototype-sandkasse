@@ -52,7 +52,11 @@ export function beregnMal(svar: Svar): string {
         case "mangler-kvalifikasjoner":
           return svar.yrke
             ? `Bli kvalifisert for jobb${yrkeTillegg}`
-            : "Skaffe relevant erfaring innen et valgt arbeidsområde";
+            : "Skaffe relevant erfaring eller kvalifikasjon";
+        case "tilrettelegging":
+          return "Finne en jobb der arbeidsplassen kan tilrettelegges for meg";
+        case "sprak":
+          return "Bli bedre i språket jeg trenger for å få jobb";
         case "annet":
           return svar.finnJobbAnnetTekst?.trim() || "Finne ut hva som er realistisk for meg";
         case "veileder":

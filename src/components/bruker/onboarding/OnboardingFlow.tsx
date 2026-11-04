@@ -98,9 +98,19 @@ export function OnboardingFlow({ onFullfor, onHopp }: OnboardingFlowProps) {
 
   // Aksel anbefaler å aldri deaktivere submit-knappen, men heller validere ved klikk
   // og vise feilmelding på feltet (se "Mønster for skjemavalidering").
+  // Endres et fokus-svar, er mål og aktivitet fra forrige runde utdaterte og må nullstilles,
+  // ellers blir det gamle målet stående når man går tilbake og velger på nytt.
   const oppdaterSvar = (delvis: Partial<Svar>) => {
     setVisFeil(false);
-    setSvar((prev) => ({ ...prev, ...delvis }));
+    const endrerFokus = steg.endsWith("-fokus");
+    if (endrerFokus) setEgetMal(undefined);
+    setSvar((prev) => ({
+      ...prev,
+      ...(endrerFokus
+        ? { malTekst: undefined, aktivitetId: undefined, egenAktivitetTekst: undefined, velgMedVeileder: undefined }
+        : {}),
+      ...delvis,
+    }));
   };
 
   // Bytter man situasjon, hører ingen av de tidligere svarene (yrke, fokus-valg, mål osv.) lenger til — nullstill alt unntatt selve valget.

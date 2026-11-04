@@ -9,8 +9,10 @@ export const SITUASJON_ALTERNATIVER: Alternativ[] = [
 
 export const FINN_JOBB_FOKUS_ALTERNATIVER: Alternativ[] = [
   { id: "vet-hva", tekst: "Søke på en bestemt type jobb" },
-  { id: "usikker-retning", tekst: "Jeg er usikker på hvilken retning eller bransje som passer for meg" },
+  { id: "tilrettelegging", tekst: "Jeg tror jeg kommer til å trenge tilrettelegging, for eksempel arbeidstid, oppgaver eller utstyr" },
   { id: "mangler-kvalifikasjoner", tekst: "Jeg mangler erfaring eller kvalifikasjoner for jobbene jeg vil ha" },
+  { id: "sprak", tekst: "Jeg trenger å bli bedre i et språk for å få jobb, for eksempel norsk eller engelsk" },
+  { id: "usikker-retning", tekst: "Jeg er usikker på hvilken retning eller bransje som passer for meg" },
   { id: "annet", tekst: "Noe annet enn dette" },
   { id: "veileder", tekst: "Jeg vet ikke ennå – vil finne ut av dette sammen med veilederen min" },
 ];
@@ -69,6 +71,15 @@ export const AKTIVITETER_FINN_JOBB: Record<string, Alternativ[]> = {
     { id: "undersoke-kurs", tekst: "Undersøke relevante kurs" },
     { id: "undersoke-krav", tekst: "Undersøke kravene til aktuelle jobber" },
     { id: "kartlegge-kompetanse", tekst: "Kartlegge kompetansen min" },
+  ],
+  tilrettelegging: [
+    { id: "kartlegge-behov-tilrettelegging", tekst: "Finne ut hva slags tilrettelegging jeg trenger" },
+    { id: "snakk-veileder-tilrettelegging", tekst: "Snakke med veileder om tilrettelegging i jobbsøket" },
+  ],
+  sprak: [
+    { id: "finne-sprak", tekst: "Finne ut hvilket språk jeg trenger å bli bedre i" },
+    { id: "finne-sprakkurs", tekst: "Finne språkkurs eller språkkafé som passer for meg" },
+    { id: "snakk-veileder-sprakkrav", tekst: "Snakke med veileder om språkkrav i jobbene jeg vil ha" },
   ],
 };
 
