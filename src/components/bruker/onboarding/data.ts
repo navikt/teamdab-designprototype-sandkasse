@@ -77,6 +77,8 @@ export const AKTIVITETER_FINN_JOBB: Record<string, Alternativ[]> = {
   ],
   sprak: [
     { id: "finne-sprakkurs", tekst: "Finne språkkurs eller språkkafé som passer for meg" },
+    { id: "dokumentere-sprakniva", tekst: "Få dokumentert språknivået mitt" },
+    { id: "jobber-mens-jeg-laerer", tekst: "Finne ut hvilke jobber jeg kan søke på mens jeg lærer mer" },
     { id: "snakk-veileder-sprakkrav", tekst: "Snakke med veileder om språkkrav i jobbene jeg vil ha" },
   ],
 };
