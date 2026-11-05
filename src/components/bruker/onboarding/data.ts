@@ -9,7 +9,7 @@ export const SITUASJON_ALTERNATIVER: Alternativ[] = [
 
 export const FINN_JOBB_FOKUS_ALTERNATIVER: Alternativ[] = [
   { id: "vet-hva", tekst: "Søke på en bestemt type jobb" },
-  { id: "tilrettelegging", tekst: "Jeg tror jeg kommer til å trenge tilrettelegging, for eksempel arbeidstid, oppgaver eller utstyr" },
+  { id: "tilrettelegging", tekst: "Jeg kan trenge tilrettelegging på jobb, for eksempel arbeidstid, oppgaver eller utstyr" },
   { id: "mangler-kvalifikasjoner", tekst: "Jeg mangler erfaring eller kvalifikasjoner for jobbene jeg vil ha" },
   { id: "sprak", tekst: "Jeg trenger å bli bedre i et språk for å få jobb, for eksempel norsk eller engelsk" },
   { id: "usikker-retning", tekst: "Jeg er usikker på hvilken retning eller bransje som passer for meg" },
@@ -73,7 +73,7 @@ export const AKTIVITETER_FINN_JOBB: Record<string, Alternativ[]> = {
   ],
   tilrettelegging: [
     { id: "kartlegge-behov-tilrettelegging", tekst: "Finne ut hva slags tilrettelegging jeg trenger" },
-    { id: "snakk-veileder-tilrettelegging", tekst: "Snakke med veileder om tilrettelegging i jobbsøket" },
+    { id: "snakk-veileder-tilrettelegging", tekst: "Snakke med veileder om tilrettelegging på jobb" },
   ],
   sprak: [
     { id: "finne-sprak", tekst: "Finne ut hvilket språk jeg trenger å bli bedre i" },
