@@ -33,7 +33,7 @@ const SPOR: Spor[] = [
     id: "finn",
     farge: "#0067c5",
     fyll: "#e6f0ff",
-    situasjon: "Jeg vil finne meg en jobb",
+    situasjon: "Jeg vil finne meg en ny jobb",
     sporsmal: "Hva trenger du mest hjelp til<br/>i jobbsøket akkurat nå?",
     svar: [
       "Søke på en bestemt type jobb<br/>+ felt: yrke, stilling eller bransje (valgfritt)",
@@ -69,7 +69,6 @@ const SPOR: Spor[] = [
       "Mestre en vanskelig livssituasjon bedre",
       "Bli sterkere fysisk eller psykisk",
       "Bygge mer kunnskap og erfaring",
-      "Utforske hvilken type arbeid som kan passe for meg",
       ANNET,
       VEILEDER,
     ],

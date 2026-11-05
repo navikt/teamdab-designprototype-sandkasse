@@ -1,7 +1,7 @@
 import { Alternativ } from "./types";
 
 export const SITUASJON_ALTERNATIVER: Alternativ[] = [
-  { id: "finn-jobb", tekst: "Jeg vil finne meg en jobb" },
+  { id: "finn-jobb", tekst: "Jeg vil finne meg en ny jobb" },
   { id: "behold-jobb", tekst: "Jeg har jobb, men trenger hjelp til å bli værende i den" },
   { id: "ikke-klar", tekst: "Jeg er ikke klar for jobb akkurat nå" },
   { id: "usikker", tekst: "Jeg er usikker på hva som passer" },
@@ -21,7 +21,6 @@ export const IKKE_KLAR_FOKUS_ALTERNATIVER: Alternativ[] = [
   { id: "livssituasjon", tekst: "Mestre en vanskelig livssituasjon bedre" },
   { id: "helse", tekst: "Bli sterkere fysisk eller psykisk" },
   { id: "kunnskap", tekst: "Bygge mer kunnskap og erfaring" },
-  { id: "utforske", tekst: "Utforske hvilken type arbeid som kan passe for meg" },
   { id: "annet", tekst: "Noe annet enn dette" },
   { id: "veileder", tekst: "Jeg vet ikke ennå – vil finne ut av dette sammen med veilederen min" },
 ];
@@ -95,10 +94,6 @@ export const AKTIVITETER_IKKE_KLAR: Record<string, Alternativ[]> = {
   kunnskap: [
     { id: "undersoke-kurs", tekst: "Undersøke relevante kurs" },
     { id: "kartlegge-kompetanse", tekst: "Kartlegge kompetansen min" },
-  ],
-  utforske: [
-    { id: "prove-praksis", tekst: "Prøve ut en arbeidsrettet aktivitet eller praksisplass" },
-    { id: "snakk-veileder-yrker", tekst: "Snakke med veileder om aktuelle yrker" },
   ],
 };
 
