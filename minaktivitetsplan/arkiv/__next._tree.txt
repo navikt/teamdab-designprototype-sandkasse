@@ -1,0 +1,6 @@
+:HL["/teamdab-designprototype-sandkasse/_next/static/chunks/16n4m6v-y3yyt.css","style"]
+:HL["https://cdn.nav.no/aksel/fonts/SourceSans3-normal.woff2","font",{"crossOrigin":"anonymous","type":"font/woff2"}]
+3:[["children",{"s":"__PAGE__","h":160}]]
+2:[["children",{"s":"arkiv","h":96,"c":"$Q3"}]]
+1:[["children",{"s":"minaktivitetsplan","h":96,"c":"$Q2"}]]
+0:{"b":"pOiHW1KjcAKP6PobE-gGJ","t":{"t":{"s":"","h":80,"c":"$Q1"}}}

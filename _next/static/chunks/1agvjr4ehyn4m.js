@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,334244,e=>{"use strict";var i=e.i(843476),r=e.i(618566),t=e.i(965782),s=e.i(9331);e.s(["default",0,function(){let e=(0,r.useSearchParams)(),{spor:o}=(0,t.J)(),u=s.f[o].BrukerSide;return(0,i.jsx)(u,{somVeileder:"1"===e.get("somVeileder")})}])}]);
