@@ -28,16 +28,22 @@ interface RolleVelgerProps {
 function RolleVelger({ id, valgte, onChange, feil }: RolleVelgerProps) {
   const labelId = useId();
   const feilId = useId();
+  const beskrivelseId = useId();
   const oppsummering = DELTAKER_ROLLER.filter((r) => valgte.includes(r)).join(", ");
 
   const toggle = (rolle: DeltakerRolle, erValgt: boolean) =>
     onChange(DELTAKER_ROLLER.filter((r) => (r === rolle ? erValgt : valgte.includes(r))));
 
   return (
-    <div className="flex flex-col gap-2">
-      <BodyShort as="span" id={labelId}>
-        Deltakers rolle
-      </BodyShort>
+    <div className="flex flex-col gap-2.5">
+      <div>
+        <BodyShort as="span" id={labelId} className="block">
+          Deltakers rolle
+        </BodyShort>
+        <BodyShort as="span" id={beskrivelseId} textColor="subtle" className="block">
+          Velg én eller flere
+        </BodyShort>
+      </div>
       <ActionMenu>
         <ActionMenu.Trigger>
           <Button
@@ -48,7 +54,7 @@ function RolleVelger({ id, valgte, onChange, feil }: RolleVelgerProps) {
             icon={<ChevronDownIcon aria-hidden />}
             iconPosition="right"
             aria-labelledby={`${labelId} ${id}`}
-            aria-describedby={feil ? feilId : undefined}
+            aria-describedby={feil ? `${beskrivelseId} ${feilId}` : beskrivelseId}
             className="w-full justify-between! text-left [&_.aksel-label]:font-normal! [&_.aksel-label]:flex-1 [&_.aksel-label]:text-left"
           >
             {oppsummering || "Velg"}
@@ -138,6 +144,7 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
               <TextField
                 id={deltakerNavnId(rad.id)}
                 label={<BodyShort as="span">{rad.id === VEILEDER_RAD_ID ? "Veileder" : "Deltakers navn"}</BodyShort>}
+                description={rad.id === VEILEDER_RAD_ID ? undefined : "Fornavn Etternavn"}
                 value={rad.navn}
                 onChange={(e) => oppdater(i, { navn: e.target.value })}
                 error={feil[rad.id]?.navn}
@@ -164,7 +171,7 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
             {rad.id === VEILEDER_RAD_ID ? (
               fjernPlassholder
             ) : (
-              <Box marginBlock={{ xs: "space-0", sm: "space-32 space-0" }}>
+              <div className="sm:mt-[58px]">
                 <Button
                   type="button"
                   variant="tertiary"
@@ -174,7 +181,7 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
                 >
                   Fjern<span className="sr-only"> deltaker {i + 1}</span>
                 </Button>
-              </Box>
+              </div>
             )}
           </HGrid>
         </div>
