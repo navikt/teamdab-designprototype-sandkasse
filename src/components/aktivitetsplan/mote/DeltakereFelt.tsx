@@ -1,9 +1,8 @@
 "use client";
 
-import { ChevronDownIcon, PlusIcon, TrashIcon } from "@navikt/aksel-icons";
-import { ActionMenu, BodyShort, Button, Box, Detail, Fieldset, ErrorMessage, HGrid, ReadMore, TextField } from "@navikt/ds-react";
-import { useEffect, useId, useState } from "react";
-import { DeltakerRolle } from "../types";
+import { PlusIcon, TrashIcon } from "@navikt/aksel-icons";
+import { BodyShort, Button, Fieldset, HGrid, ReadMore, TextField, UNSAFE_Combobox as Combobox, VStack } from "@navikt/ds-react";
+import { useEffect, useState } from "react";
 import { DELTAKER_ROLLER, DeltakerRad, DeltakerRadFeil, VEILEDER_RAD_ID, visningsNavn } from "./moteUtils";
 
 interface Props {
@@ -14,68 +13,10 @@ interface Props {
   feil: Record<string, DeltakerRadFeil>;
 }
 
+const KOLONNER = { xs: 1, sm: "minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.2fr)" };
+
 export const deltakerNavnId = (id: string) => `deltaker-navn-${id}`;
 export const deltakerRolleId = (id: string) => `deltaker-rolle-${id}`;
-
-interface RolleVelgerProps {
-  id: string;
-  valgte: DeltakerRolle[];
-  onChange: (roller: DeltakerRolle[]) => void;
-  feil?: string;
-}
-
-// ActionMenu er ikke et skjemafelt, så label, feilmelding og feilmarkering kobles til knappen manuelt.
-function RolleVelger({ id, valgte, onChange, feil }: RolleVelgerProps) {
-  const labelId = useId();
-  const feilId = useId();
-  const beskrivelseId = useId();
-  const oppsummering = DELTAKER_ROLLER.filter((r) => valgte.includes(r)).join(", ");
-
-  const toggle = (rolle: DeltakerRolle, erValgt: boolean) =>
-    onChange(DELTAKER_ROLLER.filter((r) => (r === rolle ? erValgt : valgte.includes(r))));
-
-  return (
-    <div className="flex flex-col gap-2.5">
-      <div>
-        <BodyShort as="span" id={labelId} className="block">
-          Deltakers rolle
-        </BodyShort>
-        <BodyShort as="span" id={beskrivelseId} textColor="subtle" className="block">
-          Velg én eller flere
-        </BodyShort>
-      </div>
-      <ActionMenu>
-        <ActionMenu.Trigger>
-          <Button
-            id={id}
-            type="button"
-            variant="secondary-neutral"
-            data-color={feil ? "danger" : undefined}
-            icon={<ChevronDownIcon aria-hidden />}
-            iconPosition="right"
-            aria-labelledby={`${labelId} ${id}`}
-            aria-describedby={feil ? `${beskrivelseId} ${feilId}` : beskrivelseId}
-            className="w-full justify-between! text-left [&_.aksel-label]:font-normal! [&_.aksel-label]:flex-1 [&_.aksel-label]:text-left"
-          >
-            {oppsummering || "Velg"}
-          </Button>
-        </ActionMenu.Trigger>
-        <ActionMenu.Content>
-          <ActionMenu.Group aria-label="Deltakers rolle">
-            {DELTAKER_ROLLER.map((r) => (
-              <ActionMenu.CheckboxItem key={r} checked={valgte.includes(r)} onCheckedChange={(erValgt) => toggle(r, erValgt)}>
-                {r}
-              </ActionMenu.CheckboxItem>
-            ))}
-          </ActionMenu.Group>
-        </ActionMenu.Content>
-      </ActionMenu>
-      <div id={feilId} aria-live="polite">
-        {feil && <ErrorMessage showIcon>{feil}</ErrorMessage>}
-      </div>
-    </div>
-  );
-}
 
 export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
   const [fokusId, setFokusId] = useState<string>();
@@ -107,103 +48,86 @@ export function DeltakereFelt({ rader, onChange, brukerNavn, feil }: Props) {
   const oppdater = (indeks: number, endring: Partial<DeltakerRad>) =>
     onChange(rader.map((r, i) => (i === indeks ? { ...r, ...endring } : r)));
 
-  // Usynlig kopi av Fjern-knappen holder kolonnene like brede som i radene som kan fjernes.
-  const fjernPlassholder = (
-    <div aria-hidden className="hidden sm:block invisible">
-      <Box marginBlock="space-32 space-0">
-        <Button type="button" variant="tertiary" tabIndex={-1} icon={<TrashIcon aria-hidden />}>
-          Fjern
-        </Button>
-      </Box>
-    </div>
-  );
-
   return (
     <Fieldset legend="Deltakere">
-      <div role="group" aria-label="Bruker">
-        <HGrid columns={{ xs: 1, sm: "minmax(0, 2fr) minmax(0, 1fr) auto" }} gap="space-16" align="start">
-          <TextField
-            label={<BodyShort as="span">Bruker</BodyShort>}
-            value={visningsNavn(brukerNavn)}
-            readOnly
-          />
-          <div className="hidden sm:block" aria-hidden />
-          {fjernPlassholder}
+      <VStack gap="space-16">
+        <HGrid columns={KOLONNER} gap="space-16">
+          <TextField size="small" label={<BodyShort as="span">Bruker</BodyShort>} value={visningsNavn(brukerNavn)} readOnly />
         </HGrid>
-      </div>
 
-      {rader.map((rad, i) => (
-        <div
-          key={rad.id}
-          role="group"
-          aria-label={rad.id === VEILEDER_RAD_ID ? "Veileder" : `Deltaker ${i + 1}`}
-          style={{ marginTop: "var(--ax-space-16)" }}
-        >
-          <HGrid columns={{ xs: 1, sm: "minmax(0, 2fr) minmax(0, 1fr) auto" }} gap="space-16" align="start">
-            <div>
+        {rader.map((rad, i) => {
+          const erVeileder = rad.id === VEILEDER_RAD_ID;
+          return (
+            <HGrid
+              key={rad.id}
+              role="group"
+              aria-label={erVeileder ? "Veileder" : `Deltaker ${i + 1}`}
+              columns={KOLONNER}
+              gap="space-16"
+              align="start"
+            >
               <TextField
                 id={deltakerNavnId(rad.id)}
-                label={<BodyShort as="span">{rad.id === VEILEDER_RAD_ID ? "Veileder" : "Deltakers navn"}</BodyShort>}
-                description={rad.id === VEILEDER_RAD_ID ? undefined : "Fornavn Etternavn"}
+                size="small"
+                label={<BodyShort as="span">{erVeileder ? "Veileder" : "Deltakers navn"}</BodyShort>}
+                description={erVeileder ? undefined : <BodyShort as="span" size="small">Fornavn Etternavn</BodyShort>}
                 value={rad.navn}
                 onChange={(e) => oppdater(i, { navn: e.target.value })}
                 error={feil[rad.id]?.navn}
-                aria-describedby={rad.roller.includes("Tolk") ? `${deltakerNavnId(rad.id)}-info` : undefined}
               />
-              {rad.id !== VEILEDER_RAD_ID && (
-                <div id={`${deltakerNavnId(rad.id)}-info`} aria-live="polite">
-                  {rad.roller.includes("Tolk") && (
-                    <Detail className="mt-1">Navnet på tolk vises ikke for andre enn Nav.</Detail>
-                  )}
-                </div>
+              {!erVeileder && (
+                <>
+                  <Combobox
+                    id={deltakerRolleId(rad.id)}
+                    size="small"
+                    label={<BodyShort as="span">Deltakers rolle</BodyShort>}
+                    description={<BodyShort as="span" size="small">Velg en eller flere</BodyShort>}
+                    isMultiSelect
+                    options={DELTAKER_ROLLER}
+                    selectedOptions={rad.roller}
+                    onToggleSelected={(valgt, erValgt) =>
+                      oppdater(i, {
+                        roller: DELTAKER_ROLLER.filter((r) => (r === valgt ? erValgt : rad.roller.includes(r))),
+                      })
+                    }
+                    error={feil[rad.id]?.rolle}
+                  />
+                  <div className="sm:mt-[54px]">
+                    <Button
+                      type="button"
+                      variant="tertiary"
+                      size="small"
+                      data-color="danger"
+                      icon={<TrashIcon aria-hidden />}
+                      aria-label={`Fjern deltaker ${i + 1}`}
+                      onClick={() => slett(i)}
+                    />
+                  </div>
+                </>
               )}
-            </div>
-            {rad.id === VEILEDER_RAD_ID ? (
-              <div className="hidden sm:block" aria-hidden />
-            ) : (
-              <RolleVelger
-                id={deltakerRolleId(rad.id)}
-                valgte={rad.roller}
-                onChange={(roller) => oppdater(i, { roller })}
-                feil={feil[rad.id]?.rolle}
-              />
-            )}
-            {rad.id === VEILEDER_RAD_ID ? (
-              fjernPlassholder
-            ) : (
-              <div className="sm:mt-[58px]">
-                <Button
-                  type="button"
-                  variant="tertiary"
-                  data-color="danger"
-                  icon={<TrashIcon aria-hidden />}
-                  onClick={() => slett(i)}
-                >
-                  Fjern<span className="sr-only"> deltaker {i + 1}</span>
-                </Button>
-              </div>
-            )}
-          </HGrid>
-        </div>
-      ))}
+            </HGrid>
+          );
+        })}
 
-      <div style={{ marginTop: "var(--ax-space-16)" }}>
-        <Button
-          id="deltaker-legg-til"
-          type="button"
-          variant="secondary"
-          icon={<PlusIcon aria-hidden />}
-          onClick={leggTil}
-        >
-          Legg til flere deltakere
-        </Button>
-      </div>
-      <ReadMore header="Om tolk som deltaker" size="small">
-        Du kan trygt legge til tolk. Navnet på tolk vises ikke for andre enn Nav.
-      </ReadMore>
-      <div className="sr-only" aria-live="polite" role="status">
-        {melding}
-      </div>
+        <div>
+          <Button
+            id="deltaker-legg-til"
+            type="button"
+            size="small"
+            variant="secondary"
+            icon={<PlusIcon aria-hidden />}
+            onClick={leggTil}
+          >
+            Legg til flere deltakere
+          </Button>
+        </div>
+        <ReadMore header="Om tolk som deltaker" size="small">
+          Du kan trygt legge til tolk. Navnet på tolk vises ikke for andre enn Nav.
+        </ReadMore>
+        <div className="sr-only" aria-live="polite" role="status">
+          {melding}
+        </div>
+      </VStack>
     </Fieldset>
   );
 }
