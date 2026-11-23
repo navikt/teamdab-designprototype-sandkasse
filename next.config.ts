@@ -16,6 +16,9 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
+  experimental: {
+    agentUpgrade: "security",
+  },
   env: {
     // next/image (i motsetning til next/link) legger ikke automatisk basePath foran `src`.
     // Gjør derfor basePath tilgjengelig i klientkoden via src/lib/basePath.ts.
